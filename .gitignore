@@ -1,0 +1,5 @@
+# Project exclude paths
+/adapter/target/
+/adapter-1.11/target/
+/api/target/
+/sample/target/

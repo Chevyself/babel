@@ -1,0 +1,4 @@
+language: "en"
+cmd.hello: "Hello!"
+cmd.tab: "Set tab as header: {0} footer: {1}"
+error.not-sound: "That is not a sound!"

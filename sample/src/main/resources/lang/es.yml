@@ -1,0 +1,3 @@
+language: "es"
+cmd.hello: "Hola!"
+cmd.tab: "Colocada nueva lista como: encabezado {0} pie: {1}"
