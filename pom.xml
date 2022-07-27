@@ -50,8 +50,13 @@
     <!-- Commands -->
     <dependency>
       <groupId>me.googas.starbox-commands</groupId>
+      <artifactId>core</artifactId>
+      <version>${commands.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.googas.starbox-commands</groupId>
       <artifactId>bukkit</artifactId>
-      <version>${bukkit.version}</version>
+      <version>${commands.version}</version>
     </dependency>
     <!-- Reflection -->
     <dependency>
@@ -68,7 +73,7 @@
   </dependencies>
 
   <properties>
-    <bukkit.version>1.0.0-PRE-2</bukkit.version>
+    <commands.version>1.0.0-PRE-2</commands.version>
     <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
     <lombok.version>1.18.24</lombok.version>
     <maven.compiler.source>8</maven.compiler.source>
