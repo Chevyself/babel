@@ -5,7 +5,7 @@ import me.googas.chat.api.Channel;
 import me.googas.commands.bukkit.context.CommandContext;
 import me.googas.commands.bukkit.providers.type.BukkitExtraArgumentProvider;
 
-public class ChannelProvider implements BukkitExtraArgumentProvider<Channel> {
+public final class ChannelProvider implements BukkitExtraArgumentProvider<Channel> {
   @Override
   public @NonNull Channel getObject(@NonNull CommandContext commandContext) {
     return Channel.of(commandContext.getSender());
