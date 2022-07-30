@@ -4,6 +4,8 @@ import java.util.Locale;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.NonNull;
+import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.sound.WrappedSoundCategory;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -44,7 +46,7 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public @NonNull Channel playSound(
+  public @NonNull ConsoleChannel playSound(
       @NonNull Location location,
       @NonNull Sound sound,
       @NonNull WrappedSoundCategory category,
@@ -54,9 +56,19 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public @NonNull Channel playSound(
+  public @NonNull ConsoleChannel playSound(
       @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     return this;
+  }
+
+  @Override
+  public @NonNull ConsoleChannel send(@NonNull Line line) {
+    return (ConsoleChannel) Channel.super.send(line);
+  }
+
+  @Override
+  public @NonNull ConsoleChannel send(@NonNull LocalizedReference reference) {
+    return (ConsoleChannel) Channel.super.send(reference);
   }
 
   @Override

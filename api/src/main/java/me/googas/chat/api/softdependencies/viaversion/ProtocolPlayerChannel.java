@@ -4,9 +4,14 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import me.googas.chat.api.Channel;
 import me.googas.chat.api.PlayerChannel;
+import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.util.Versions;
+import me.googas.chat.sound.WrappedSoundCategory;
+import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 
 /**
  * Represents a {@link PlayerChannel} which methods may change due to being in a different protocol
@@ -45,10 +50,47 @@ public class ProtocolPlayerChannel implements PlayerChannel {
   }
 
   @Override
-  public @NonNull Channel setTabList(String header, String bottom) {
+  public @NonNull ProtocolPlayerChannel setTabList(String header, String bottom) {
     if (this.version.getBukkit() >= 8) {
-      return PlayerChannel.super.setTabList(header, bottom);
+      return (ProtocolPlayerChannel) PlayerChannel.super.setTabList(header, bottom);
     }
     return this;
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel send(@NonNull Line line) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.send(line);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel send(@NonNull LocalizedReference reference) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.send(reference);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel send(@NonNull BaseComponent... components) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.send(components);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel send(@NonNull String text) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.send(text);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel playSound(
+      @NonNull Location location,
+      @NonNull Sound sound,
+      @NonNull WrappedSoundCategory category,
+      float volume,
+      float pitch) {
+    return (ProtocolPlayerChannel)
+        PlayerChannel.super.playSound(location, sound, category, volume, pitch);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel playSound(
+      @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.playSound(location, sound, volume, pitch);
   }
 }

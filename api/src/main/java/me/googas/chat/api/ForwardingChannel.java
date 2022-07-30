@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 import lombok.NonNull;
+import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.sound.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
@@ -19,6 +21,18 @@ public interface ForwardingChannel extends Channel {
    */
   @NonNull
   Optional<Channel> getForward();
+
+  @Override
+  @NonNull
+  default ForwardingChannel send(@NonNull Line line) {
+    return (ForwardingChannel) Channel.super.send(line);
+  }
+
+  @Override
+  @NonNull
+  default ForwardingChannel send(@NonNull LocalizedReference reference) {
+    return (ForwardingChannel) Channel.super.send(reference);
+  }
 
   @Override
   @NonNull
@@ -96,6 +110,18 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
+    default Multiple send(@NonNull Line line) {
+      return (Multiple) Channel.super.send(line);
+    }
+
+    @Override
+    @NonNull
+    default Multiple send(@NonNull LocalizedReference reference) {
+      return (Multiple) Channel.super.send(reference);
+    }
+
+    @Override
+    @NonNull
     default Multiple send(@NonNull String text) {
       this.getChannels().forEach(channel -> channel.send(text));
       return this;
@@ -108,7 +134,7 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
-    default Channel playSound(
+    default Multiple playSound(
         @NonNull Location location,
         @NonNull Sound sound,
         @NonNull WrappedSoundCategory category,
@@ -121,7 +147,7 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
-    default Channel playSound(
+    default Multiple playSound(
         @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
       this.getChannels().forEach(channel -> channel.playSound(location, sound, volume, pitch));
       return this;

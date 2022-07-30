@@ -6,6 +6,8 @@ import java.util.UUID;
 import lombok.NonNull;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
+import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.util.Players;
 import me.googas.chat.api.util.Versions;
 import me.googas.chat.sound.WrappedSoundCategory;
@@ -22,6 +24,18 @@ public interface PlayerChannel extends Channel {
 
   @NonNull PlayerTitleAdapter titleAdapter = Players.getTitleAdapter();
   @NonNull PlayerTabListAdapter tabListAdapter = Players.getTabListAdapter();
+
+  @Override
+  @NonNull
+  default PlayerChannel send(@NonNull Line line) {
+    return (PlayerChannel) Channel.super.send(line);
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel send(@NonNull LocalizedReference reference) {
+    return (PlayerChannel) Channel.super.send(reference);
+  }
 
   /**
    * Get the unique id of the player.

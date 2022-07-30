@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.NonNull;
 import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.softdependencies.viaversion.ViaVersionSoft;
 import me.googas.chat.sound.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -96,6 +97,17 @@ public interface Channel {
   @NonNull
   default Channel send(@NonNull Line line) {
     return this.send(line.build());
+  }
+
+  /**
+   * Send a localized reference to this channel.
+   *
+   * @param reference the line to send
+   * @return this same instance
+   */
+  @NonNull
+  default Channel send(@NonNull LocalizedReference reference) {
+    return this.send(reference.asLocalized(this));
   }
 
   /**
