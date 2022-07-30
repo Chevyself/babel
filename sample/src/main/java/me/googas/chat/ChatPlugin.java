@@ -1,6 +1,5 @@
 package me.googas.chat;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import me.googas.chat.api.ResourceManager;
@@ -22,10 +21,10 @@ public class ChatPlugin extends JavaPlugin {
   public void onEnable() {
     ErrorHandler errors =
         ErrorHandler.setInstance(new ErrorHandler.LoggerErrorHandler(this.getLogger()));
-    File lang = new File(this.getDataFolder(), "lang");
     // Load languages
     try {
-      ResourceManager.getInstance().registerAll(this, YamlLanguage.load(this, lang, "en", "es"));
+      ResourceManager.getInstance()
+          .registerAll(this, YamlLanguage.load(this, this.getDataFolder(), "en", "es"));
     } catch (IOException e) {
       errors.handle(Level.SEVERE, "Failed to create 'lang' directory", e);
     }
