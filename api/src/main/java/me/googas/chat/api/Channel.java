@@ -175,6 +175,34 @@ public interface Channel {
   Channel setTabList(String header, String bottom);
 
   /**
+   * Set the header and bottom of the tab-list.
+   *
+   * @param header the header text to set as a line
+   * @param bottom the bottom text to set as a line
+   * @return this same instance
+   */
+  @NonNull
+  default Channel setTabList(Line header, Line bottom) {
+    return this.setTabList(
+        header == null ? null : header.asText().orElse(null),
+        bottom == null ? null : bottom.asText().orElse(null));
+  }
+
+  /**
+   * Set the header and bottom of the tab-list.
+   *
+   * @param header the header text to set as a localized reference line
+   * @param bottom the bottom text to set as a localized reference line
+   * @return this same instance
+   */
+  @NonNull
+  default Channel setTabList(LocalizedReference header, LocalizedReference bottom) {
+    return this.setTabList(
+        header == null ? null : header.asLocalized(this),
+        bottom == null ? null : bottom.asLocalized(this));
+  }
+
+  /**
    * Play sound to a channel.
    *
    * @param location the location in which the sound will play
