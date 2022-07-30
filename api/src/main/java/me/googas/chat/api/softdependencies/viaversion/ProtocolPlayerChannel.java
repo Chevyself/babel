@@ -50,6 +50,20 @@ public class ProtocolPlayerChannel implements PlayerChannel {
   }
 
   @Override
+  public @NonNull ProtocolPlayerChannel sendTitle(
+      Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+    return (ProtocolPlayerChannel)
+        PlayerChannel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel sendTitle(
+      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
+    return (ProtocolPlayerChannel)
+        PlayerChannel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
   public @NonNull ProtocolPlayerChannel setTabList(String header, String bottom) {
     if (this.version.getBukkit() >= 8) {
       return (ProtocolPlayerChannel) PlayerChannel.super.setTabList(header, bottom);

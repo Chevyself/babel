@@ -117,6 +117,19 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
+  @NonNull
+  default PlayerChannel sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+    return (PlayerChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel sendTitle(
+      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
+    return (PlayerChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
   default @NonNull Channel playSound(
       @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     this.getPlayer().ifPresent(player -> player.playSound(location, sound, volume, pitch));

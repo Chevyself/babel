@@ -24,6 +24,20 @@ public interface ForwardingChannel extends Channel {
 
   @Override
   @NonNull
+  default ForwardingChannel sendTitle(
+      Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+    return (ForwardingChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
+  @NonNull
+  default ForwardingChannel sendTitle(
+      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
+    return (ForwardingChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
+  @NonNull
   default ForwardingChannel send(@NonNull Line line) {
     return (ForwardingChannel) Channel.super.send(line);
   }
@@ -106,6 +120,19 @@ public interface ForwardingChannel extends Channel {
     default Multiple send(@NonNull BaseComponent... components) {
       this.getChannels().forEach(channel -> channel.send(components));
       return this;
+    }
+
+    @Override
+    @NonNull
+    default Multiple sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+      return (Multiple) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+    }
+
+    @Override
+    @NonNull
+    default Multiple sendTitle(
+        LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
+      return (Multiple) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
     }
 
     @Override

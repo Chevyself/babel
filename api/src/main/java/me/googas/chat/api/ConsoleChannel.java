@@ -56,6 +56,18 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
+  public @NonNull ConsoleChannel sendTitle(
+      Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+    return (ConsoleChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
+  public @NonNull ConsoleChannel sendTitle(
+      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
+    return (ConsoleChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Override
   public @NonNull ConsoleChannel playSound(
       @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     return this;

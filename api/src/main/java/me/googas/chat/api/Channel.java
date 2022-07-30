@@ -124,6 +124,47 @@ public interface Channel {
   Channel sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut);
 
   /**
+   * Send a title to this channel.
+   *
+   * @param title the title as a line
+   * @param subtitle the subtitle as a line
+   * @param fadeIn how long until the title appears in ticks
+   * @param stay how long until the title stays in ticks
+   * @param fadeOut how long until the title fades in ticks
+   * @return this same instance
+   */
+  @NonNull
+  default Channel sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+    return this.sendTitle(
+        title == null ? null : title.asText().orElse(null),
+        subtitle == null ? null : subtitle.asText().orElse(null),
+        fadeIn,
+        stay,
+        fadeOut);
+  }
+
+  /**
+   * Send a title to this channel.
+   *
+   * @param title the title as a localized reference line
+   * @param subtitle the subtitle as a localized reference line
+   * @param fadeIn how long until the title appears in ticks
+   * @param stay how long until the title stays in ticks
+   * @param fadeOut how long until the title fades in ticks
+   * @return this same instance
+   */
+  @NonNull
+  default Channel sendTitle(
+      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
+    return this.sendTitle(
+        title == null ? null : title.asLocalized(this),
+        subtitle == null ? null : subtitle.asLocalized(this),
+        fadeIn,
+        stay,
+        fadeOut);
+  }
+
+  /**
    * Set the header and bottom of the tab-list.
    *
    * @param header the header text to set
