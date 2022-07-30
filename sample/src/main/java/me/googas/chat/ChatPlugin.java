@@ -24,7 +24,7 @@ public class ChatPlugin extends JavaPlugin {
     // Load languages
     try {
       ResourceManager.getInstance()
-          .registerAll(this, YamlLanguage.load(this, this.getDataFolder(), "en", "es"));
+          .registerAll(this, YamlLanguage.load(this, this.getDataFolder(), "lang/en", "lang/es"));
     } catch (IOException e) {
       errors.handle(Level.SEVERE, "Failed to create 'lang' directory", e);
     }
