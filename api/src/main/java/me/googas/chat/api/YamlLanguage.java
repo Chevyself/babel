@@ -72,10 +72,10 @@ public final class YamlLanguage implements Language {
     } else {
       List<YamlLanguage> languages = new ArrayList<>();
       for (String name : lang) {
-        String resourcePath = "lang/" + (!name.endsWith(".yml") ? name + ".yml" : name);
+        String resourcePath = !name.endsWith(".yml") ? name + ".yml" : name;
         InputStream resource = plugin.getResource(resourcePath);
         if (resource != null) {
-          File file = new File(directory, name + ".yml");
+          File file = new File(directory, name.replace("/", File.separator) + ".yml");
           try {
             if (!file.exists() && !file.createNewFile()) {
               ErrorHandler.getInstance().handle(Level.SEVERE, "Could not create file " + file);
