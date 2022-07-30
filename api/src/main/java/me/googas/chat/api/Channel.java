@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.NonNull;
 import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.softdependencies.viaversion.ViaVersionSoft;
 import me.googas.chat.sound.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
@@ -59,20 +60,13 @@ public interface Channel {
             .orElseGet(
                 () -> {
                   PlayerChannel channel;
-                  /* FIXME
-                  if (Starbox.getCompatibilities().isEnabled("ViaVersion")) {
-                    channel =
-                        Starbox.getModules()
-                            .get(ProtocolChannelsModule.class)
-                            .map(module -> module.getChannel(uniqueId))
-                            .orElseGet(() -> () -> uniqueId);
+                  if (ViaVersionSoft.isEnabled()) {
+                    return ViaVersionSoft.getProtocolChannel(uniqueId);
                   } else {
-
+                    channel = () -> uniqueId;
+                    Channel.players.add(channel);
+                    return channel;
                   }
-                   */
-                  channel = () -> uniqueId;
-                  Channel.players.add(channel);
-                  return channel;
                 });
   }
 

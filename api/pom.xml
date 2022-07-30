@@ -18,10 +18,22 @@
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <!-- ViaVersion -->
+        <repository>
+            <id>viaversion-repo</id>
+            <url>https://repo.viaversion.com</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <!-- Soft dependencies -->
+        <!-- ViaVersion -->
+        <dependency>
+            <groupId>com.viaversion</groupId>
+            <artifactId>viaversion-api</artifactId>
+            <version>${viaversion-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- PAPI -->
         <dependency>
             <groupId>me.clip</groupId>
@@ -55,5 +67,6 @@
         <adapter-1.11.version>1.0-SNAPSHOT</adapter-1.11.version>
         <adapter.version>1.0-SNAPSHOT</adapter.version>
         <placeholderapi.version>2.11.2</placeholderapi.version>
+        <viaversion-api.version>4.4.1</viaversion-api.version>
     </properties>
 </project>
