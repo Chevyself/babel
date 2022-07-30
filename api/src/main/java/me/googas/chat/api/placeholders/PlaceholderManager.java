@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.NonNull;
+import me.googas.chat.api.softdependencies.papi.PapiSoft;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
@@ -97,13 +98,9 @@ public final class PlaceholderManager {
    */
   @NonNull
   public String build(@NonNull OfflinePlayer player, @NonNull String raw) {
-    /* FIXME
-    Optional<PAPIPlaceholderModule> papiPlaceholderModule =
-            Starbox.getModules().get(PAPIPlaceholderModule.class);
-    if (papiPlaceholderModule.isPresent()) {
-        raw = papiPlaceholderModule.get().build(player, raw);
+    if (PapiSoft.isEnabled()) {
+      raw = PapiSoft.getBuilder().build(player, raw);
     }
-     */
     Matcher matcher = PlaceholderManager.PATTERN.matcher(raw);
     while (matcher.find()) {
       String name = matcher.group().replace("%", "");
