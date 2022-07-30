@@ -22,7 +22,9 @@ public final class Versions {
           new Player(14, 477, 498),
           new Player(15, 573, 578),
           new Player(16, 735, 754),
-          new Player(17, 755, 756));
+          new Player(17, 755, 756),
+          new Player(18, 757, 758),
+          new Player(19, 759, 759));
 
   public static final int MIN_BUKKIT = 8;
   public static final int MAX_BUKKIT = 19;
