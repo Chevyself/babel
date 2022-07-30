@@ -73,7 +73,7 @@
   </dependencies>
 
   <properties>
-    <commands.version>1.0.0-PRE-3</commands.version>
+    <commands.version>1.0.0-PRE-4</commands.version>
     <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
     <lombok.version>1.18.24</lombok.version>
     <maven.compiler.source>8</maven.compiler.source>
