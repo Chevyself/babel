@@ -1,5 +1,6 @@
 package me.googas.chat;
 
+import java.util.Locale;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.lines.Line;
@@ -27,7 +28,8 @@ public class SampleCommands {
               behaviour = ArgumentBehaviour.CONTINUOUS,
               suggestions = {"$", "$cmd.hello"})
           String line) {
-    return Line.parse(Language.getLocale(context.getSender()), line);
+    Locale locale = Language.getLocale(context.getSender());
+    return Line.parse(locale, line).formatSample(locale);
   }
 
   @Command(aliases = "sound", description = "a")

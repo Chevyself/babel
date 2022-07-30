@@ -130,7 +130,11 @@ public interface Line extends BukkitResult {
       if (string.startsWith("localized:")) {
         string = string.substring(10);
       } else if (string.startsWith("$")) {
-        string = string.substring(1);
+        if (string.startsWith("${") && string.endsWith("}")) {
+          string = string.substring(2, string.length() - 1);
+        } else {
+          string = string.substring(1);
+        }
       }
       return Line.localized(locale, string);
     } else {

@@ -6,12 +6,16 @@ import java.util.regex.Pattern;
 import lombok.NonNull;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.Localized;
-import me.googas.chat.api.lines.LocalizedReference;
 
 /** Formatter for sample lines. */
 public final class SampleFormatter implements Formatter, Localized.LocalizedFormatter {
 
-  @NonNull private static final Pattern PATTERN = Pattern.compile("(?<!\\w)\\$\\w(\\S+)");
+  /**
+   * Pattern to find anything that is inside a word starting with '$' and inside '{}' such as:
+   *
+   * <p>${this.will.be.matched}
+   */
+  @NonNull private static final Pattern PATTERN = Pattern.compile("\\$\\{(.*?)}");
 
   public SampleFormatter() {}
 
@@ -31,16 +35,12 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
     String raw = line.getRaw();
     Matcher matcher = SampleFormatter.PATTERN.matcher(raw);
     while (matcher.find()) {
-      String key = matcher.group().replace("\"", "");
-      Line bukkitLine = Line.parse(key);
-      String replacement;
-      if (bukkitLine instanceof LocalizedReference) {
-        LocalizedReference reference = (LocalizedReference) bukkitLine;
-        replacement = reference.asLocalized(locale).getRaw();
-      } else {
-        replacement = bukkitLine.getRaw();
-      }
-      raw = raw.replace(key, replacement);
+      String group = matcher.group();
+      // I don't really understand why remove quotation marks
+      // keep it removed until theres a reason
+      // String key = group.replace("\"", "");
+      String key = group.substring(2, group.length() - 1);
+      raw = raw.replace(group, Line.localized(key).asLocalized(locale).getRaw());
     }
     return line.setRaw(raw);
   }
