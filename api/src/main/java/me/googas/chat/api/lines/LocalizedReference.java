@@ -7,7 +7,6 @@ import me.googas.chat.ErrorHandler;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.lines.format.Formatter;
-import me.googas.commands.bukkit.result.Result;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -90,12 +89,6 @@ public final class LocalizedReference implements Line {
         new HashMap<>(this.placeholders),
         new ArrayList<>(this.formatters),
         this.key);
-  }
-
-  @Override
-  public @NonNull Result asResult() {
-    ErrorHandler.getInstance().handle(Level.WARNING, "Raw use of LocalizedReference#asResult");
-    return this.asLocalized().asResult();
   }
 
   @Override

@@ -15,7 +15,6 @@ import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
 import me.googas.chat.api.placeholders.PlaceholderManager;
 import me.googas.commands.bukkit.result.BukkitResult;
-import me.googas.commands.bukkit.result.Result;
 import me.googas.commands.exceptions.ArgumentProviderException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.OfflinePlayer;
@@ -146,15 +145,6 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   Line copy();
-
-  /**
-   * Build the line as a {@link Result} for commands.
-   *
-   * @return the line built as a result
-   */
-  @Deprecated
-  @NonNull
-  Result asResult();
 
   /**
    * Build the message.

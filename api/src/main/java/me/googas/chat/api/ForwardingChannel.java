@@ -2,7 +2,6 @@ package me.googas.chat.api;
 
 import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
 import me.googas.chat.sound.WrappedSoundCategory;
@@ -99,27 +98,6 @@ public interface ForwardingChannel extends Channel {
     @NonNull
     default Multiple send(@NonNull String text) {
       this.getChannels().forEach(channel -> channel.send(text));
-      return this;
-    }
-
-    @Override
-    @NonNull
-    default Multiple localized(@NonNull String key) {
-      this.getChannels().forEach(channel -> channel.localized(key));
-      return this;
-    }
-
-    @Override
-    @NonNull
-    default Multiple localized(@NonNull String key, @NonNull Map<String, String> map) {
-      this.getChannels().forEach(channel -> channel.localized(key, map));
-      return this;
-    }
-
-    @Override
-    @NonNull
-    default Multiple localized(@NonNull String key, @NonNull Object... objects) {
-      this.getChannels().forEach(channel -> channel.localized(key, objects));
       return this;
     }
 

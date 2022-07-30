@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
-import me.googas.commands.bukkit.result.Result;
 import me.googas.commands.bukkit.utils.Components;
 import me.googas.commands.util.Strings;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -38,11 +37,6 @@ public final class Localized implements Line {
   @Override
   public @NonNull Localized copy() {
     return new Localized(locale, json);
-  }
-
-  @Override
-  public @NonNull Result asResult() {
-    return new Result(this.build());
   }
 
   @Override

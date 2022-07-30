@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
 import me.googas.chat.api.lines.format.Formatter;
-import me.googas.commands.bukkit.result.Result;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.bukkit.utils.Components;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -21,11 +20,6 @@ public final class Plain implements Line {
   @Override
   public @NonNull Plain copy() {
     return new Plain(text);
-  }
-
-  @Override
-  public @NonNull Result asResult() {
-    return new Result(this.build());
   }
 
   @Override

@@ -3,7 +3,6 @@ package me.googas.chat.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.NonNull;
@@ -87,49 +86,6 @@ public interface Channel {
    */
   @NonNull
   Channel send(@NonNull String text);
-
-  /**
-   * Send a localized {@link Line}.
-   *
-   * @param key the key to match the json/text
-   * @return this same instance
-   */
-  @NonNull
-  @Deprecated
-  default Channel localized(@NonNull String key) {
-    this.send(Line.localized(this, key).formatSample().build());
-    return this;
-  }
-
-  /**
-   * Send a localized formatted {@link Line}.
-   *
-   * @see Line#format(Map)
-   * @param key the key to match the json/text
-   * @param map to format the line
-   * @return this same instance
-   */
-  @NonNull
-  @Deprecated
-  default Channel localized(@NonNull String key, @NonNull Map<String, String> map) {
-    this.send(Line.localized(this, key).format(map).formatSample().build());
-    return this;
-  }
-
-  /**
-   * Send a localized formatted {@link Line}.
-   *
-   * @see Line#format(Object...)
-   * @param key the key to match the json/text
-   * @param objects to format the line
-   * @return this same instance
-   */
-  @NonNull
-  @Deprecated
-  default Channel localized(@NonNull String key, @NonNull Object... objects) {
-    this.send(Line.localized(this, key).format(objects).formatSample().build());
-    return this;
-  }
 
   /**
    * Send a line to this channel.
