@@ -5,21 +5,25 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 
-public class PapiSoft {
+public final class PapiSoft {
 
-  @Getter private static final boolean enabled;
+  @Getter private static boolean enabled;
   private static PapiPlaceholderBuilder builder;
 
   static {
-    enabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
-    if (enabled) {
-      builder = new PapiPlaceholderBuilder();
-    }
+    reload();
   }
 
   @NonNull
   public static PapiPlaceholderBuilder getBuilder() {
     return Objects.requireNonNull(
         builder, "Builder has not been enabled. Check if it has been with #isEnabled");
+  }
+
+  public static void reload() {
+    enabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
+    if (enabled) {
+      builder = new PapiPlaceholderBuilder();
+    }
   }
 }

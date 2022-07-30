@@ -12,10 +12,14 @@ import org.bukkit.plugin.Plugin;
 
 public class ViaVersionSoft {
 
-  @Getter private static final boolean enabled;
-  private static final ViaVersionProtocol protocol;
+  @Getter private static boolean enabled;
+  private static ViaVersionProtocol protocol;
 
   static {
+    reload();
+  }
+
+  private static void reload() {
     enabled = Bukkit.getServer().getPluginManager().getPlugin("ViaVersion") != null;
     if (enabled) {
       protocol = new ViaVersionProtocol();
