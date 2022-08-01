@@ -18,9 +18,9 @@ public final class ResultHandler implements Middleware<CommandContext> {
     CommandSender sender = context.getSender();
     Channel channel = Channel.of(sender);
     if (result instanceof LocalizedReference) {
-      channel.send(((LocalizedReference) result).asLocalized(channel));
+      channel.send(((LocalizedReference) result).asLocalized(channel).formatSample());
     } else if (result instanceof Line) {
-      channel.send(((Line) result));
+      channel.send(((Line) result).formatSample());
     } else if (result instanceof BukkitResult) {
       BukkitUtils.send(sender, ((BukkitResult) result).getComponents());
     }
