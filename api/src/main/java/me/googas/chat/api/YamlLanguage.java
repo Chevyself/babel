@@ -75,9 +75,12 @@ public final class YamlLanguage implements Language {
         String resourcePath = !name.endsWith(".yml") ? name + ".yml" : name;
         InputStream resource = plugin.getResource(resourcePath);
         if (resource != null) {
-          File file = new File(directory, name.replace("/", File.separator) + ".yml");
+          File file = new File(directory, resourcePath.replace("/", File.separator));
           try {
-            if (!file.exists() && !file.createNewFile()) {
+            if (!file.exists()
+                && !file.createNewFile()
+                && !file.getParentFile().exists()
+                && !file.getParentFile().mkdirs()) {
               ErrorHandler.getInstance().handle(Level.SEVERE, "Could not create file " + file);
             } else {
               languages.add(YamlLanguage.load(resource, file));
