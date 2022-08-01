@@ -77,10 +77,10 @@ public final class YamlLanguage implements Language {
         if (resource != null) {
           File file = new File(directory, resourcePath.replace("/", File.separator));
           try {
-            if (!file.getParentFile().exists()
-                && !file.getParentFile().mkdirs()
-                && !file.exists()
-                && !file.createNewFile()) {
+            if (!file.exists()
+                && (file.getParentFile().exists()
+                    ? !file.createNewFile()
+                    : !file.getParentFile().mkdirs() || !file.createNewFile())) {
               ErrorHandler.getInstance().handle(Level.SEVERE, "Could not create file " + file);
             } else {
               languages.add(YamlLanguage.load(resource, file));
