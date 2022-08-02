@@ -11,6 +11,44 @@
     <artifactId>api</artifactId>
     <version>1.0.0-PRE-1</version>
 
+    <build>
+        <plugins>
+            <!-- Maven jar shade plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven-shade-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>me.googas.chat:adapter</include>
+                                    <include>me.googas.chat:adapter-1.12</include>
+                                    <include>me.googas.chat:adapter-1.11</include>
+                                    <include>me.googas.chat:adapter-1.8</include>
+                                    <include>me.googas:reflect</include>
+                                </includes>
+                            </artifactSet>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                </filter>
+                            </filters>
+                            <outputFile>../output/${project.parent.artifactId}-API-${project.version}.jar
+                            </outputFile>
+                        </configuration>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <repositories>
         <!-- Soft dependencies -->
         <!-- PAPI -->
@@ -46,25 +84,25 @@
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter-1.12</artifactId>
             <version>${adapter.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter-1.11</artifactId>
             <version>${adapter.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter-1.8</artifactId>
             <version>${adapter.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter</artifactId>
             <version>${adapter.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <!-- Spigot -->
         <dependency>
@@ -79,5 +117,6 @@
         <adapter.version>1.0.0-PRE-1</adapter.version>
         <placeholderapi.version>2.11.2</placeholderapi.version>
         <viaversion-api.version>4.4.1</viaversion-api.version>
+        <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
     </properties>
 </project>

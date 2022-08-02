@@ -61,12 +61,6 @@
       <version>${api.version}</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>me.googas.chat</groupId>
-      <artifactId>adapter-1.8</artifactId>
-      <version>${api.version}</version>
-      <scope>compile</scope>
-    </dependency>
     <!-- Spigot -->
     <dependency>
       <groupId>org.spigotmc</groupId>
