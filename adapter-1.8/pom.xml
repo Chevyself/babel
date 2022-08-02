@@ -16,7 +16,7 @@
         <dependency>
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter</artifactId>
-            <version>${adapter.version}</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- Spigot -->
         <dependency>
@@ -26,8 +26,4 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <properties>
-        <adapter.version>1.0-SNAPSHOT</adapter.version>
-    </properties>
 </project>

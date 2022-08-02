@@ -58,7 +58,7 @@
     <dependency>
       <groupId>me.googas.chat</groupId>
       <artifactId>api</artifactId>
-      <version>${api.version}</version>
+      <version>1.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <!-- Spigot -->
@@ -71,7 +71,7 @@
   </dependencies>
 
   <properties>
-    <api.version>1.0-SNAPSHOT</api.version>
     <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
   </properties>
 </project>
+
