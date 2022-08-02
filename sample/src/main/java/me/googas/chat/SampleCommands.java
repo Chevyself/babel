@@ -1,9 +1,12 @@
 package me.googas.chat;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.scoreboard.ScoreboardLine;
 import me.googas.commands.annotations.Free;
 import me.googas.commands.annotations.Parent;
 import me.googas.commands.annotations.Required;
@@ -23,6 +26,14 @@ public class SampleCommands {
       @Required(name = "text", behaviour = ArgumentBehaviour.CONTINUOUS) String text) {
     channel.giveBossBar(text, ((Double) progress).floatValue());
     return Line.of("Given boss bar");
+  }
+
+  @Command(aliases = "scoreboard")
+  public BukkitResult scoreboard(Channel channel) {
+    List<ScoreboardLine> layout =
+        ScoreboardLine.parse(Arrays.asList("This", "is", "the", "best", ":)"), false);
+    channel.getScoreboard().setLayout(layout).initialize("Hey!");
+    return Line.of("Applied");
   }
 
   @Parent

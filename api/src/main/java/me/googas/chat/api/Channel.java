@@ -9,10 +9,12 @@ import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
+import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.softdependencies.viaversion.ViaVersionSoft;
 import me.googas.chat.wrappers.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,10 +33,20 @@ public interface Channel {
   @NonNull
   static Channel of(@NonNull CommandSender sender) {
     if (sender instanceof Player) {
-      return Channel.of((Player) sender);
+      return Channel.of((OfflinePlayer) sender);
     } else {
       return ConsoleChannel.getInstance();
     }
+  }
+
+  /**
+   * Get the channel of a {@link OfflinePlayer}.
+   *
+   * @param player the player to get the channel from
+   * @return the channel
+   */
+  static PlayerChannel of(@NonNull OfflinePlayer player) {
+    return Channel.of(player.getUniqueId());
   }
 
   /**
@@ -255,4 +267,7 @@ public interface Channel {
 
   @NonNull
   Optional<? extends AdaptedBossBar> getBossBar();
+
+  @NonNull
+  ChannelScoreboard getScoreboard();
 }

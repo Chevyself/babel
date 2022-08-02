@@ -11,6 +11,7 @@ public class LatestAdaptedBossBar implements AdaptedBossBar {
   @NonNull private final BossBar bukkit;
   @NonNull @Getter private final UUID owner;
   @Getter private boolean destroyed;
+
   LatestAdaptedBossBar(@NonNull BossBar bukkit, @NonNull UUID owner) {
     this.bukkit = bukkit;
     this.owner = owner;

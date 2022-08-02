@@ -1,12 +1,16 @@
 package me.googas.chat.api;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
+import me.googas.chat.api.scoreboard.EmptyScoreboard;
+import me.googas.chat.api.scoreboard.ForwardingScoreboard;
 import me.googas.chat.wrappers.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
@@ -137,8 +141,23 @@ public interface ForwardingChannel extends Channel {
   @NonNull
   Optional<? extends AdaptedBossBar> getBossBar();
 
+  @Override
+  @NonNull
+  default ForwardingScoreboard getScoreboard() {
+    return () ->
+        Collections.singletonList(
+            this.getForward().map(Channel::getScoreboard).orElseGet(EmptyScoreboard::new));
+  }
+
   /** This type of forwarding channel wraps more than one channel. */
   interface Multiple extends Channel {
+
+    @Override
+    @NonNull
+    default ForwardingScoreboard getScoreboard() {
+      return () ->
+          this.getChannels().stream().map(Channel::getScoreboard).collect(Collectors.toList());
+    }
 
     @Override
     @NonNull

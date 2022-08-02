@@ -44,6 +44,12 @@
         <!-- Adapters -->
         <dependency>
             <groupId>me.googas.chat</groupId>
+            <artifactId>adapter-1.12</artifactId>
+            <version>${adapter.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.googas.chat</groupId>
             <artifactId>adapter-1.11</artifactId>
             <version>${adapter.version}</version>
             <scope>compile</scope>

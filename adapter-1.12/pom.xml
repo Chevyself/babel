@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>me.googas.chat</groupId>
+        <artifactId>chat</artifactId>
+        <version>1.0.0-PRE-1</version>
+    </parent>
+
+    <artifactId>adapter-1.12</artifactId>
+    <version>1.0.0-PRE-1</version>
+
+    <dependencies>
+        <!-- Adapters core -->
+        <dependency>
+            <groupId>me.googas.chat</groupId>
+            <artifactId>adapter</artifactId>
+            <version>${adapter.version}</version>
+        </dependency>
+        <!-- Spigot -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${spigot-api.version-v12}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <adapter.version>1.0.0-PRE-1</adapter.version>
+    </properties>
+</project>

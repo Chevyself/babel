@@ -26,6 +26,7 @@
                 <includes>
                   <include>me.googas.chat:api</include>
                   <include>me.googas.chat:adapter</include>
+                  <include>me.googas.chat:adapter-1.12</include>
                   <include>me.googas.chat:adapter-1.11</include>
                   <include>me.googas.chat:adapter-1.8</include>
                   <include>me.googas.starbox-commands:bukkit</include>

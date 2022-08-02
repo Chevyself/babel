@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.StringJoiner;
 import lombok.Getter;
 import lombok.NonNull;
+import me.googas.chat.adapters.LatestObjectiveAdapter;
+import me.googas.chat.adapters.ObjectiveAdapter;
+import me.googas.chat.adapters.v1_12.LegacyObjectiveAdapter;
 import org.bukkit.Bukkit;
 
 /** Utility class to get Bukkit version. */
@@ -69,6 +72,15 @@ public final class Versions {
         .filter(player -> player.getBukkit() == Versions.BUKKIT)
         .findFirst()
         .orElseThrow(NullPointerException::new);
+  }
+
+  @NonNull
+  public static ObjectiveAdapter getObjectiveAdapter() {
+    if (BUKKIT > 12) {
+      return new LatestObjectiveAdapter();
+    } else {
+      return new LegacyObjectiveAdapter();
+    }
   }
 
   /**

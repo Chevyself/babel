@@ -1,7 +1,10 @@
 package me.googas.chat.api;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.NonNull;
@@ -12,6 +15,7 @@ import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
+import me.googas.chat.api.scoreboard.PlayerScoreboard;
 import me.googas.chat.api.util.Players;
 import me.googas.chat.api.util.Versions;
 import me.googas.chat.wrappers.WrappedSoundCategory;
@@ -29,6 +33,8 @@ public interface PlayerChannel extends Channel {
   @NonNull PlayerTitleAdapter titleAdapter = Players.getTitleAdapter();
   @NonNull PlayerTabListAdapter tabListAdapter = Players.getTabListAdapter();
   @NonNull BossBarAdapter bossBarAdapter = Players.getBossBarAdapter();
+
+  @NonNull Set<PlayerScoreboard> scoreboards = new HashSet<>();
 
   @Override
   @NonNull
@@ -162,6 +168,24 @@ public interface PlayerChannel extends Channel {
   @NonNull
   default PlayerChannel giveBossBar(@NonNull Line text, float progress) {
     return (PlayerChannel) Channel.super.giveBossBar(text, progress);
+  }
+
+  @Override
+  @NonNull
+  default PlayerScoreboard getScoreboard() {
+    return scoreboards.stream()
+        .filter(
+            scoreboard -> {
+              return scoreboard.getOwner().equals(this.getUniqueId());
+            })
+        .findFirst()
+        .orElseGet(
+            () -> {
+              PlayerScoreboard scoreboard =
+                  PlayerScoreboard.create(this.getUniqueId(), new ArrayList<>());
+              scoreboards.add(scoreboard);
+              return scoreboard;
+            });
   }
 
   @Override

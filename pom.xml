@@ -10,6 +10,7 @@
 
   <modules>
     <module>adapter</module>
+    <module>adapter-1.12</module>
     <module>adapter-1.11</module>
     <module>adapter-1.8</module>
     <module>api</module>
@@ -81,6 +82,7 @@
     <maven.compiler.target>8</maven.compiler.target>
     <reflect.version>0.0.1-SNAPSHOT</reflect.version>
     <spigot-api.version-latest>1.18.2-R0.1-SNAPSHOT</spigot-api.version-latest>
+    <spigot-api.version-v12>1.12.2-R0.1-SNAPSHOT</spigot-api.version-v12>
     <spigot-api.version-v11>1.11.2-R0.1-SNAPSHOT</spigot-api.version-v11>
     <spigot-api.version-v8>1.8.8-R0.1-SNAPSHOT</spigot-api.version-v8>
   </properties>
