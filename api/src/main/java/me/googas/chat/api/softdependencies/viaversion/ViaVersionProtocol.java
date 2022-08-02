@@ -2,22 +2,27 @@ package me.googas.chat.api.softdependencies.viaversion;
 
 import com.viaversion.viaversion.api.Via;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.PlayerChannel;
 import me.googas.chat.api.util.Versions;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 
 public class ViaVersionProtocol implements Listener {
 
   @NonNull private final Map<UUID, Versions.Player> versions = new HashMap<>();
+  @NonNull private final Set<ProtocolPlayerChannel> channels = new HashSet<>();
 
   /**
    * Get the channel for a {@link Player} with its {@link UUID}.
@@ -26,8 +31,16 @@ public class ViaVersionProtocol implements Listener {
    * @return the created channel for the player
    */
   @NonNull
-  public PlayerChannel getChannel(@NonNull UUID uniqueId) {
-    return new ProtocolPlayerChannel(uniqueId);
+  public ProtocolPlayerChannel getChannel(@NonNull UUID uniqueId) {
+    return channels.stream()
+        .filter(channel -> channel.getUniqueId().equals(uniqueId))
+        .findFirst()
+        .orElseGet(
+            () -> {
+              ProtocolPlayerChannel channel = new ProtocolPlayerChannel(uniqueId);
+              channels.add(channel);
+              return channel;
+            });
   }
 
   /**
@@ -41,6 +54,10 @@ public class ViaVersionProtocol implements Listener {
     return versions.computeIfAbsent(
         player.getUniqueId(),
         uuid -> Versions.getVersion(Via.getAPI().getPlayerVersion(player.getUniqueId())));
+  }
+
+  public void register(@NonNull Plugin plugin) {
+    Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   /**

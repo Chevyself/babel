@@ -43,7 +43,7 @@ public class ProtocolPlayerChannel implements PlayerChannel {
       String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     if (this.version.getBukkit() < 8) {
       if (title != null) this.send(title);
-      if (title != null) this.send(subtitle);
+      if (subtitle != null) this.send(subtitle);
       return this;
     } else {
       return (ProtocolPlayerChannel)
