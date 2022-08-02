@@ -16,6 +16,15 @@ import org.bukkit.entity.Player;
 
 public class SampleCommands {
 
+  @Command(aliases = "bossbar")
+  public BukkitResult bossbar(
+      Channel channel,
+      @Required(name = "progress") double progress,
+      @Required(name = "text", behaviour = ArgumentBehaviour.CONTINUOUS) String text) {
+    channel.giveBossBar(text, ((Double) progress).floatValue());
+    return Line.of("Given boss bar");
+  }
+
   @Parent
   @Command(
       aliases = "chat",

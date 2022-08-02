@@ -4,9 +4,10 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 import lombok.NonNull;
+import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
-import me.googas.chat.sound.WrappedSoundCategory;
+import me.googas.chat.wrappers.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -104,8 +105,72 @@ public interface ForwardingChannel extends Channel {
     return this;
   }
 
+  @Override
+  @NonNull
+  default ForwardingChannel setTabList(Line header, Line bottom) {
+    return (ForwardingChannel) Channel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  @NonNull
+  default ForwardingChannel setTabList(LocalizedReference header, LocalizedReference bottom) {
+    return (ForwardingChannel) Channel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  @NonNull
+  ForwardingChannel giveBossBar(@NonNull String text, float progress);
+
+  @Override
+  @NonNull
+  default ForwardingChannel giveBossBar(@NonNull Line text, float progress) {
+    return (ForwardingChannel) Channel.super.giveBossBar(text, progress);
+  }
+
+  @Override
+  @NonNull
+  default ForwardingChannel giveBossBar(@NonNull LocalizedReference reference, float progress) {
+    return (ForwardingChannel) Channel.super.giveBossBar(reference, progress);
+  }
+
+  @Override
+  @NonNull
+  Optional<? extends AdaptedBossBar> getBossBar();
+
   /** This type of forwarding channel wraps more than one channel. */
   interface Multiple extends Channel {
+
+    @Override
+    @NonNull
+    default Multiple setTabList(Line header, Line bottom) {
+      return (Multiple) Channel.super.setTabList(header, bottom);
+    }
+
+    @Override
+    @NonNull
+    default Multiple setTabList(LocalizedReference header, LocalizedReference bottom) {
+      return (Multiple) Channel.super.setTabList(header, bottom);
+    }
+
+    @Override
+    @NonNull
+    Multiple giveBossBar(@NonNull String text, float progress);
+
+    @Override
+    @NonNull
+    default Multiple giveBossBar(@NonNull Line text, float progress) {
+      return (Multiple) Channel.super.giveBossBar(text, progress);
+    }
+
+    @Override
+    @NonNull
+    default Multiple giveBossBar(@NonNull LocalizedReference reference, float progress) {
+      return (Multiple) Channel.super.giveBossBar(reference, progress);
+    }
+
+    @Override
+    @NonNull
+    Optional<? extends AdaptedBossBar> getBossBar();
 
     /**
      * Get all the wrapped channels.

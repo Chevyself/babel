@@ -6,10 +6,11 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.NonNull;
+import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.softdependencies.viaversion.ViaVersionSoft;
-import me.googas.chat.sound.WrappedSoundCategory;
+import me.googas.chat.wrappers.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -238,4 +239,20 @@ public interface Channel {
    * @return the locale
    */
   Optional<Locale> getLocale();
+
+  @NonNull
+  Channel giveBossBar(@NonNull String text, float progress);
+
+  @NonNull
+  default Channel giveBossBar(@NonNull Line text, float progress) {
+    return this.giveBossBar(text.asText().orElse(""), progress);
+  }
+
+  @NonNull
+  default Channel giveBossBar(@NonNull LocalizedReference reference, float progress) {
+    return this.giveBossBar(reference.asLocalized(this), progress);
+  }
+
+  @NonNull
+  Optional<? extends AdaptedBossBar> getBossBar();
 }

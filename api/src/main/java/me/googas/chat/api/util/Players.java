@@ -1,6 +1,8 @@
 package me.googas.chat.api.util;
 
 import lombok.NonNull;
+import me.googas.chat.adapters.BossBarAdapter;
+import me.googas.chat.adapters.LatestBossBarAdapter;
 import me.googas.chat.adapters.LatestPlayerLocaleAdapter;
 import me.googas.chat.adapters.LatestPlayerTabListAdapter;
 import me.googas.chat.adapters.LatestPlayerTitleAdapter;
@@ -10,6 +12,7 @@ import me.googas.chat.adapters.PlayerTitleAdapter;
 import me.googas.chat.adapters.v1_11.LegacyPlayerLocaleAdapter;
 import me.googas.chat.adapters.v1_11.LegacyPlayerTabListAdapter;
 import me.googas.chat.adapters.v1_11.LegacyPlayerTitleAdapter;
+import me.googas.chat.adapters.v1_8.LegacyBossBarAdapter;
 import org.bukkit.entity.Player;
 
 public final class Players {
@@ -51,6 +54,15 @@ public final class Players {
       return new LatestPlayerTabListAdapter();
     } else {
       return new LegacyPlayerTabListAdapter();
+    }
+  }
+
+  @NonNull
+  public static BossBarAdapter getBossBarAdapter() {
+    if (Versions.BUKKIT > 8) {
+      return new LatestBossBarAdapter();
+    } else {
+      return new LegacyBossBarAdapter();
     }
   }
 }

@@ -54,21 +54,16 @@ public final class ResourceManager {
    * Get a bukkit languages from a locale.
    *
    * @param locale the locale to get the bukkit languages for
-   * @return the pack of languages
+   * @return the list of languages
    */
-  public LanguagesPack getLanguages(@NonNull Locale locale) {
-    List<Language> languages =
-        this.languages.values().stream()
-            .flatMap(Collection::stream)
-            .filter(
-                language ->
-                    language.isSample()
-                        || language
-                            .getLocale()
-                            .getLanguage()
-                            .equalsIgnoreCase(locale.getLanguage()))
-            .collect(Collectors.toList());
-    return new LanguagesPack(languages);
+  public List<Language> getLanguages(@NonNull Locale locale) {
+    return this.languages.values().stream()
+        .flatMap(Collection::stream)
+        .filter(
+            language ->
+                language.isSample()
+                    || language.getLocale().getLanguage().equalsIgnoreCase(locale.getLanguage()))
+        .collect(Collectors.toList());
   }
 
   /**

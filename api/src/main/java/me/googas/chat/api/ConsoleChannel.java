@@ -4,9 +4,10 @@ import java.util.Locale;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.NonNull;
+import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
-import me.googas.chat.sound.WrappedSoundCategory;
+import me.googas.chat.wrappers.WrappedSoundCategory;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
@@ -86,5 +87,36 @@ public final class ConsoleChannel implements Channel {
   @Override
   public Optional<Locale> getLocale() {
     return Optional.of(Locale.ENGLISH);
+  }
+
+  @Override
+  public @NonNull ConsoleChannel giveBossBar(@NonNull String text, float progress) {
+    return this;
+  }
+
+  @Override
+  public @NonNull Optional<? extends AdaptedBossBar> getBossBar() {
+    return Optional.empty();
+  }
+
+  @Override
+  public @NonNull ConsoleChannel setTabList(Line header, Line bottom) {
+    return (ConsoleChannel) Channel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  public @NonNull ConsoleChannel setTabList(LocalizedReference header, LocalizedReference bottom) {
+    return (ConsoleChannel) Channel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  public @NonNull ConsoleChannel giveBossBar(@NonNull Line text, float progress) {
+    return (ConsoleChannel) Channel.super.giveBossBar(text, progress);
+  }
+
+  @Override
+  public @NonNull ConsoleChannel giveBossBar(
+      @NonNull LocalizedReference reference, float progress) {
+    return (ConsoleChannel) Channel.super.giveBossBar(reference, progress);
   }
 }

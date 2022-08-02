@@ -3,14 +3,18 @@ package me.googas.chat.api;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
 import lombok.NonNull;
+import me.googas.chat.ErrorHandler;
+import me.googas.chat.adapters.AdaptedBossBar;
+import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.util.Players;
 import me.googas.chat.api.util.Versions;
-import me.googas.chat.sound.WrappedSoundCategory;
+import me.googas.chat.wrappers.WrappedSoundCategory;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
@@ -24,6 +28,7 @@ public interface PlayerChannel extends Channel {
 
   @NonNull PlayerTitleAdapter titleAdapter = Players.getTitleAdapter();
   @NonNull PlayerTabListAdapter tabListAdapter = Players.getTabListAdapter();
+  @NonNull BossBarAdapter bossBarAdapter = Players.getBossBarAdapter();
 
   @Override
   @NonNull
@@ -130,7 +135,7 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  default @NonNull Channel playSound(
+  default @NonNull PlayerChannel playSound(
       @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     this.getPlayer().ifPresent(player -> player.playSound(location, sound, volume, pitch));
     return this;
@@ -139,5 +144,55 @@ public interface PlayerChannel extends Channel {
   @Override
   default Optional<Locale> getLocale() {
     return this.getPlayer().map(Language::getLocale);
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel setTabList(Line header, Line bottom) {
+    return (PlayerChannel) Channel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel setTabList(LocalizedReference header, LocalizedReference bottom) {
+    return (PlayerChannel) Channel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel giveBossBar(@NonNull Line text, float progress) {
+    return (PlayerChannel) Channel.super.giveBossBar(text, progress);
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel giveBossBar(@NonNull LocalizedReference reference, float progress) {
+    return (PlayerChannel) Channel.super.giveBossBar(reference, progress);
+  }
+
+  @Override
+  @NonNull
+  default Optional<? extends AdaptedBossBar> getBossBar() {
+    return bossBarAdapter.getBossBar(this.getUniqueId());
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel giveBossBar(@NonNull String text, float progress) {
+    this.getPlayer()
+        .ifPresent(
+            player -> {
+              Optional<? extends AdaptedBossBar> optional = this.getBossBar();
+              if (optional.isPresent()) {
+                ErrorHandler.getInstance()
+                    .handle(Level.WARNING, "PlayerChannel#giveBossBar without #getBossBar check");
+                AdaptedBossBar bossBar = optional.get();
+                bossBar.setTitle(text);
+                bossBar.setProgress(progress);
+              } else {
+                bossBarAdapter.create(player, text, progress);
+              }
+            });
+    return this;
   }
 }

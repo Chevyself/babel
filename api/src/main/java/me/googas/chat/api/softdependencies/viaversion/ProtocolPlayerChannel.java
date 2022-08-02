@@ -1,14 +1,16 @@
 package me.googas.chat.api.softdependencies.viaversion;
 
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.PlayerChannel;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.util.Versions;
-import me.googas.chat.sound.WrappedSoundCategory;
+import me.googas.chat.wrappers.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -100,6 +102,38 @@ public class ProtocolPlayerChannel implements PlayerChannel {
       float pitch) {
     return (ProtocolPlayerChannel)
         PlayerChannel.super.playSound(location, sound, category, volume, pitch);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel setTabList(Line header, Line bottom) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel setTabList(
+      LocalizedReference header, LocalizedReference bottom) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.setTabList(header, bottom);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel giveBossBar(@NonNull Line text, float progress) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.giveBossBar(text, progress);
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel giveBossBar(
+      @NonNull LocalizedReference reference, float progress) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.giveBossBar(reference, progress);
+  }
+
+  @Override
+  public @NonNull Optional<? extends AdaptedBossBar> getBossBar() {
+    return PlayerChannel.super.getBossBar();
+  }
+
+  @Override
+  public @NonNull ProtocolPlayerChannel giveBossBar(@NonNull String text, float progress) {
+    return (ProtocolPlayerChannel) PlayerChannel.super.giveBossBar(text, progress);
   }
 
   @Override

@@ -47,6 +47,17 @@ public final class PacketType {
     return "net.minecraft.server." + Packet.NMS + "." + name;
   }
 
+  @NonNull
+  public Packet create(@NonNull Object... objects) throws PacketHandlingException {
+    return Packet.forType(this, objects);
+  }
+
+  @NonNull
+  public Packet create(@NonNull Class<?>[] params, @NonNull Object... objects)
+      throws PacketHandlingException {
+    return Packet.forType(this, params, objects);
+  }
+
   /** Packets while in game. */
   public static class Play {
 
@@ -59,6 +70,21 @@ public final class PacketType {
       @NonNull
       public static final PacketType HEADER_FOOTER =
           new PacketType("PacketPlayOutPlayerListHeaderFooter");
+      /** Spawns an entity for the player. */
+      @NonNull
+      public static final PacketType SPAWN_ENTITY_LIVING =
+          new PacketType("PacketPlayOutSpawnEntityLiving");
+
+      @NonNull
+      public static final PacketType ENTITY_DESTROY = new PacketType("PacketPlayOutEntityDestroy");
+
+      @NonNull
+      public static final PacketType ENTITY_METADATA =
+          new PacketType("PacketPlayOutEntityMetadata");
+
+      @NonNull
+      public static final PacketType ENTITY_TELEPORT =
+          new PacketType("PacketPlayOutEntityTeleport");
     }
   }
 }

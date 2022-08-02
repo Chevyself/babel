@@ -1,8 +1,10 @@
 package me.googas.chat.packet;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.BiConsumer;
 import lombok.Getter;
 import lombok.NonNull;
@@ -10,6 +12,7 @@ import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.entity.player.WrappedCraftPlayer;
 import me.googas.reflect.SimpleWrapper;
 import me.googas.reflect.wrappers.WrappedClass;
+import me.googas.reflect.wrappers.WrappedConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -39,22 +42,53 @@ public final class Packet extends SimpleWrapper<Object> {
     this.clazz = clazz;
   }
 
-  /**
-   * Create a packet for a given packet type.
-   *
-   * @param type the type of the packet to create
-   * @return the created packet
-   */
-  @NonNull
-  public static Packet forType(@NonNull PacketType type) throws PacketHandlingException {
+  public static Packet forType(
+      @NonNull PacketType type, @NonNull Class<?>[] params, Object... objects)
+      throws PacketHandlingException {
     WrappedClass<?> clazz = type.wrap();
     Object handle;
     try {
-      handle = clazz.getConstructor().invoke();
+      if (objects.length > 0) {
+        if (clazz.hasConstructor(params)) {
+          WrappedConstructor<?> constructor = clazz.getConstructor(params);
+          handle = constructor.invoke(objects);
+        } else {
+          throw new PacketHandlingException(
+              "Could not find constructor with " + Arrays.toString(params));
+        }
+      } else {
+        handle = clazz.getConstructor().invoke();
+      }
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke constructor for packet", e);
     }
     return new Packet(type, clazz, handle);
+  }
+
+  public static Packet forType(@NonNull PacketType type, Object... objects)
+      throws PacketHandlingException {
+    WrappedClass<?> clazz = type.wrap();
+    Object handle;
+    try {
+      if (objects.length > 0) {
+        return forType(type, getConstructorParameters(objects), objects);
+      } else {
+        handle = clazz.getConstructor().invoke();
+      }
+    } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+      throw new PacketHandlingException("Could not invoke constructor for packet", e);
+    }
+    return new Packet(type, clazz, handle);
+  }
+
+  private static Class<?>[] getConstructorParameters(Object... objects) {
+    List<Class<?>> classes = new ArrayList<>();
+    for (Object object : objects) {
+      if (object != null) {
+        classes.add(object.getClass());
+      }
+    }
+    return classes.toArray(new Class[0]);
   }
 
   /**

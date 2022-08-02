@@ -1,10 +1,11 @@
-package me.googas.chat.sound;
+package me.googas.chat.wrappers;
 
 import lombok.NonNull;
 import me.googas.reflect.SimpleWrapper;
 import org.bukkit.SoundCategory;
 
 /** Class to wrap {@link SoundCategory} to not crash when older versions cannot use it. */
+// TODO change this to enum
 public class WrappedSoundCategory extends SimpleWrapper<SoundCategory> {
   @NonNull public static final WrappedSoundCategory MASTER = WrappedSoundCategory.valueOf("MASTER");
   @NonNull public static final WrappedSoundCategory MUSIC = WrappedSoundCategory.valueOf("MUSIC");
