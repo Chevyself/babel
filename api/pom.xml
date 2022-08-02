@@ -46,25 +46,25 @@
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter-1.12</artifactId>
             <version>${adapter.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter-1.11</artifactId>
             <version>${adapter.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter-1.8</artifactId>
             <version>${adapter.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.googas.chat</groupId>
             <artifactId>adapter</artifactId>
             <version>${adapter.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <!-- Spigot -->
         <dependency>
