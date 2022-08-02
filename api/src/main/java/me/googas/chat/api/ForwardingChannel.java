@@ -123,7 +123,10 @@ public interface ForwardingChannel extends Channel {
 
   @Override
   @NonNull
-  ForwardingChannel giveBossBar(@NonNull String text, float progress);
+  default ForwardingChannel giveBossBar(@NonNull String text, float progress) {
+    this.getForward().ifPresent(channel -> channel.giveBossBar(text, progress));
+    return this;
+  }
 
   @Override
   @NonNull
@@ -139,7 +142,9 @@ public interface ForwardingChannel extends Channel {
 
   @Override
   @NonNull
-  Optional<? extends AdaptedBossBar> getBossBar();
+  default Optional<? extends AdaptedBossBar> getBossBar() {
+    return this.getForward().flatMap(Channel::getBossBar);
+  }
 
   @Override
   @NonNull
@@ -173,7 +178,10 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
-    Multiple giveBossBar(@NonNull String text, float progress);
+    default Multiple giveBossBar(@NonNull String text, float progress) {
+      this.getChannels().forEach(channel -> channel.giveBossBar(text, progress));
+      return this;
+    }
 
     @Override
     @NonNull
@@ -189,7 +197,9 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
-    Optional<? extends AdaptedBossBar> getBossBar();
+    default Optional<? extends AdaptedBossBar> getBossBar() {
+      return Optional.empty();
+    }
 
     /**
      * Get all the wrapped channels.
