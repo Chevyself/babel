@@ -40,7 +40,7 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
       // keep it removed until theres a reason
       // String key = group.replace("\"", "");
       String key = group.substring(2, group.length() - 1);
-      raw = raw.replace(group, Line.localized(key).asLocalized(locale).getRaw());
+      raw = raw.replace(group, Line.localized(locale, key).getRaw());
     }
     return line.setRaw(raw);
   }
