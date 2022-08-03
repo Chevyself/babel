@@ -1,5 +1,8 @@
 package me.googas.chat.api.lines;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -16,11 +19,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 public final class Localized implements Line {
 
   @NonNull @Getter private final Locale locale;
+  @NonNull private final List<Line> extra;
   @NonNull private String json;
 
   Localized(@NonNull Locale locale, @NonNull String json) {
     this.locale = locale;
     this.json = json;
+    this.extra = new ArrayList<>();
   }
 
   @Override
@@ -41,7 +46,9 @@ public final class Localized implements Line {
 
   @Override
   public @NonNull BaseComponent[] build() {
-    return Components.getComponent(json);
+    List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(json)));
+    this.extra.forEach(line -> components.addAll(line.getComponents()));
+    return components.toArray(new BaseComponent[0]);
   }
 
   @Override
@@ -64,6 +71,12 @@ public final class Localized implements Line {
   @Override
   public @NonNull Localized format(@NonNull Formatter formatter) {
     return (Localized) formatter.format(this);
+  }
+
+  @Override
+  public @NonNull Line append(@NonNull Line line) {
+    this.extra.add(line);
+    return this;
   }
 
   /** Represents a formatter which can format {@link Line} using {@link Locale}. */

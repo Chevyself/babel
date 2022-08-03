@@ -1,5 +1,8 @@
 package me.googas.chat.api.lines;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
@@ -11,10 +14,12 @@ import net.md_5.bungee.api.chat.BaseComponent;
 /** Represents a plain text line. */
 public final class Plain implements Line {
 
+  @NonNull private final List<Line> extra;
   @NonNull private String text;
 
   Plain(@NonNull String text) {
     this.text = text;
+    this.extra = new ArrayList<>();
   }
 
   @Override
@@ -24,7 +29,10 @@ public final class Plain implements Line {
 
   @Override
   public @NonNull BaseComponent[] build() {
-    return Components.deserializePlain('&', text);
+    List<BaseComponent> components =
+        new ArrayList<>(Arrays.asList(Components.deserializePlain('&', text)));
+    this.extra.forEach(line -> components.addAll(line.getComponents()));
+    return components.toArray(new BaseComponent[0]);
   }
 
   @Override
@@ -58,6 +66,12 @@ public final class Plain implements Line {
   @Override
   public @NonNull Plain format(@NonNull Formatter formatter) {
     formatter.format(this);
+    return this;
+  }
+
+  @Override
+  public @NonNull Line append(@NonNull Line line) {
+    this.extra.add(line);
     return this;
   }
 }

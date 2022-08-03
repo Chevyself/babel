@@ -1,6 +1,7 @@
 package me.googas.chat.api.lines;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -265,6 +266,15 @@ public interface Line extends BukkitResult {
   Line format(@NonNull Formatter formatter);
 
   /**
+   * Append a line.
+   *
+   * @param line the line to append
+   * @return this same instance
+   */
+  @NonNull
+  Line append(@NonNull Line line);
+
+  /**
    * Get the raw text of the line. This is the line without being formatted.
    *
    * <p>Ex: {@link Localized} the raw text is its json
@@ -318,4 +328,15 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   Optional<String> asText();
+
+  @NonNull
+  default Line appendMany(@NonNull Collection<Line> extra) {
+    extra.forEach(this::append);
+    return this;
+  }
+
+  @NonNull
+  default Line appendMany(@NonNull Line... lines) {
+    return this.appendMany(Arrays.asList(lines));
+  }
 }

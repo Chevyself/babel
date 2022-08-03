@@ -20,22 +20,26 @@ public final class LocalizedReference implements Line {
   /** Placeholders formatters. */
   @NonNull private final Map<String, String> placeholders;
   /** Formatters. */
-  @NonNull private final List<me.googas.chat.api.lines.format.Formatter> formatters;
+  @NonNull private final List<Formatter> formatters;
+
+  @NonNull private final List<Line> extra;
 
   @NonNull private String key;
 
   LocalizedReference(@NonNull String key) {
-    this(new ArrayList<>(), new HashMap<>(), new ArrayList<>(), key);
+    this(new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), key);
   }
 
   private LocalizedReference(
       @NonNull List<Object> objects,
       @NonNull Map<String, String> placeholders,
-      @NonNull List<me.googas.chat.api.lines.format.Formatter> formatters,
+      @NonNull List<Formatter> formatters,
+      @NonNull List<Line> extra,
       @NonNull String key) {
     this.objects = objects;
     this.placeholders = placeholders;
     this.formatters = formatters;
+    this.extra = extra;
     this.key = key;
   }
 
@@ -50,6 +54,7 @@ public final class LocalizedReference implements Line {
     if (!objects.isEmpty()) localized.format(objects.toArray());
     if (!placeholders.isEmpty()) localized.format(placeholders);
     if (!formatters.isEmpty()) localized.format(formatters);
+    if (!extra.isEmpty()) localized.appendMany(this.extra);
     return localized;
   }
 
@@ -88,6 +93,7 @@ public final class LocalizedReference implements Line {
         new ArrayList<>(this.objects),
         new HashMap<>(this.placeholders),
         new ArrayList<>(this.formatters),
+        extra,
         this.key);
   }
 
@@ -118,6 +124,12 @@ public final class LocalizedReference implements Line {
   @Override
   public @NonNull LocalizedReference format(@NonNull Formatter formatter) {
     this.formatters.add(formatter);
+    return this;
+  }
+
+  @Override
+  public @NonNull Line append(@NonNull Line line) {
+    this.extra.add(line);
     return this;
   }
 
