@@ -10,9 +10,9 @@ import java.util.Optional;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.lines.format.Formatter;
-import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.bukkit.utils.Components;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 /** Represents a plain text line. */
 public final class Plain implements Line {
@@ -68,7 +68,7 @@ public final class Plain implements Line {
 
   @Override
   public @NonNull Optional<String> asText() {
-    return Optional.of(BukkitUtils.format(text));
+    return Optional.ofNullable(new TextComponent(this.build()).toLegacyText());
   }
 
   @Override
