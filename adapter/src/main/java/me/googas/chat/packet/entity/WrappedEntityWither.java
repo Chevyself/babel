@@ -112,7 +112,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public Object getDataWatcher() throws PacketHandlingException {
     try {
-      return GET_DATA_WATCHER.prepare(this.reference);
+      return GET_DATA_WATCHER.invoke(this.reference);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getDataWatcher");
     }

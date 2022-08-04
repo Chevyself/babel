@@ -29,7 +29,7 @@ public class LegacyBossBarAdapter implements BossBarAdapter {
 
   static Location getWitherLocation(Location location) {
     int sum = location.getPitch() < -10 ? -10 : 10;
-    return location.add(location.getDirection().multiply(1).add(new Vector(0, sum, 0)));
+    return location.add(location.getDirection().multiply(36).add(new Vector(0, sum, 0)));
   }
 
   @Override

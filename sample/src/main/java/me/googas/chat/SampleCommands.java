@@ -3,6 +3,8 @@ package me.googas.chat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.lines.Line;
@@ -24,7 +26,15 @@ public class SampleCommands {
       Channel channel,
       @Required(name = "progress") double progress,
       @Required(name = "text", behaviour = ArgumentBehaviour.CONTINUOUS) String text) {
-    channel.giveBossBar(text, ((Double) progress).floatValue());
+    Optional<? extends AdaptedBossBar> bossBar = channel.getBossBar();
+    float floatValue = ((Double) progress).floatValue();
+    if (bossBar.isPresent()) {
+      bossBar.get().setTitle(text);
+      bossBar.get().setProgress(floatValue);
+    } else {
+      channel.giveBossBar(text, floatValue);
+    }
+
     return Line.of("Given boss bar");
   }
 
