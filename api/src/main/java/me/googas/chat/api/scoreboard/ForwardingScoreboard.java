@@ -8,31 +8,31 @@ public interface ForwardingScoreboard extends ChannelScoreboard {
 
   @Override
   @NonNull
-  default ChannelScoreboard update() {
+  default ForwardingScoreboard update() {
     this.getForwards().forEach(ChannelScoreboard::update);
     return this;
   }
 
   @Override
   @NonNull
-  default ChannelScoreboard update(int position) {
+  default ForwardingScoreboard update(int position) {
     this.getForwards().forEach(scoreboard -> scoreboard.update(position));
     return this;
   }
 
   @Override
   @NonNull
-  default ChannelScoreboard setLayout(@NonNull List<ScoreboardLine> layout) {
+  default ForwardingScoreboard setLayout(@NonNull List<ScoreboardLine> layout) {
     this.getForwards().forEach(scoreboard -> scoreboard.setLayout(layout));
     return this;
   }
 
   @NonNull
-  List<? extends ChannelScoreboard> getForwards();
+  List<? extends ForwardingScoreboard> getForwards();
 
   @Override
   @NonNull
-  default ChannelScoreboard initialize(String title) {
+  default ForwardingScoreboard initialize(String title) {
     this.getForwards()
         .forEach(
             forward -> {
