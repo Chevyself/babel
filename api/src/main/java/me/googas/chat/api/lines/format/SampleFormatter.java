@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.NonNull;
+import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.lines.Localized;
 
@@ -25,7 +26,7 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
     if (line instanceof Localized) {
       locale = ((Localized) line).getLocale();
     } else {
-      locale = Locale.ENGLISH;
+      locale = ResourceManager.getBase();
     }
     return this.format(locale, line);
   }

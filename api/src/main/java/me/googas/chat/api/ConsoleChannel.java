@@ -83,7 +83,7 @@ public final class ConsoleChannel implements Channel {
 
   @Override
   public Optional<Locale> getLocale() {
-    return Optional.of(Locale.ENGLISH);
+    return Optional.of(ResourceManager.getBase());
   }
 
   @Override

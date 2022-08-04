@@ -4,11 +4,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import me.googas.chat.api.lines.format.SampleFormatter;
 import org.bukkit.plugin.Plugin;
 
 public final class ResourceManager {
 
+  @NonNull @Getter @Setter private static Locale base = Locale.ENGLISH;
   @NonNull @Getter private static final ResourceManager instance = new ResourceManager();
 
   @NonNull @Getter private final SampleFormatter sampleFormatter = new SampleFormatter();
@@ -85,7 +87,7 @@ public final class ResourceManager {
               if (locale.getLanguage().equals("en")) {
                 return key;
               } else {
-                return this.getRaw(Locale.ENGLISH, key);
+                return this.getRaw(ResourceManager.getBase(), key);
               }
             });
   }

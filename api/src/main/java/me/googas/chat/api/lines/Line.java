@@ -56,7 +56,7 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   static Localized localized(@NonNull Channel channel, String key) {
-    return Line.localized(channel.getLocale().orElse(Locale.ENGLISH), key);
+    return Line.localized(channel.getLocale().orElse(ResourceManager.getBase()), key);
   }
 
   /**

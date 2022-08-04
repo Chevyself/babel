@@ -7,6 +7,7 @@ import lombok.NonNull;
 import me.googas.chat.ErrorHandler;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
+import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.OfflinePlayer;
@@ -76,7 +77,7 @@ public final class LocalizedReference implements Line {
    * @return the {@link Localized}
    */
   public @NonNull Localized asLocalized(@NonNull Channel channel) {
-    return this.asLocalized(channel.getLocale().orElse(Locale.ENGLISH));
+    return this.asLocalized(channel.getLocale().orElse(ResourceManager.getBase()));
   }
 
   /**
@@ -85,7 +86,7 @@ public final class LocalizedReference implements Line {
    * @return the {@link Localized}
    */
   public @NonNull Localized asLocalized() {
-    return this.asLocalized(Locale.ENGLISH);
+    return this.asLocalized(ResourceManager.getBase());
   }
 
   @Override
@@ -156,7 +157,7 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull Line append(@NonNull Line line) {
+  public @NonNull LocalizedReference append(@NonNull Line line) {
     this.extra.add(line);
     return this;
   }
@@ -177,7 +178,7 @@ public final class LocalizedReference implements Line {
   public BaseComponent[] buildWithPlaceholders(@NonNull OfflinePlayer player) {
     Player onlinePlayer = player.getPlayer();
     return this.asLocalized(
-            onlinePlayer == null ? Locale.ENGLISH : Language.getLocale(onlinePlayer))
+            onlinePlayer == null ? ResourceManager.getBase() : Language.getLocale(onlinePlayer))
         .buildWithPlaceholders(player);
   }
 
@@ -185,7 +186,7 @@ public final class LocalizedReference implements Line {
   public @NonNull Optional<String> asTextWithPlaceholders(@NonNull OfflinePlayer player) {
     Player onlinePlayer = player.getPlayer();
     return this.asLocalized(
-            onlinePlayer == null ? Locale.ENGLISH : Language.getLocale(onlinePlayer))
+            onlinePlayer == null ? ResourceManager.getBase() : Language.getLocale(onlinePlayer))
         .asTextWithPlaceholders(player);
   }
 }

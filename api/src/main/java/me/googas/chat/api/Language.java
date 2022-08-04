@@ -23,7 +23,7 @@ public interface Language {
     if (sender instanceof Player) {
       return Language.getLocale(Players.getLocale((Player) sender));
     } else {
-      return Locale.ENGLISH;
+      return ResourceManager.getBase();
     }
   }
 
@@ -35,7 +35,7 @@ public interface Language {
    */
   static Locale getOfflineLocale(@NonNull OfflinePlayer player) {
     Player online = player.getPlayer();
-    return online != null ? Language.getLocale(online) : Locale.ENGLISH;
+    return online != null ? Language.getLocale(online) : ResourceManager.getBase();
   }
 
   @NonNull
