@@ -2,7 +2,9 @@ package me.googas.chat.api.lines;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
@@ -26,6 +28,26 @@ public final class Plain implements Line {
   @Override
   public @NonNull Plain copy() {
     return new Plain(text);
+  }
+
+  @Override
+  public @NonNull Plain formatSample() {
+    return (Plain) Line.super.formatSample();
+  }
+
+  @Override
+  public @NonNull Plain formatSample(@NonNull Locale locale) {
+    return (Plain) Line.super.formatSample(locale);
+  }
+
+  @Override
+  public @NonNull Plain appendMany(@NonNull Collection<Line> extra) {
+    return (Plain) Line.super.appendMany(extra);
+  }
+
+  @Override
+  public @NonNull Plain appendMany(@NonNull Line... lines) {
+    return (Plain) Line.super.appendMany(lines);
   }
 
   @Override

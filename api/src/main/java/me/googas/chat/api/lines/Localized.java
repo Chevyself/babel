@@ -2,6 +2,7 @@ package me.googas.chat.api.lines;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,6 +28,26 @@ public final class Localized implements Line {
     this.locale = locale;
     this.json = json;
     this.extra = new ArrayList<>();
+  }
+
+  @Override
+  public @NonNull Localized formatSample() {
+    return (Localized) Line.super.formatSample();
+  }
+
+  @Override
+  public @NonNull Localized formatSample(@NonNull Locale locale) {
+    return (Localized) Line.super.formatSample(locale);
+  }
+
+  @Override
+  public @NonNull Localized appendMany(@NonNull Collection<Line> extra) {
+    return (Localized) Line.super.appendMany(extra);
+  }
+
+  @Override
+  public @NonNull Localized appendMany(@NonNull Line... lines) {
+    return (Localized) Line.super.appendMany(lines);
   }
 
   @Override

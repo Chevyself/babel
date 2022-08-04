@@ -98,6 +98,26 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
+  public @NonNull Localized formatSample() {
+    return (Localized) Line.super.formatSample();
+  }
+
+  @Override
+  public @NonNull Localized formatSample(@NonNull Locale locale) {
+    return (Localized) Line.super.formatSample(locale);
+  }
+
+  @Override
+  public @NonNull Localized appendMany(@NonNull Collection<Line> extra) {
+    return (Localized) Line.super.appendMany(extra);
+  }
+
+  @Override
+  public @NonNull Localized appendMany(@NonNull Line... lines) {
+    return (Localized) Line.super.appendMany(lines);
+  }
+
+  @Override
   public @NonNull BaseComponent[] build() {
     ErrorHandler.getInstance().handle(Level.WARNING, "Raw use of LocalizedReference#build");
     return this.asLocalized().build();
