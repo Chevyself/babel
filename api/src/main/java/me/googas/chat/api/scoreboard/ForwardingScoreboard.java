@@ -28,7 +28,7 @@ public interface ForwardingScoreboard extends ChannelScoreboard {
   }
 
   @NonNull
-  List<? extends ForwardingScoreboard> getForwards();
+  List<? extends ChannelScoreboard> getForwards();
 
   @Override
   @NonNull
