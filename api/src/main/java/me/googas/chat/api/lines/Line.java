@@ -325,8 +325,20 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   default Line formatSample(@NonNull Locale locale) {
-    ResourceManager.getInstance().getSampleFormatter().format(locale, this);
-    return this;
+    return ResourceManager.getInstance().getSampleFormatter().format(locale, this);
+  }
+
+  /**
+   * Format this sample using a channel.
+   *
+   * @param channel the channel to get the locale and format it
+   * @return this line formatted
+   */
+  @NonNull
+  default Line formatSample(@NonNull Channel channel) {
+    return ResourceManager.getInstance()
+        .getSampleFormatter()
+        .format(channel.getLocale().orElseGet(ResourceManager::getBase), this);
   }
 
   /**
