@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.lines.format.Formatter;
@@ -17,7 +18,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 /** Represents a plain text line. */
 public final class Plain implements Line {
 
-  @NonNull private final List<Line> extra;
+  @NonNull @Getter private final List<Line> extra;
   @NonNull private String text;
 
   Plain(@NonNull String text) {
@@ -85,19 +86,20 @@ public final class Plain implements Line {
   @Override
   public @NonNull Plain format(@NonNull Object... objects) {
     this.text = String.format(text, objects);
+    this.extra.forEach(line -> line.format(objects));
     return this;
   }
 
   @Override
   public @NonNull Plain format(@NonNull Map<String, String> map) {
     this.text = String.format(text, map);
+    this.extra.forEach(line -> line.format(map));
     return this;
   }
 
   @Override
   public @NonNull Plain format(@NonNull Formatter formatter) {
-    formatter.format(this);
-    return this;
+    return (Plain) formatter.format(this);
   }
 
   @Override

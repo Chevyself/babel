@@ -42,6 +42,7 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
       String key = group.substring(2, group.length() - 1);
       raw = raw.replace(group, Line.localized(locale, key).getRaw());
     }
+    line.getExtra().forEach(child -> this.format(locale, child));
     return line.setRaw(raw);
   }
 }

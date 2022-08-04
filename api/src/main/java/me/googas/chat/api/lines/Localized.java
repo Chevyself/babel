@@ -21,7 +21,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public final class Localized implements Line {
 
   @NonNull @Getter private final Locale locale;
-  @NonNull private final List<Line> extra;
+  @NonNull @Getter private final List<Line> extra;
   @NonNull private String json;
 
   Localized(@NonNull Locale locale, @NonNull String json) {
@@ -88,12 +88,14 @@ public final class Localized implements Line {
   @Override
   public @NonNull Localized format(@NonNull Object... objects) {
     json = Strings.format(json, objects);
+    this.extra.forEach(line -> line.format(objects));
     return this;
   }
 
   @Override
   public @NonNull Localized format(@NonNull Map<String, String> map) {
     json = Strings.format(json, map);
+    this.extra.forEach(line -> line.format(map));
     return this;
   }
 

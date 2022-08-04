@@ -337,6 +337,14 @@ public interface Line extends BukkitResult {
   @NonNull
   Optional<String> asText();
 
+  /**
+   * Get the extra lines that have been appended
+   *
+   * @return the extra lines in a list
+   */
+  @NonNull
+  Collection<Line> getExtra();
+
   @NonNull
   default Line appendMany(@NonNull Collection<Line> extra) {
     extra.forEach(this::append);

@@ -2,6 +2,7 @@ package me.googas.chat.api.lines;
 
 import java.util.*;
 import java.util.logging.Level;
+import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.ErrorHandler;
 import me.googas.chat.api.Channel;
@@ -22,7 +23,7 @@ public final class LocalizedReference implements Line {
   /** Formatters. */
   @NonNull private final List<Formatter> formatters;
 
-  @NonNull private final List<Line> extra;
+  @NonNull @Getter private final List<Line> extra;
 
   @NonNull private String key;
 
@@ -137,11 +138,13 @@ public final class LocalizedReference implements Line {
   @Override
   public @NonNull LocalizedReference format(@NonNull Object... objects) {
     this.objects.addAll(Arrays.asList(objects));
+    this.extra.forEach(line -> line.format(objects));
     return this;
   }
 
   @Override
   public @NonNull LocalizedReference format(@NonNull Map<String, String> map) {
+    this.extra.forEach(line -> line.format(map));
     this.placeholders.putAll(map);
     return this;
   }
