@@ -79,11 +79,6 @@ public class ProtocolPlayerChannel implements PlayerChannel {
   }
 
   @Override
-  public @NonNull ProtocolPlayerChannel send(@NonNull LocalizedReference reference) {
-    return (ProtocolPlayerChannel) PlayerChannel.super.send(reference);
-  }
-
-  @Override
   public @NonNull ProtocolPlayerChannel send(@NonNull BaseComponent... components) {
     return (ProtocolPlayerChannel) PlayerChannel.super.send(components);
   }

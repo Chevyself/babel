@@ -104,6 +104,11 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
+  public BaseComponent[] build(@NonNull Channel channel) {
+    return this.asLocalized(channel).build(channel);
+  }
+
+  @Override
   public @NonNull Optional<String> asText() {
     ErrorHandler.getInstance().handle(Level.WARNING, "Raw use of LocalizedReference#asText");
     return this.asLocalized().asText();

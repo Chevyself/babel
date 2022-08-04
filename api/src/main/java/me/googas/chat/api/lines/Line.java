@@ -160,6 +160,14 @@ public interface Line extends BukkitResult {
   BaseComponent[] build();
 
   /**
+   * Build the message.
+   *
+   * @param channel the channel to build the message for
+   * @return the built message
+   */
+  BaseComponent[] build(@NonNull Channel channel);
+
+  /**
    * Build this line with placeholders. The placeholders will be built using {@link
    * PlaceholderManager}
    *

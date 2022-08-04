@@ -42,12 +42,6 @@ public interface PlayerChannel extends Channel {
     return (PlayerChannel) Channel.super.send(line);
   }
 
-  @Override
-  @NonNull
-  default PlayerChannel send(@NonNull LocalizedReference reference) {
-    return (PlayerChannel) Channel.super.send(reference);
-  }
-
   /**
    * Get the unique id of the player.
    *

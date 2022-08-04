@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
+import me.googas.chat.api.Channel;
 import me.googas.chat.api.lines.format.Formatter;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.bukkit.utils.Components;
@@ -32,6 +33,14 @@ public final class Plain implements Line {
     List<BaseComponent> components =
         new ArrayList<>(Arrays.asList(Components.deserializePlain('&', text)));
     this.extra.forEach(line -> components.addAll(line.getComponents()));
+    return components.toArray(new BaseComponent[0]);
+  }
+
+  @Override
+  public BaseComponent[] build(@NonNull Channel channel) {
+    List<BaseComponent> components =
+        new ArrayList<>(Arrays.asList(Components.deserializePlain('&', text)));
+    this.extra.forEach(line -> components.addAll(Arrays.asList(line.build(channel))));
     return components.toArray(new BaseComponent[0]);
   }
 

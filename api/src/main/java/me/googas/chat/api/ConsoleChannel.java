@@ -82,11 +82,6 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public @NonNull ConsoleChannel send(@NonNull LocalizedReference reference) {
-    return (ConsoleChannel) Channel.super.send(reference);
-  }
-
-  @Override
   public Optional<Locale> getLocale() {
     return Optional.of(Locale.ENGLISH);
   }

@@ -109,18 +109,20 @@ public interface Channel {
    */
   @NonNull
   default Channel send(@NonNull Line line) {
-    return this.send(line.build());
+    return this.send(line.build(this));
   }
 
   /**
    * Send a localized reference to this channel.
    *
+   * @deprecated the method {@link Channel#send(Line)} now uses {@link Line#build(Channel)} which no
+   *     longer raw use of {@link LocalizedReference}
    * @param reference the line to send
    * @return this same instance
    */
   @NonNull
   default Channel send(@NonNull LocalizedReference reference) {
-    return this.send(reference.asLocalized(this));
+    return this.send(reference.asLocalized(this).build(this));
   }
 
   /**

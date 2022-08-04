@@ -49,12 +49,6 @@ public interface ForwardingChannel extends Channel {
 
   @Override
   @NonNull
-  default ForwardingChannel send(@NonNull LocalizedReference reference) {
-    return (ForwardingChannel) Channel.super.send(reference);
-  }
-
-  @Override
-  @NonNull
   default ForwardingChannel send(@NonNull BaseComponent... components) {
     this.getForward().ifPresent(channel -> channel.send(components));
     return this;
