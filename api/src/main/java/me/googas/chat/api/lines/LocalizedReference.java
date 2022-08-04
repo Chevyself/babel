@@ -175,6 +175,11 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
+  public @NonNull LocalizedReference append(@NonNull String string) {
+    return (LocalizedReference) Line.super.append(string);
+  }
+
+  @Override
   public @NonNull LocalizedReference formatSample(@NonNull Channel channel) {
     return (LocalizedReference) Line.super.formatSample(channel);
   }

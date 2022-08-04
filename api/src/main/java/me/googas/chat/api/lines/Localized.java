@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
@@ -113,6 +114,11 @@ public final class Localized implements Line {
   public @NonNull Localized append(@NonNull Line line) {
     this.extra.add(line);
     return this;
+  }
+
+  @Override
+  public @NonNull Localized append(@NonNull String string) {
+    return (Localized) Line.super.append(string);
   }
 
   /** Represents a formatter which can format {@link Line} using {@link Locale}. */

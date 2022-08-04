@@ -283,6 +283,17 @@ public interface Line extends BukkitResult {
   Line append(@NonNull Line line);
 
   /**
+   * Append a string. This will use {@link #of(String)} which means it will append a plain line
+   *
+   * @param string the string to append
+   * @return this same instance
+   */
+  @NonNull
+  default Line append(@NonNull String string) {
+    return this.append(Line.of(string));
+  }
+
+  /**
    * Get the raw text of the line. This is the line without being formatted.
    *
    * <p>Ex: {@link Localized} the raw text is its json

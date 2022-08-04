@@ -52,6 +52,11 @@ public final class Plain implements Line {
   }
 
   @Override
+  public @NonNull Plain append(@NonNull String string) {
+    return (Plain) Line.super.append(string);
+  }
+
+  @Override
   public @NonNull Plain appendMany(@NonNull Line... lines) {
     return (Plain) Line.super.appendMany(lines);
   }
