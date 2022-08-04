@@ -63,7 +63,7 @@ public final class Localized implements Line {
 
   @Override
   public @NonNull Localized copy() {
-    return new Localized(locale, json);
+    return new Localized(locale, json).appendMany(this.extra);
   }
 
   @Override

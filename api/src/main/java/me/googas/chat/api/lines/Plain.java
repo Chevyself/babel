@@ -28,7 +28,7 @@ public final class Plain implements Line {
 
   @Override
   public @NonNull Plain copy() {
-    return new Plain(text);
+    return new Plain(text).appendMany(this.extra);
   }
 
   @Override

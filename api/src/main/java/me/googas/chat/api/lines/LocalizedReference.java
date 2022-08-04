@@ -94,7 +94,7 @@ public final class LocalizedReference implements Line {
         new ArrayList<>(this.objects),
         new HashMap<>(this.placeholders),
         new ArrayList<>(this.formatters),
-        extra,
+        this.extra,
         this.key);
   }
 
