@@ -105,7 +105,12 @@ public final class Localized implements Line {
   }
 
   @Override
-  public @NonNull Line append(@NonNull Line line) {
+  public @NonNull Localized formatSample(@NonNull Channel channel) {
+    return (Localized) Line.super.formatSample(channel);
+  }
+
+  @Override
+  public @NonNull Localized append(@NonNull Line line) {
     this.extra.add(line);
     return this;
   }

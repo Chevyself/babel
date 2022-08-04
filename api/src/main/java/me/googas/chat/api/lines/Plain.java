@@ -27,6 +27,11 @@ public final class Plain implements Line {
   }
 
   @Override
+  public @NonNull Plain formatSample(@NonNull Channel channel) {
+    return (Plain) Line.super.formatSample(channel);
+  }
+
+  @Override
   public @NonNull Plain copy() {
     return new Plain(text).appendMany(this.extra);
   }

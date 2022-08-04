@@ -175,6 +175,11 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
+  public @NonNull LocalizedReference formatSample(@NonNull Channel channel) {
+    return (LocalizedReference) Line.super.formatSample(channel);
+  }
+
+  @Override
   public BaseComponent[] buildWithPlaceholders(@NonNull OfflinePlayer player) {
     Player onlinePlayer = player.getPlayer();
     return this.asLocalized(
