@@ -52,10 +52,10 @@ public final class LocalizedReference implements Line {
    */
   public @NonNull Localized asLocalized(@NonNull Locale locale) {
     Localized localized = Line.localized(locale, this.key);
+    if (!extra.isEmpty()) localized.appendMany(this.extra);
     if (!objects.isEmpty()) localized.format(objects.toArray());
     if (!placeholders.isEmpty()) localized.format(placeholders);
     if (!formatters.isEmpty()) localized.format(formatters);
-    if (!extra.isEmpty()) localized.appendMany(this.extra);
     return localized;
   }
 
