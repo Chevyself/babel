@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.lines.format.Formatter;
+import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.bukkit.utils.Components;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -63,23 +64,31 @@ public final class Plain implements Line {
 
   @Override
   public @NonNull BaseComponent[] build() {
-    List<BaseComponent> components =
-        new ArrayList<>(Arrays.asList(Components.deserializePlain('&', text)));
+    List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(text)));
     this.extra.forEach(line -> components.addAll(line.getComponents()));
     return components.toArray(new BaseComponent[0]);
   }
 
   @Override
   public BaseComponent[] build(@NonNull Channel channel) {
-    List<BaseComponent> components =
-        new ArrayList<>(Arrays.asList(Components.deserializePlain('&', text)));
+    List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(text)));
     this.extra.forEach(line -> components.addAll(Arrays.asList(line.build(channel))));
     return components.toArray(new BaseComponent[0]);
   }
 
   @Override
   public @NonNull Optional<String> asText() {
-    return Optional.ofNullable(new TextComponent(this.build()).toLegacyText());
+    if (Line.isJson(this.text)) {
+      return Optional.ofNullable(new TextComponent(this.build()).toLegacyText());
+    } else {
+      StringBuilder builder = new StringBuilder(BukkitUtils.format(this.text));
+      this.extra.stream()
+          .map(Line::asText)
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(builder::append);
+      return Optional.of(builder.toString());
+    }
   }
 
   @Override

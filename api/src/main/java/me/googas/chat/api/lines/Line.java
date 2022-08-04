@@ -378,4 +378,9 @@ public interface Line extends BukkitResult {
   default Line appendMany(@NonNull Line... lines) {
     return this.appendMany(Arrays.asList(lines));
   }
+
+  static boolean isJson(@NonNull String string) {
+    return string.startsWith("{") && string.endsWith("}")
+        || string.startsWith("[") && string.endsWith("]");
+  }
 }

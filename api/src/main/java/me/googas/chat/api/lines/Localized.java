@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
+import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.bukkit.utils.Components;
 import me.googas.commands.util.Strings;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -83,7 +83,17 @@ public final class Localized implements Line {
 
   @Override
   public @NonNull Optional<String> asText() {
-    return Optional.of(new TextComponent(this.build()).toLegacyText());
+    if (Line.isJson(this.json)) {
+      return Optional.ofNullable(new TextComponent(this.build()).toLegacyText());
+    } else {
+      StringBuilder builder = new StringBuilder(BukkitUtils.format(this.json));
+      this.extra.stream()
+          .map(Line::asText)
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(builder::append);
+      return Optional.of(builder.toString());
+    }
   }
 
   @Override
