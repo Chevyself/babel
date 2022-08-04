@@ -100,28 +100,28 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull Localized formatSample() {
-    return (Localized) Line.super.formatSample();
+  public @NonNull LocalizedReference formatSample() {
+    return (LocalizedReference) Line.super.formatSample();
   }
 
   @Override
-  public @NonNull Localized formatSample(@NonNull Locale locale) {
-    return (Localized) Line.super.formatSample(locale);
+  public @NonNull LocalizedReference formatSample(@NonNull Locale locale) {
+    return (LocalizedReference) Line.super.formatSample(locale);
   }
 
   @Override
-  public @NonNull Localized appendMany(@NonNull Collection<Line> extra) {
-    return (Localized) Line.super.appendMany(extra);
+  public @NonNull LocalizedReference appendMany(@NonNull Collection<Line> extra) {
+    return (LocalizedReference) Line.super.appendMany(extra);
   }
 
   @Override
-  public @NonNull Localized appendMany(@NonNull Line... lines) {
-    return (Localized) Line.super.appendMany(lines);
+  public @NonNull LocalizedReference appendMany(@NonNull Line... lines) {
+    return (LocalizedReference) Line.super.appendMany(lines);
   }
 
   @Override
   public @NonNull BaseComponent[] build() {
-    ErrorHandler.getInstance().handle(Level.WARNING, "Raw use of LocalizedReference#build");
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
     return this.asLocalized().build();
   }
 
@@ -132,7 +132,7 @@ public final class LocalizedReference implements Line {
 
   @Override
   public @NonNull Optional<String> asText() {
-    ErrorHandler.getInstance().handle(Level.WARNING, "Raw use of LocalizedReference#asText");
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#asText");
     return this.asLocalized().asText();
   }
 
@@ -164,7 +164,7 @@ public final class LocalizedReference implements Line {
 
   @Override
   public @NonNull String getRaw() {
-    ErrorHandler.getInstance().handle(Level.WARNING, "Raw use of LocalizedReference#getRaw");
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#getRaw");
     return this.asLocalized().getRaw();
   }
 
