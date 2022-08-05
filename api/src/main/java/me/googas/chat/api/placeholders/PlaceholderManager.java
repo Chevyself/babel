@@ -81,7 +81,7 @@ public final class PlaceholderManager {
   public Placeholder getPlaceholder(String name) {
     for (Set<Placeholder> placeholders : map.values()) {
       for (Placeholder placeholder : placeholders) {
-        if (placeholder.getName().equalsIgnoreCase(name)) {
+        if (placeholder.hasName(name)) {
           return placeholder;
         }
       }

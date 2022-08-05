@@ -8,13 +8,14 @@ import org.bukkit.OfflinePlayer;
  * %name%, this replaces that with a message
  */
 public interface Placeholder {
+
   /**
-   * Get the name of the placeholder. The name that is inside the '%'
+   * Check whether this placeholder applies to the given name.
    *
-   * @return the name
+   * @param name the name to check
+   * @return true if this placeholder applies for the name
    */
-  @NonNull
-  String getName();
+  boolean hasName(@NonNull String name);
 
   /**
    * Build the placeholder.
