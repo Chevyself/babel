@@ -78,7 +78,7 @@ public final class PlaceholderManager {
    * @param name the name of the placeholder to get
    * @return the placeholder matching the name, might be null
    */
-  public Placeholder getPlaceholder(String name) {
+  public Placeholder getPlaceholder(@NonNull String name) {
     for (Set<Placeholder> placeholders : map.values()) {
       for (Placeholder placeholder : placeholders) {
         if (placeholder.hasName(name)) {
@@ -105,7 +105,7 @@ public final class PlaceholderManager {
     while (matcher.find()) {
       String name = matcher.group().replace("%", "");
       Placeholder placeholder = this.getPlaceholder(name);
-      if (placeholder != null) raw = raw.replace("%" + name + "%", placeholder.build(player));
+      if (placeholder != null) raw = raw.replace("%" + name + "%", placeholder.build(name, player));
     }
     return raw;
   }

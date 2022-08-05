@@ -20,9 +20,10 @@ public interface Placeholder {
   /**
    * Build the placeholder.
    *
-   * @param player the player that is requesting the placeholder
+   * @param key the key/name that was used in {@link #hasName(String)}
+   * @param player the player to build the placeholder to
    * @return the built placeholder
    */
   @NonNull
-  String build(OfflinePlayer player);
+  String build(@NonNull String key, @NonNull OfflinePlayer player);
 }
