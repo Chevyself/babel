@@ -26,10 +26,7 @@ public class SoundProvider implements BukkitArgumentProvider<Sound> {
     try {
       return Sound.valueOf(string.toUpperCase(Locale.ROOT));
     } catch (IllegalArgumentException e) {
-      throw new ArgumentProviderException(
-          Line.localized(context.getSender(), "error.not-sound")
-              .asText()
-              .orElse("error.not-sound"));
+      throw Line.localized(context.getSender(), "error.not-sound").asProviderException();
     }
   }
 

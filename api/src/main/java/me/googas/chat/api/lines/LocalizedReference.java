@@ -131,7 +131,7 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull Optional<String> asText() {
+  public @NonNull String asText() {
     ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#asText");
     return this.asLocalized().asText();
   }
@@ -185,6 +185,11 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
+  public @NonNull String asText(@NonNull Channel channel, boolean placeholders) {
+    return this.asLocalized(channel).asText(channel, placeholders);
+  }
+
+  @Override
   public BaseComponent[] buildWithPlaceholders(@NonNull OfflinePlayer player) {
     Player onlinePlayer = player.getPlayer();
     return this.asLocalized(
@@ -193,7 +198,7 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull Optional<String> asTextWithPlaceholders(@NonNull OfflinePlayer player) {
+  public @NonNull String asTextWithPlaceholders(@NonNull OfflinePlayer player) {
     Player onlinePlayer = player.getPlayer();
     return this.asLocalized(
             onlinePlayer == null ? ResourceManager.getBase() : Language.getLocale(onlinePlayer))

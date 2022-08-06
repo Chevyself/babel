@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
@@ -16,8 +15,10 @@ import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
 import me.googas.chat.api.placeholders.PlaceholderManager;
 import me.googas.commands.bukkit.result.BukkitResult;
+import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.exceptions.ArgumentProviderException;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
@@ -175,6 +176,7 @@ public interface Line extends BukkitResult {
    * @return the built {@link BaseComponent}
    */
   @NonNull
+  @Deprecated
   default BaseComponent[] buildWithPlaceholders(@NonNull OfflinePlayer player) {
     Line copy = this.copy();
     return copy.setRaw(PlaceholderManager.getInstance().build(player, copy.getRaw())).build();
@@ -188,7 +190,8 @@ public interface Line extends BukkitResult {
    * @return the built {@link String}
    */
   @NonNull
-  default Optional<String> asTextWithPlaceholders(@NonNull OfflinePlayer player) {
+  @Deprecated
+  default String asTextWithPlaceholders(@NonNull OfflinePlayer player) {
     Line copy = this.copy();
     return copy.setRaw(PlaceholderManager.getInstance().build(player, copy.getRaw())).asText();
   }
@@ -222,6 +225,7 @@ public interface Line extends BukkitResult {
    *
    * @param channel the channel to send this line to
    */
+  @Deprecated
   default void sendWithPlaceholders(@NonNull Channel channel) {
     if (channel instanceof PlayerChannel) {
       this.send(channel, true);
@@ -322,10 +326,7 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   default ArgumentProviderException asProviderException() {
-    if (this.asText().isPresent()) {
-      return new ArgumentProviderException(this.asText().get());
-    }
-    return new ArgumentProviderException();
+    return new ArgumentProviderException(this.asText());
   }
 
   /**
@@ -355,10 +356,52 @@ public interface Line extends BukkitResult {
   /**
    * Build the message as text.
    *
+   * @param channel the channel to build the message for
+   * @param placeholders whether to append placeholders
    * @return the built message as text
    */
   @NonNull
-  Optional<String> asText();
+  default String asText(@NonNull Channel channel, boolean placeholders) {
+    Line copy = this.copy();
+    if (placeholders) {
+      copy.setRaw(PlaceholderManager.getInstance().build(channel, copy.getRaw()));
+    }
+    if (Line.isJson(copy.getRaw())) {
+      return new TextComponent(copy.build(channel)).toLegacyText();
+    } else {
+      StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
+      copy.getExtra().stream().map(Line::asText).forEach(builder::append);
+      return builder.toString();
+    }
+  }
+
+  /**
+   * Build the message as text.
+   *
+   * @param channel the channel to build the message for
+   * @return the built message as text
+   */
+  @NonNull
+  default String asText(@NonNull Channel channel) {
+    return this.asText(channel, false);
+  }
+
+  /**
+   * Build the message as text.
+   *
+   * @return the built message as text
+   */
+  @NonNull
+  default String asText() {
+    Line copy = this.copy();
+    if (Line.isJson(copy.getRaw())) {
+      return new TextComponent(copy.build()).toLegacyText();
+    } else {
+      StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
+      copy.getExtra().stream().map(Line::asText).forEach(builder::append);
+      return builder.toString();
+    }
+  }
 
   /**
    * Get the extra lines that have been appended

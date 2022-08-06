@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.NonNull;
+import me.googas.chat.api.Channel;
+import me.googas.chat.api.PlayerChannel;
 import me.googas.chat.api.softdependencies.papi.PapiSoft;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
@@ -106,6 +108,14 @@ public final class PlaceholderManager {
       String name = matcher.group().replace("%", "");
       Placeholder placeholder = this.getPlaceholder(name);
       if (placeholder != null) raw = raw.replace("%" + name + "%", placeholder.build(name, player));
+    }
+    return raw;
+  }
+
+  @NonNull
+  public String build(@NonNull Channel channel, @NonNull String raw) {
+    if (channel instanceof PlayerChannel) {
+      return this.build(((PlayerChannel) channel).getOffline(), raw);
     }
     return raw;
   }

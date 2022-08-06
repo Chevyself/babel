@@ -98,7 +98,7 @@ public class SampleCommands {
               description = "The time that the title will have to show",
               suggestions = "20")
           int fadeOut) {
-    channel.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+    channel.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut);
   }
 
   @Command(aliases = "tab", permission = "chat.tab")
@@ -106,7 +106,7 @@ public class SampleCommands {
       Channel channel,
       @Required(name = "header", behaviour = ArgumentBehaviour.MULTIPLE) String header,
       @Required(name = "footer", behaviour = ArgumentBehaviour.MULTIPLE) String footer) {
-    channel.setTabList(header, footer);
+    channel.setRawTabList(header, footer);
     return Line.localized("cmd.tab").format(header, footer);
   }
 }

@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
 import me.googas.chat.wrappers.WrappedSoundCategory;
@@ -36,7 +35,7 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public @NonNull ConsoleChannel sendTitle(
+  public @NonNull ConsoleChannel sendRawTitle(
       String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     if (title != null) this.send(title);
     if (subtitle != null) this.send(subtitle);
@@ -44,7 +43,7 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public @NonNull ConsoleChannel setTabList(String header, String bottom) {
+  public @NonNull ConsoleChannel setRawTabList(String header, String bottom) {
     return this;
   }
 
@@ -61,12 +60,6 @@ public final class ConsoleChannel implements Channel {
   @Override
   public @NonNull ConsoleChannel sendTitle(
       Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
-    return (ConsoleChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-  }
-
-  @Override
-  public @NonNull ConsoleChannel sendTitle(
-      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
     return (ConsoleChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
   }
 
@@ -107,18 +100,7 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public @NonNull ConsoleChannel setTabList(LocalizedReference header, LocalizedReference bottom) {
-    return (ConsoleChannel) Channel.super.setTabList(header, bottom);
-  }
-
-  @Override
   public @NonNull ConsoleChannel giveBossBar(@NonNull Line text, float progress) {
     return (ConsoleChannel) Channel.super.giveBossBar(text, progress);
-  }
-
-  @Override
-  public @NonNull ConsoleChannel giveBossBar(
-      @NonNull LocalizedReference reference, float progress) {
-    return (ConsoleChannel) Channel.super.giveBossBar(reference, progress);
   }
 }

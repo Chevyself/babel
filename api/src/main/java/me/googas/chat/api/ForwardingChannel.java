@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
 import me.googas.chat.api.scoreboard.ForwardingScoreboard;
 import me.googas.chat.wrappers.WrappedSoundCategory;
@@ -31,13 +30,6 @@ public interface ForwardingChannel extends Channel {
   @NonNull
   default ForwardingChannel sendTitle(
       Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
-    return (ForwardingChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-  }
-
-  @Override
-  @NonNull
-  default ForwardingChannel sendTitle(
-      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
     return (ForwardingChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
   }
 
@@ -68,17 +60,17 @@ public interface ForwardingChannel extends Channel {
 
   @Override
   @NonNull
-  default ForwardingChannel sendTitle(
+  default ForwardingChannel sendRawTitle(
       String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     this.getForward()
-        .ifPresent(channel -> channel.sendTitle(title, subtitle, fadeIn, stay, fadeOut));
+        .ifPresent(channel -> channel.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut));
     return this;
   }
 
   @Override
   @NonNull
-  default ForwardingChannel setTabList(String header, String bottom) {
-    this.getForward().ifPresent(channel -> channel.setTabList(header, bottom));
+  default ForwardingChannel setRawTabList(String header, String bottom) {
+    this.getForward().ifPresent(channel -> channel.setRawTabList(header, bottom));
     return this;
   }
 
@@ -111,12 +103,6 @@ public interface ForwardingChannel extends Channel {
 
   @Override
   @NonNull
-  default ForwardingChannel setTabList(LocalizedReference header, LocalizedReference bottom) {
-    return (ForwardingChannel) Channel.super.setTabList(header, bottom);
-  }
-
-  @Override
-  @NonNull
   default ForwardingChannel giveBossBar(@NonNull String text, float progress) {
     this.getForward().ifPresent(channel -> channel.giveBossBar(text, progress));
     return this;
@@ -126,12 +112,6 @@ public interface ForwardingChannel extends Channel {
   @NonNull
   default ForwardingChannel giveBossBar(@NonNull Line text, float progress) {
     return (ForwardingChannel) Channel.super.giveBossBar(text, progress);
-  }
-
-  @Override
-  @NonNull
-  default ForwardingChannel giveBossBar(@NonNull LocalizedReference reference, float progress) {
-    return (ForwardingChannel) Channel.super.giveBossBar(reference, progress);
   }
 
   @Override
@@ -166,12 +146,6 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
-    default Multiple setTabList(LocalizedReference header, LocalizedReference bottom) {
-      return (Multiple) Channel.super.setTabList(header, bottom);
-    }
-
-    @Override
-    @NonNull
     default Multiple giveBossBar(@NonNull String text, float progress) {
       this.getChannels().forEach(channel -> channel.giveBossBar(text, progress));
       return this;
@@ -181,12 +155,6 @@ public interface ForwardingChannel extends Channel {
     @NonNull
     default Multiple giveBossBar(@NonNull Line text, float progress) {
       return (Multiple) Channel.super.giveBossBar(text, progress);
-    }
-
-    @Override
-    @NonNull
-    default Multiple giveBossBar(@NonNull LocalizedReference reference, float progress) {
-      return (Multiple) Channel.super.giveBossBar(reference, progress);
     }
 
     @Override
@@ -218,21 +186,8 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
-    default Multiple sendTitle(
-        LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
-      return (Multiple) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-    }
-
-    @Override
-    @NonNull
     default Multiple send(@NonNull Line line) {
       return (Multiple) Channel.super.send(line);
-    }
-
-    @Override
-    @NonNull
-    default Multiple send(@NonNull LocalizedReference reference) {
-      return (Multiple) Channel.super.send(reference);
     }
 
     @Override
@@ -270,16 +225,17 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
-    default Multiple sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    default Multiple sendRawTitle(
+        String title, String subtitle, int fadeIn, int stay, int fadeOut) {
       this.getChannels()
-          .forEach(channel -> channel.sendTitle(title, subtitle, fadeIn, stay, fadeOut));
+          .forEach(channel -> channel.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut));
       return this;
     }
 
     @Override
     @NonNull
-    default Multiple setTabList(String header, String bottom) {
-      this.getChannels().forEach(channel -> channel.setTabList(header, bottom));
+    default Multiple setRawTabList(String header, String bottom) {
+      this.getChannels().forEach(channel -> channel.setRawTabList(header, bottom));
       return this;
     }
   }

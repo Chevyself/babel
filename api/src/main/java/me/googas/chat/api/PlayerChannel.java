@@ -14,7 +14,6 @@ import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
 import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.scoreboard.PlayerScoreboard;
 import me.googas.chat.api.util.Players;
 import me.googas.chat.api.util.Versions;
@@ -85,7 +84,7 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  default @NonNull PlayerChannel sendTitle(
+  default @NonNull PlayerChannel sendRawTitle(
       String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     this.getPlayer()
         .ifPresent(
@@ -96,7 +95,7 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  default @NonNull Channel setTabList(String header, String footer) {
+  default @NonNull Channel setRawTabList(String header, String footer) {
     this.getPlayer()
         .ifPresent(player -> PlayerChannel.tabListAdapter.setTabList(player, header, footer));
     return this;
@@ -128,13 +127,6 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  @NonNull
-  default PlayerChannel sendTitle(
-      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
-    return (PlayerChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-  }
-
-  @Override
   default @NonNull PlayerChannel playSound(
       @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     this.getPlayer().ifPresent(player -> player.playSound(location, sound, volume, pitch));
@@ -149,12 +141,6 @@ public interface PlayerChannel extends Channel {
   @Override
   @NonNull
   default PlayerChannel setTabList(Line header, Line bottom) {
-    return (PlayerChannel) Channel.super.setTabList(header, bottom);
-  }
-
-  @Override
-  @NonNull
-  default PlayerChannel setTabList(LocalizedReference header, LocalizedReference bottom) {
     return (PlayerChannel) Channel.super.setTabList(header, bottom);
   }
 
@@ -180,12 +166,6 @@ public interface PlayerChannel extends Channel {
               scoreboards.add(scoreboard);
               return scoreboard;
             });
-  }
-
-  @Override
-  @NonNull
-  default PlayerChannel giveBossBar(@NonNull LocalizedReference reference, float progress) {
-    return (PlayerChannel) Channel.super.giveBossBar(reference, progress);
   }
 
   @Override

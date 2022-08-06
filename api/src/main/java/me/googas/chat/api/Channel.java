@@ -8,7 +8,6 @@ import java.util.UUID;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.softdependencies.viaversion.ViaVersionSoft;
 import me.googas.chat.wrappers.WrappedSoundCategory;
@@ -113,19 +112,6 @@ public interface Channel {
   }
 
   /**
-   * Send a localized reference to this channel.
-   *
-   * @deprecated the method {@link Channel#send(Line)} now uses {@link Line#build(Channel)} which no
-   *     longer raw use of {@link LocalizedReference}
-   * @param reference the line to send
-   * @return this same instance
-   */
-  @NonNull
-  default Channel send(@NonNull LocalizedReference reference) {
-    return this.send(reference.asLocalized(this).build(this));
-  }
-
-  /**
    * Send a title to this channel.
    *
    * @param title the title
@@ -136,7 +122,7 @@ public interface Channel {
    * @return this same instance
    */
   @NonNull
-  Channel sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut);
+  Channel sendRawTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut);
 
   /**
    * Send a title to this channel.
@@ -150,30 +136,9 @@ public interface Channel {
    */
   @NonNull
   default Channel sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
-    return this.sendTitle(
-        title == null ? null : title.asText().orElse(null),
-        subtitle == null ? null : subtitle.asText().orElse(null),
-        fadeIn,
-        stay,
-        fadeOut);
-  }
-
-  /**
-   * Send a title to this channel.
-   *
-   * @param title the title as a localized reference line
-   * @param subtitle the subtitle as a localized reference line
-   * @param fadeIn how long until the title appears in ticks
-   * @param stay how long until the title stays in ticks
-   * @param fadeOut how long until the title fades in ticks
-   * @return this same instance
-   */
-  @NonNull
-  default Channel sendTitle(
-      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
-    return this.sendTitle(
-        title == null ? null : title.asLocalized(this),
-        subtitle == null ? null : subtitle.asLocalized(this),
+    return this.sendRawTitle(
+        title == null ? null : title.asText(this),
+        subtitle == null ? null : subtitle.asText(this),
         fadeIn,
         stay,
         fadeOut);
@@ -187,7 +152,7 @@ public interface Channel {
    * @return this same instance
    */
   @NonNull
-  Channel setTabList(String header, String bottom);
+  Channel setRawTabList(String header, String bottom);
 
   /**
    * Set the header and bottom of the tab-list.
@@ -198,23 +163,8 @@ public interface Channel {
    */
   @NonNull
   default Channel setTabList(Line header, Line bottom) {
-    return this.setTabList(
-        header == null ? null : header.asText().orElse(null),
-        bottom == null ? null : bottom.asText().orElse(null));
-  }
-
-  /**
-   * Set the header and bottom of the tab-list.
-   *
-   * @param header the header text to set as a localized reference line
-   * @param bottom the bottom text to set as a localized reference line
-   * @return this same instance
-   */
-  @NonNull
-  default Channel setTabList(LocalizedReference header, LocalizedReference bottom) {
-    return this.setTabList(
-        header == null ? null : header.asLocalized(this),
-        bottom == null ? null : bottom.asLocalized(this));
+    return this.setRawTabList(
+        header == null ? null : header.asText(this), bottom == null ? null : bottom.asText(this));
   }
 
   /**
@@ -259,12 +209,7 @@ public interface Channel {
 
   @NonNull
   default Channel giveBossBar(@NonNull Line text, float progress) {
-    return this.giveBossBar(text.asText().orElse(""), progress);
-  }
-
-  @NonNull
-  default Channel giveBossBar(@NonNull LocalizedReference reference, float progress) {
-    return this.giveBossBar(reference.asLocalized(this), progress);
+    return this.giveBossBar(text.asText(this), progress);
   }
 
   @NonNull

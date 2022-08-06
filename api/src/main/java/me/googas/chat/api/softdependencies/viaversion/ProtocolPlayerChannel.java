@@ -8,7 +8,6 @@ import lombok.Setter;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.PlayerChannel;
 import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.LocalizedReference;
 import me.googas.chat.api.util.Versions;
 import me.googas.chat.wrappers.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -39,7 +38,7 @@ public class ProtocolPlayerChannel implements PlayerChannel {
   }
 
   @Override
-  public @NonNull ProtocolPlayerChannel sendTitle(
+  public @NonNull ProtocolPlayerChannel sendRawTitle(
       String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     if (this.version.getBukkit() < 8) {
       if (title != null) this.send(title);
@@ -47,7 +46,7 @@ public class ProtocolPlayerChannel implements PlayerChannel {
       return this;
     } else {
       return (ProtocolPlayerChannel)
-          PlayerChannel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+          PlayerChannel.super.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut);
     }
   }
 
@@ -59,16 +58,9 @@ public class ProtocolPlayerChannel implements PlayerChannel {
   }
 
   @Override
-  public @NonNull ProtocolPlayerChannel sendTitle(
-      LocalizedReference title, LocalizedReference subtitle, int fadeIn, int stay, int fadeOut) {
-    return (ProtocolPlayerChannel)
-        PlayerChannel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-  }
-
-  @Override
-  public @NonNull ProtocolPlayerChannel setTabList(String header, String bottom) {
+  public @NonNull ProtocolPlayerChannel setRawTabList(String header, String bottom) {
     if (this.version.getBukkit() >= 8) {
-      return (ProtocolPlayerChannel) PlayerChannel.super.setTabList(header, bottom);
+      return (ProtocolPlayerChannel) PlayerChannel.super.setRawTabList(header, bottom);
     }
     return this;
   }
@@ -105,20 +97,8 @@ public class ProtocolPlayerChannel implements PlayerChannel {
   }
 
   @Override
-  public @NonNull ProtocolPlayerChannel setTabList(
-      LocalizedReference header, LocalizedReference bottom) {
-    return (ProtocolPlayerChannel) PlayerChannel.super.setTabList(header, bottom);
-  }
-
-  @Override
   public @NonNull ProtocolPlayerChannel giveBossBar(@NonNull Line text, float progress) {
     return (ProtocolPlayerChannel) PlayerChannel.super.giveBossBar(text, progress);
-  }
-
-  @Override
-  public @NonNull ProtocolPlayerChannel giveBossBar(
-      @NonNull LocalizedReference reference, float progress) {
-    return (ProtocolPlayerChannel) PlayerChannel.super.giveBossBar(reference, progress);
   }
 
   @Override

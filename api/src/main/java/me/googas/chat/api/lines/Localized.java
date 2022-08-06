@@ -6,17 +6,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
-import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.bukkit.utils.Components;
 import me.googas.commands.util.Strings;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 /** This is a {@link Line} which uses a message obtained from {@link ResourceManager}. */
 public final class Localized implements Line {
@@ -79,21 +76,6 @@ public final class Localized implements Line {
     List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(json)));
     this.extra.forEach(line -> components.addAll(Arrays.asList(line.build(channel))));
     return components.toArray(new BaseComponent[0]);
-  }
-
-  @Override
-  public @NonNull Optional<String> asText() {
-    if (Line.isJson(this.json)) {
-      return Optional.ofNullable(new TextComponent(this.build()).toLegacyText());
-    } else {
-      StringBuilder builder = new StringBuilder(BukkitUtils.format(this.json));
-      this.extra.stream()
-          .map(Line::asText)
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .forEach(builder::append);
-      return Optional.of(builder.toString());
-    }
   }
 
   @Override
