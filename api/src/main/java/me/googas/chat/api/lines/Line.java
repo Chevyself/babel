@@ -543,11 +543,9 @@ public interface Line extends BukkitResult {
 
   final class Placeholder {
 
-    @NonNull
-    private final String key;
+    @NonNull private final String key;
     private final Object value;
-    @NonNull
-    private final String def;
+    @NonNull private final String def;
 
     public Placeholder(@NonNull String key, Object value, @NonNull String def) {
       this.key = key;

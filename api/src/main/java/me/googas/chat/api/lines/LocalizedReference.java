@@ -23,6 +23,7 @@ public final class LocalizedReference implements Line {
   @NonNull private final Map<String, String> placeholders;
   /** Formatters. */
   @NonNull private final List<Formatter> formatters;
+
   @NonNull private final List<Placeholder> linePlaceholder;
 
   @NonNull @Getter private final List<Line> extra;
@@ -30,15 +31,22 @@ public final class LocalizedReference implements Line {
   @NonNull private String key;
 
   LocalizedReference(@NonNull String key) {
-    this(new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), key);
+    this(
+        new ArrayList<>(),
+        new HashMap<>(),
+        new ArrayList<>(),
+        new ArrayList<>(),
+        new ArrayList<>(),
+        key);
   }
 
   private LocalizedReference(
-          @NonNull List<Object> objects,
-          @NonNull Map<String, String> placeholders,
-          @NonNull List<Formatter> formatters,
-          @NonNull List<Placeholder> linePlaceholder, @NonNull List<Line> extra,
-          @NonNull String key) {
+      @NonNull List<Object> objects,
+      @NonNull Map<String, String> placeholders,
+      @NonNull List<Formatter> formatters,
+      @NonNull List<Placeholder> linePlaceholder,
+      @NonNull List<Line> extra,
+      @NonNull String key) {
     this.objects = objects;
     this.placeholders = placeholders;
     this.formatters = formatters;
@@ -59,7 +67,8 @@ public final class LocalizedReference implements Line {
     if (!objects.isEmpty()) localized.format(objects.toArray());
     if (!placeholders.isEmpty()) localized.format(placeholders);
     if (!formatters.isEmpty()) localized.format(formatters);
-    if (!linePlaceholder.isEmpty()) localized.placeholders(linePlaceholder.toArray(new Placeholder[0]));
+    if (!linePlaceholder.isEmpty())
+      localized.placeholders(linePlaceholder.toArray(new Placeholder[0]));
     return localized;
   }
 
@@ -98,7 +107,8 @@ public final class LocalizedReference implements Line {
         new ArrayList<>(this.objects),
         new HashMap<>(this.placeholders),
         new ArrayList<>(this.formatters),
-            linePlaceholder, this.extra,
+        linePlaceholder,
+        this.extra,
         this.key);
   }
 
