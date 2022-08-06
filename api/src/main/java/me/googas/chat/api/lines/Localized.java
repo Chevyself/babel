@@ -17,11 +17,11 @@ public final class Localized implements Line {
 
   @NonNull @Getter private final Locale locale;
   @NonNull @Getter private final List<Line> extra;
-  @NonNull private String json;
+  @NonNull private String text;
 
-  Localized(@NonNull Locale locale, @NonNull String json) {
+  Localized(@NonNull Locale locale, @NonNull String text) {
     this.locale = locale;
-    this.json = json;
+    this.text = text;
     this.extra = new ArrayList<>();
   }
 
@@ -52,30 +52,30 @@ public final class Localized implements Line {
 
   @Override
   public @NonNull String getRaw() {
-    return json;
+    return text;
   }
 
   @NonNull
   public Localized setRaw(@NonNull String json) {
-    this.json = json;
+    this.text = json;
     return this;
   }
 
   @Override
   public @NonNull Localized copy() {
-    return new Localized(locale, json).appendMany(this.extra);
+    return new Localized(locale, text).appendMany(this.extra);
   }
 
   @Override
   public @NonNull Localized format(@NonNull Object... objects) {
-    json = Strings.format(json, objects);
+    text = Strings.format(text, objects);
     this.extra.forEach(line -> line.format(objects));
     return this;
   }
 
   @Override
   public @NonNull Localized format(@NonNull Map<String, String> map) {
-    json = Strings.format(json, map);
+    text = Strings.format(text, map);
     this.extra.forEach(line -> line.format(map));
     return this;
   }
@@ -88,6 +88,13 @@ public final class Localized implements Line {
   @Override
   public @NonNull Localized append(@NonNull Line line) {
     this.extra.add(line);
+    return this;
+  }
+
+  @Override
+  public @NonNull Line format(@NonNull Placeholder placeholder) {
+    this.text = placeholder.format(this.text);
+    this.extra.forEach(line -> line.format(placeholder));
     return this;
   }
 

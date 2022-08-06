@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.lines.format.Formatter;
+import me.googas.commands.util.Strings;
 
 /** Represents a plain text line. */
 public final class Plain implements Line {
@@ -69,14 +70,14 @@ public final class Plain implements Line {
 
   @Override
   public @NonNull Plain format(@NonNull Object... objects) {
-    this.text = String.format(text, objects);
+    this.text = Strings.format(text, objects);
     this.extra.forEach(line -> line.format(objects));
     return this;
   }
 
   @Override
   public @NonNull Plain format(@NonNull Map<String, String> map) {
-    this.text = String.format(text, map);
+    this.text = Strings.format(text, map);
     this.extra.forEach(line -> line.format(map));
     return this;
   }
@@ -87,8 +88,15 @@ public final class Plain implements Line {
   }
 
   @Override
-  public @NonNull Line append(@NonNull Line line) {
+  public @NonNull Plain append(@NonNull Line line) {
     this.extra.add(line);
+    return this;
+  }
+
+  @Override
+  public @NonNull Plain format(@NonNull Placeholder placeholder) {
+    this.text = placeholder.format(this.text);
+    this.extra.forEach(line -> line.format(placeholder));
     return this;
   }
 }

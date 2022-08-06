@@ -327,6 +327,7 @@ public interface Line extends BukkitResult {
   /**
    * Format the message using a map of placeholders.
    *
+   * @deprecated use {@link #format(Placeholder)} instead
    * @param map the map of the placeholders
    * @return this same instance
    */
@@ -350,6 +351,27 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   Line append(@NonNull Line line);
+
+  @NonNull
+  Line format(@NonNull Line.Placeholder placeholder);
+
+  @NonNull
+  default Line placeholder(@NonNull String key, Object value, @NonNull String def) {
+    return this.format(new Line.Placeholder(key, value, def));
+  }
+
+  @NonNull
+  default Line placeholder(@NonNull String key, Object value) {
+    return this.format(new Line.Placeholder(key, value));
+  }
+
+  @NonNull
+  default Line placeholders(@NonNull Placeholder... placeholders) {
+    for (Placeholder placeholder : placeholders) {
+      this.format(placeholder);
+    }
+    return this;
+  }
 
   /**
    * Append a string. This will use {@link #of(String)} which means it will append a plain line
@@ -517,5 +539,39 @@ public interface Line extends BukkitResult {
   static boolean isJson(@NonNull String string) {
     return string.startsWith("{") && string.endsWith("}")
         || string.startsWith("[") && string.endsWith("]");
+  }
+
+  final class Placeholder {
+
+    @NonNull
+    private final String key;
+    private final Object value;
+    @NonNull
+    private final String def;
+
+    public Placeholder(@NonNull String key, Object value, @NonNull String def) {
+      this.key = key;
+      this.value = value;
+      this.def = def;
+    }
+
+    public Placeholder(@NonNull String key, Object value) {
+      this(key, value, "null");
+    }
+
+    @NonNull
+    public String getKey() {
+      return this.key;
+    }
+
+    @NonNull
+    public String getValue() {
+      return this.value == null ? this.def : this.value.toString();
+    }
+
+    @NonNull
+    public String format(String text) {
+      return text.replace("%" + key + "%", this.getValue());
+    }
   }
 }
