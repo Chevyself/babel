@@ -1,7 +1,6 @@
 package me.googas.chat.api.lines;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -10,8 +9,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.lines.format.Formatter;
-import me.googas.commands.bukkit.utils.Components;
-import net.md_5.bungee.api.chat.BaseComponent;
 
 /** Represents a plain text line. */
 public final class Plain implements Line {
@@ -57,20 +54,6 @@ public final class Plain implements Line {
   @Override
   public @NonNull Plain appendMany(@NonNull Line... lines) {
     return (Plain) Line.super.appendMany(lines);
-  }
-
-  @Override
-  public @NonNull BaseComponent[] build() {
-    List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(text)));
-    this.extra.forEach(line -> components.addAll(line.getComponents()));
-    return components.toArray(new BaseComponent[0]);
-  }
-
-  @Override
-  public BaseComponent[] build(@NonNull Channel channel) {
-    List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(text)));
-    this.extra.forEach(line -> components.addAll(Arrays.asList(line.build(channel))));
-    return components.toArray(new BaseComponent[0]);
   }
 
   @Override

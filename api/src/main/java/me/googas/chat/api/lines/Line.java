@@ -1,5 +1,6 @@
 package me.googas.chat.api.lines;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -16,6 +17,7 @@ import me.googas.chat.api.lines.format.Formatter;
 import me.googas.chat.api.placeholders.PlaceholderManager;
 import me.googas.commands.bukkit.result.BukkitResult;
 import me.googas.commands.bukkit.utils.BukkitUtils;
+import me.googas.commands.bukkit.utils.Components;
 import me.googas.commands.exceptions.ArgumentProviderException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -145,6 +147,20 @@ public interface Line extends BukkitResult {
   }
 
   /**
+   * Parse a line from a string.
+   *
+   * @see #parse(Locale, String)
+   * @param channel to get the locale from
+   * @param string the string to parse
+   * @return the parsed line
+   */
+  @NonNull
+  static Line parse(Channel channel, @NonNull String string) {
+    return parse(
+        channel == null ? null : channel.getLocale().orElse(ResourceManager.getBase()), string);
+  }
+
+  /**
    * Copy this line.
    *
    * @return a new copied instance of this line
@@ -158,7 +174,53 @@ public interface Line extends BukkitResult {
    * @return the built message
    */
   @NonNull
-  BaseComponent[] build();
+  default BaseComponent[] build() {
+    return this.build(true);
+  }
+
+  /**
+   * Build the message.
+   *
+   * @return the built message
+   */
+  @NonNull
+  default BaseComponent[] build(boolean sample) {
+    Line copy = this.copy();
+    if (sample) {
+      ResourceManager.getInstance().getSampleFormatter().format(ResourceManager.getBase(), copy);
+    }
+    List<BaseComponent> components =
+        new ArrayList<>(Arrays.asList(Components.getComponent(copy.getRaw())));
+    copy.getExtra().forEach(line -> components.addAll(Arrays.asList(line.build(sample))));
+    return components.toArray(new BaseComponent[0]);
+  }
+
+  /**
+   * Build the message.
+   *
+   * @param channel the channel to build the message for
+   * @param placeholders whether to append placeholders
+   * @param sample whether the line must be formatted using {@link
+   *     me.googas.chat.api.lines.format.SampleFormatter}
+   * @return the built message
+   */
+  default BaseComponent[] build(@NonNull Channel channel, boolean placeholders, boolean sample) {
+    Line copy = this.copy();
+    if (placeholders) {
+      copy.setRaw(PlaceholderManager.getInstance().build(channel, copy.getRaw()));
+    }
+    if (sample) {
+      ResourceManager.getInstance()
+          .getSampleFormatter()
+          .format(channel.getLocale().orElseGet(ResourceManager::getBase), copy);
+    }
+    List<BaseComponent> components =
+        new ArrayList<>(Arrays.asList(Components.getComponent(copy.getRaw())));
+    copy.getExtra()
+        .forEach(
+            line -> components.addAll(Arrays.asList(line.build(channel, placeholders, sample))));
+    return components.toArray(new BaseComponent[0]);
+  }
 
   /**
    * Build the message.
@@ -166,7 +228,9 @@ public interface Line extends BukkitResult {
    * @param channel the channel to build the message for
    * @return the built message
    */
-  BaseComponent[] build(@NonNull Channel channel);
+  default BaseComponent[] build(@NonNull Channel channel) {
+    return this.build(channel, true, true);
+  }
 
   /**
    * Build this line with placeholders. The placeholders will be built using {@link
@@ -203,6 +267,7 @@ public interface Line extends BukkitResult {
    * @param channel the channel to send this line to
    * @param placeholders whether to build this line with placeholders
    */
+  @Deprecated
   default void send(@NonNull Channel channel, boolean placeholders) {
     if (channel instanceof PlayerChannel && placeholders) {
       channel.send(this.buildWithPlaceholders(((PlayerChannel) channel).getOffline()));
@@ -217,7 +282,7 @@ public interface Line extends BukkitResult {
    * @param channel the channel to send this line to
    */
   default void send(@NonNull Channel channel) {
-    channel.send(this.build());
+    channel.send(this.build(channel));
   }
 
   /**
@@ -314,9 +379,36 @@ public interface Line extends BukkitResult {
    * @return this same instance
    */
   @NonNull
+  @Deprecated
   default Line formatSample() {
     this.format(ResourceManager.getInstance().getSampleFormatter());
     return this;
+  }
+
+  /**
+   * Format this sample using a locale.
+   *
+   * @param locale the locale to format this sample with
+   * @return this line formatted
+   */
+  @NonNull
+  @Deprecated
+  default Line formatSample(@NonNull Locale locale) {
+    return ResourceManager.getInstance().getSampleFormatter().format(locale, this);
+  }
+
+  /**
+   * Format this sample using a channel.
+   *
+   * @param channel the channel to get the locale and format it
+   * @return this line formatted
+   */
+  @NonNull
+  @Deprecated
+  default Line formatSample(@NonNull Channel channel) {
+    return ResourceManager.getInstance()
+        .getSampleFormatter()
+        .format(channel.getLocale().orElseGet(ResourceManager::getBase), this);
   }
 
   /**
@@ -330,47 +422,32 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Format this sample using a locale.
-   *
-   * @param locale the locale to format this sample with
-   * @return this line formatted
-   */
-  @NonNull
-  default Line formatSample(@NonNull Locale locale) {
-    return ResourceManager.getInstance().getSampleFormatter().format(locale, this);
-  }
-
-  /**
-   * Format this sample using a channel.
-   *
-   * @param channel the channel to get the locale and format it
-   * @return this line formatted
-   */
-  @NonNull
-  default Line formatSample(@NonNull Channel channel) {
-    return ResourceManager.getInstance()
-        .getSampleFormatter()
-        .format(channel.getLocale().orElseGet(ResourceManager::getBase), this);
-  }
-
-  /**
    * Build the message as text.
    *
    * @param channel the channel to build the message for
    * @param placeholders whether to append placeholders
+   * @param sample whether the line must be formatted using {@link
+   *     me.googas.chat.api.lines.format.SampleFormatter}
    * @return the built message as text
    */
   @NonNull
-  default String asText(@NonNull Channel channel, boolean placeholders) {
+  default String asText(@NonNull Channel channel, boolean placeholders, boolean sample) {
     Line copy = this.copy();
     if (placeholders) {
       copy.setRaw(PlaceholderManager.getInstance().build(channel, copy.getRaw()));
     }
+    if (sample) {
+      ResourceManager.getInstance()
+          .getSampleFormatter()
+          .format(channel.getLocale().orElseGet(ResourceManager::getBase), copy);
+    }
     if (Line.isJson(copy.getRaw())) {
-      return new TextComponent(copy.build(channel)).toLegacyText();
+      return new TextComponent(copy.build(channel, placeholders, sample)).toLegacyText();
     } else {
       StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
-      copy.getExtra().stream().map(Line::asText).forEach(builder::append);
+      copy.getExtra().stream()
+          .map(line -> line.asText(channel, placeholders, sample))
+          .forEach(builder::append);
       return builder.toString();
     }
   }
@@ -383,7 +460,29 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   default String asText(@NonNull Channel channel) {
-    return this.asText(channel, false);
+    return this.asText(channel, true, true);
+  }
+
+  /**
+   * Build the message as text.
+   *
+   * @param sample whether the line must be formatted using {@link
+   *     me.googas.chat.api.lines.format.SampleFormatter}
+   * @return the built message as text
+   */
+  @NonNull
+  default String asText(boolean sample) {
+    Line copy = this.copy();
+    if (sample) {
+      ResourceManager.getInstance().getSampleFormatter().format(ResourceManager.getBase(), copy);
+    }
+    if (Line.isJson(copy.getRaw())) {
+      return new TextComponent(copy.build()).toLegacyText();
+    } else {
+      StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
+      copy.getExtra().stream().map(line -> line.asText(sample)).forEach(builder::append);
+      return builder.toString();
+    }
   }
 
   /**
@@ -393,14 +492,7 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   default String asText() {
-    Line copy = this.copy();
-    if (Line.isJson(copy.getRaw())) {
-      return new TextComponent(copy.build()).toLegacyText();
-    } else {
-      StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
-      copy.getExtra().stream().map(Line::asText).forEach(builder::append);
-      return builder.toString();
-    }
+    return this.asText(true);
   }
 
   /**

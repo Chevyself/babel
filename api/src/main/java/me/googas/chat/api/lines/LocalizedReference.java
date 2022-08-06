@@ -126,14 +126,25 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public BaseComponent[] build(@NonNull Channel channel) {
-    return this.asLocalized(channel).build(channel);
+  public @NonNull BaseComponent[] build(boolean sample) {
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
+    return this.asLocalized().build(sample);
   }
 
   @Override
-  public @NonNull String asText() {
+  public BaseComponent[] build(@NonNull Channel channel, boolean placeholders, boolean sample) {
+    return this.asLocalized(channel).build(channel, placeholders, sample);
+  }
+
+  @Override
+  public @NonNull String asText(@NonNull Channel channel, boolean placeholders, boolean sample) {
+    return this.asLocalized(channel).asText(channel, placeholders, sample);
+  }
+
+  @Override
+  public @NonNull String asText(boolean sample) {
     ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#asText");
-    return this.asLocalized().asText();
+    return this.asLocalized().asText(sample);
   }
 
   @Override
@@ -182,11 +193,6 @@ public final class LocalizedReference implements Line {
   @Override
   public @NonNull LocalizedReference formatSample(@NonNull Channel channel) {
     return (LocalizedReference) Line.super.formatSample(channel);
-  }
-
-  @Override
-  public @NonNull String asText(@NonNull Channel channel, boolean placeholders) {
-    return this.asLocalized(channel).asText(channel, placeholders);
   }
 
   @Override

@@ -42,6 +42,6 @@ public class ScoreboardLine {
     if (child instanceof LocalizedReference) {
       line = ((LocalizedReference) child).asLocalized(channel);
     }
-    return line.formatSample(channel).asText(channel, true);
+    return line.asText(channel, true, true);
   }
 }

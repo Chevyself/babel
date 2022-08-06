@@ -1,7 +1,6 @@
 package me.googas.chat.api.lines;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -11,9 +10,7 @@ import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
-import me.googas.commands.bukkit.utils.Components;
 import me.googas.commands.util.Strings;
-import net.md_5.bungee.api.chat.BaseComponent;
 
 /** This is a {@link Line} which uses a message obtained from {@link ResourceManager}. */
 public final class Localized implements Line {
@@ -36,6 +33,11 @@ public final class Localized implements Line {
   @Override
   public @NonNull Localized formatSample(@NonNull Locale locale) {
     return (Localized) Line.super.formatSample(locale);
+  }
+
+  @Override
+  public @NonNull Localized formatSample(@NonNull Channel channel) {
+    return (Localized) Line.super.formatSample(channel);
   }
 
   @Override
@@ -65,20 +67,6 @@ public final class Localized implements Line {
   }
 
   @Override
-  public @NonNull BaseComponent[] build() {
-    List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(json)));
-    this.extra.forEach(line -> components.addAll(line.getComponents()));
-    return components.toArray(new BaseComponent[0]);
-  }
-
-  @Override
-  public BaseComponent[] build(@NonNull Channel channel) {
-    List<BaseComponent> components = new ArrayList<>(Arrays.asList(Components.getComponent(json)));
-    this.extra.forEach(line -> components.addAll(Arrays.asList(line.build(channel))));
-    return components.toArray(new BaseComponent[0]);
-  }
-
-  @Override
   public @NonNull Localized format(@NonNull Object... objects) {
     json = Strings.format(json, objects);
     this.extra.forEach(line -> line.format(objects));
@@ -95,11 +83,6 @@ public final class Localized implements Line {
   @Override
   public @NonNull Localized format(@NonNull Formatter formatter) {
     return (Localized) formatter.format(this);
-  }
-
-  @Override
-  public @NonNull Localized formatSample(@NonNull Channel channel) {
-    return (Localized) Line.super.formatSample(channel);
   }
 
   @Override
