@@ -95,14 +95,14 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  default @NonNull Channel setRawTabList(String header, String footer) {
+  default @NonNull PlayerChannel setRawTabList(String header, String footer) {
     this.getPlayer()
         .ifPresent(player -> PlayerChannel.tabListAdapter.setTabList(player, header, footer));
     return this;
   }
 
   @Override
-  default @NonNull Channel playSound(
+  default @NonNull PlayerChannel playSound(
       @NonNull Location location,
       @NonNull Sound sound,
       @NonNull WrappedSoundCategory category,

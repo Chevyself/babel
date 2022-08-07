@@ -195,6 +195,21 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     @NonNull
+    default Multiple playSound(
+        @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
+      this.getChannels().forEach(channel -> channel.playSound(sound, category, volume, pitch));
+      return this;
+    }
+
+    @Override
+    @NonNull
+    default Channel playSound(@NonNull Sound sound, float volume, float pitch) {
+      this.getChannels().forEach(channel -> channel.playSound(sound, volume, pitch));
+      return this;
+    }
+
+    @Override
+    @NonNull
     default Multiple sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
       return (Multiple) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
     }
