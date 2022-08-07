@@ -100,6 +100,17 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
+  public @NonNull ConsoleChannel playSound(
+      @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
+    return this;
+  }
+
+  @Override
+  public @NonNull ConsoleChannel playSound(@NonNull Sound sound, float volume, float pitch) {
+    return this;
+  }
+
+  @Override
   public @NonNull ConsoleChannel giveBossBar(@NonNull Line text, float progress) {
     return (ConsoleChannel) Channel.super.giveBossBar(text, progress);
   }

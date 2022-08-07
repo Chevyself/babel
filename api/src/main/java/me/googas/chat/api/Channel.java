@@ -170,6 +170,30 @@ public interface Channel {
   /**
    * Play sound to a channel.
    *
+   * @param sound the sound to play
+   * @param category the category in which the sound will play
+   * @param volume the volume of the sound
+   * @param pitch the pitch of the sound
+   * @return this same instance
+   */
+  @NonNull
+  Channel playSound(
+      @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch);
+
+  /**
+   * Play sound to a channel.
+   *
+   * @param sound the sound to play
+   * @param volume the volume of the sound
+   * @param pitch the pitch of the sound
+   * @return this same instance
+   */
+  @NonNull
+  Channel playSound(@NonNull Sound sound, float volume, float pitch);
+
+  /**
+   * Play sound to a channel.
+   *
    * @param location the location in which the sound will play
    * @param sound the sound to play
    * @param category the category in which the sound will play

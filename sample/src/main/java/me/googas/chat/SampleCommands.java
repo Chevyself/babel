@@ -59,7 +59,7 @@ public class SampleCommands {
               suggestions = {"$", "$cmd.hello"})
           String line) {
     Locale locale = Language.getLocale(context.getSender());
-    return Line.parse(locale, line).formatSample(locale);
+    return Line.parse(locale, line);
   }
 
   @Command(aliases = "sound", description = "a")

@@ -193,4 +193,21 @@ public interface PlayerChannel extends Channel {
             });
     return this;
   }
+
+  @Override
+  @NonNull
+  default PlayerChannel playSound(
+      @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
+    this.getPlayer()
+        .ifPresent(player -> this.playSound(player.getLocation(), sound, category, volume, pitch));
+    return this;
+  }
+
+  @Override
+  @NonNull
+  default PlayerChannel playSound(@NonNull Sound sound, float volume, float pitch) {
+    this.getPlayer()
+        .ifPresent(player -> this.playSound(player.getLocation(), sound, volume, pitch));
+    return this;
+  }
 }
