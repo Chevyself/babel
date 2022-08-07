@@ -3,11 +3,8 @@ package me.googas.chat.api.lines;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.api.Channel;
 import me.googas.chat.api.lines.format.Formatter;
 import me.googas.commands.util.Strings;
 
@@ -23,23 +20,8 @@ public final class Plain implements Line {
   }
 
   @Override
-  public @NonNull Plain formatSample(@NonNull Channel channel) {
-    return (Plain) Line.super.formatSample(channel);
-  }
-
-  @Override
   public @NonNull Plain copy() {
     return new Plain(text).appendMany(this.extra);
-  }
-
-  @Override
-  public @NonNull Plain formatSample() {
-    return (Plain) Line.super.formatSample();
-  }
-
-  @Override
-  public @NonNull Plain formatSample(@NonNull Locale locale) {
-    return (Plain) Line.super.formatSample(locale);
   }
 
   @Override
@@ -72,13 +54,6 @@ public final class Plain implements Line {
   public @NonNull Plain format(@NonNull Object... objects) {
     this.text = Strings.format(text, objects);
     this.extra.forEach(line -> line.format(objects));
-    return this;
-  }
-
-  @Override
-  public @NonNull Plain format(@NonNull Map<String, String> map) {
-    this.text = Strings.format(text, map);
-    this.extra.forEach(line -> line.format(map));
     return this;
   }
 

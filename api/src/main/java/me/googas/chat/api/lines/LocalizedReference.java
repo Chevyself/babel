@@ -10,9 +10,7 @@ import me.googas.chat.api.Language;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
 import net.md_5.bungee.api.chat.BaseComponent;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /** A {@link Line} that references a language key to be built into {@link Localized}. */
 public final class LocalizedReference implements Line {
@@ -113,16 +111,6 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull LocalizedReference formatSample() {
-    return (LocalizedReference) Line.super.formatSample();
-  }
-
-  @Override
-  public @NonNull LocalizedReference formatSample(@NonNull Locale locale) {
-    return (LocalizedReference) Line.super.formatSample(locale);
-  }
-
-  @Override
   public @NonNull LocalizedReference appendMany(@NonNull Collection<Line> extra) {
     return (LocalizedReference) Line.super.appendMany(extra);
   }
@@ -168,13 +156,6 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull LocalizedReference format(@NonNull Map<String, String> map) {
-    this.extra.forEach(line -> line.format(map));
-    this.placeholders.putAll(map);
-    return this;
-  }
-
-  @Override
   public @NonNull LocalizedReference format(@NonNull Formatter formatter) {
     this.formatters.add(formatter);
     return this;
@@ -207,26 +188,5 @@ public final class LocalizedReference implements Line {
   @Override
   public @NonNull LocalizedReference append(@NonNull String string) {
     return (LocalizedReference) Line.super.append(string);
-  }
-
-  @Override
-  public @NonNull LocalizedReference formatSample(@NonNull Channel channel) {
-    return (LocalizedReference) Line.super.formatSample(channel);
-  }
-
-  @Override
-  public BaseComponent[] buildWithPlaceholders(@NonNull OfflinePlayer player) {
-    Player onlinePlayer = player.getPlayer();
-    return this.asLocalized(
-            onlinePlayer == null ? ResourceManager.getBase() : Language.getLocale(onlinePlayer))
-        .buildWithPlaceholders(player);
-  }
-
-  @Override
-  public @NonNull String asTextWithPlaceholders(@NonNull OfflinePlayer player) {
-    Player onlinePlayer = player.getPlayer();
-    return this.asLocalized(
-            onlinePlayer == null ? ResourceManager.getBase() : Language.getLocale(onlinePlayer))
-        .asTextWithPlaceholders(player);
   }
 }

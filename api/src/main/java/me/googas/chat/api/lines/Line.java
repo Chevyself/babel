@@ -5,13 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.ForwardingChannel;
 import me.googas.chat.api.Language;
-import me.googas.chat.api.PlayerChannel;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
 import me.googas.chat.api.placeholders.PlaceholderManager;
@@ -21,7 +19,6 @@ import me.googas.commands.bukkit.utils.Components;
 import me.googas.commands.exceptions.ArgumentProviderException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 public interface Line extends BukkitResult {
@@ -232,71 +229,12 @@ public interface Line extends BukkitResult {
     return this.build(channel, true, true);
   }
 
-  /**
-   * Build this line with placeholders. The placeholders will be built using {@link
-   * PlaceholderManager}
-   *
-   * @param player the player to build the placeholders
-   * @return the built {@link BaseComponent}
-   */
-  @NonNull
-  @Deprecated
-  default BaseComponent[] buildWithPlaceholders(@NonNull OfflinePlayer player) {
-    Line copy = this.copy();
-    return copy.setRaw(PlaceholderManager.getInstance().build(player, copy.getRaw())).build();
-  }
-
-  /**
-   * Build this line with placeholders as {@link String}. The placeholders will be built using
-   * {@link PlaceholderManager}
-   *
-   * @param player the player to build the placeholders
-   * @return the built {@link String}
-   */
-  @NonNull
-  @Deprecated
-  default String asTextWithPlaceholders(@NonNull OfflinePlayer player) {
-    Line copy = this.copy();
-    return copy.setRaw(PlaceholderManager.getInstance().build(player, copy.getRaw())).asText();
-  }
-
-  /**
-   * Send this line to a {@link Channel}.
-   *
-   * @see #sendWithPlaceholders(Channel)
-   * @param channel the channel to send this line to
-   * @param placeholders whether to build this line with placeholders
-   */
-  @Deprecated
-  default void send(@NonNull Channel channel, boolean placeholders) {
-    if (channel instanceof PlayerChannel && placeholders) {
-      channel.send(this.buildWithPlaceholders(((PlayerChannel) channel).getOffline()));
-    } else {
-      this.send(channel);
-    }
-  }
-
-  /**
-   * Send this line to a {@link Channel}.
-   *
-   * @param channel the channel to send this line to
-   */
   default void send(@NonNull Channel channel) {
-    channel.send(this.build(channel));
+    channel.send(this);
   }
 
-  /**
-   * Send this line with placeholders.
-   *
-   * @param channel the channel to send this line to
-   */
-  @Deprecated
-  default void sendWithPlaceholders(@NonNull Channel channel) {
-    if (channel instanceof PlayerChannel) {
-      this.send(channel, true);
-    } else {
-      this.send(channel);
-    }
+  default void send(@NonNull Channel channel, boolean placeholders, boolean sample) {
+    channel.send(this.build(channel, placeholders, sample));
   }
 
   /**
@@ -323,16 +261,6 @@ public interface Line extends BukkitResult {
   default List<BaseComponent> getComponents() {
     return Arrays.asList(this.build());
   }
-
-  /**
-   * Format the message using a map of placeholders.
-   *
-   * @deprecated use {@link #format(Placeholder)} instead
-   * @param map the map of the placeholders
-   * @return this same instance
-   */
-  @NonNull
-  Line format(@NonNull Map<String, String> map);
 
   /**
    * Format the message using a formatter.
@@ -393,45 +321,6 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   String getRaw();
-
-  /**
-   * This must be used if the line is a sample line to format it. This line will be formatted using
-   * {@link me.googas.chat.api.lines.format.SampleFormatter}
-   *
-   * @return this same instance
-   */
-  @NonNull
-  @Deprecated
-  default Line formatSample() {
-    this.format(ResourceManager.getInstance().getSampleFormatter());
-    return this;
-  }
-
-  /**
-   * Format this sample using a locale.
-   *
-   * @param locale the locale to format this sample with
-   * @return this line formatted
-   */
-  @NonNull
-  @Deprecated
-  default Line formatSample(@NonNull Locale locale) {
-    return ResourceManager.getInstance().getSampleFormatter().format(locale, this);
-  }
-
-  /**
-   * Format this sample using a channel.
-   *
-   * @param channel the channel to get the locale and format it
-   * @return this line formatted
-   */
-  @NonNull
-  @Deprecated
-  default Line formatSample(@NonNull Channel channel) {
-    return ResourceManager.getInstance()
-        .getSampleFormatter()
-        .format(channel.getLocale().orElseGet(ResourceManager::getBase), this);
-  }
 
   /**
    * Get this line as a {@link ArgumentProviderException}.

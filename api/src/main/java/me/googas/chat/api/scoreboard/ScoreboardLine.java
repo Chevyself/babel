@@ -32,7 +32,7 @@ public class ScoreboardLine {
 
   @NonNull
   public static ScoreboardLine parse(@NonNull String string, int position) {
-    return new ScoreboardLine(Line.parse(string).formatSample(), position);
+    return new ScoreboardLine(Line.parse(string), position);
   }
 
   @NonNull

@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.api.Channel;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lines.format.Formatter;
 import me.googas.commands.util.Strings;
@@ -23,21 +22,6 @@ public final class Localized implements Line {
     this.locale = locale;
     this.text = text;
     this.extra = new ArrayList<>();
-  }
-
-  @Override
-  public @NonNull Localized formatSample() {
-    return (Localized) Line.super.formatSample();
-  }
-
-  @Override
-  public @NonNull Localized formatSample(@NonNull Locale locale) {
-    return (Localized) Line.super.formatSample(locale);
-  }
-
-  @Override
-  public @NonNull Localized formatSample(@NonNull Channel channel) {
-    return (Localized) Line.super.formatSample(channel);
   }
 
   @Override
@@ -73,7 +57,6 @@ public final class Localized implements Line {
     return this;
   }
 
-  @Override
   public @NonNull Localized format(@NonNull Map<String, String> map) {
     text = Strings.format(text, map);
     this.extra.forEach(line -> line.format(map));
