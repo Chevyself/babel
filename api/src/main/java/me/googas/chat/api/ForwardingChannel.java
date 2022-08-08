@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
-import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
 import me.googas.chat.api.scoreboard.ForwardingScoreboard;
 import me.googas.chat.wrappers.WrappedSoundCategory;
@@ -27,45 +26,24 @@ public interface ForwardingChannel extends Channel {
   Optional<Channel> getForward();
 
   @Override
-  @NonNull
-  default ForwardingChannel playSound(
+  default void playSound(
       @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
     this.getForward().ifPresent(channel -> channel.playSound(sound, category, volume, pitch));
-    return this;
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel playSound(@NonNull Sound sound, float volume, float pitch) {
+  default void playSound(@NonNull Sound sound, float volume, float pitch) {
     this.getForward().ifPresent(channel -> channel.playSound(sound, volume, pitch));
-    return this;
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel sendTitle(
-      Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
-    return (ForwardingChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-  }
-
-  @Override
-  @NonNull
-  default ForwardingChannel send(@NonNull Line line) {
-    return (ForwardingChannel) Channel.super.send(line);
-  }
-
-  @Override
-  @NonNull
-  default ForwardingChannel send(@NonNull BaseComponent... components) {
+  default void send(@NonNull BaseComponent... components) {
     this.getForward().ifPresent(channel -> channel.send(components));
-    return this;
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel send(@NonNull String text) {
+  default void send(@NonNull String text) {
     this.getForward().ifPresent(channel -> channel.send(text));
-    return this;
   }
 
   @Override
@@ -74,24 +52,18 @@ public interface ForwardingChannel extends Channel {
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel sendRawTitle(
-      String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+  default void sendRawTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     this.getForward()
         .ifPresent(channel -> channel.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut));
-    return this;
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel setRawTabList(String header, String bottom) {
+  default void setRawTabList(String header, String bottom) {
     this.getForward().ifPresent(channel -> channel.setRawTabList(header, bottom));
-    return this;
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel playSound(
+  default void playSound(
       @NonNull Location location,
       @NonNull Sound sound,
       @NonNull WrappedSoundCategory category,
@@ -99,34 +71,17 @@ public interface ForwardingChannel extends Channel {
       float pitch) {
     this.getForward()
         .ifPresent(channel -> channel.playSound(location, sound, category, volume, pitch));
-    return this;
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel playSound(
+  default void playSound(
       @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     this.getForward().ifPresent(channel -> channel.playSound(location, sound, volume, pitch));
-    return this;
   }
 
   @Override
-  @NonNull
-  default ForwardingChannel setTabList(Line header, Line bottom) {
-    return (ForwardingChannel) Channel.super.setTabList(header, bottom);
-  }
-
-  @Override
-  @NonNull
-  default ForwardingChannel giveBossBar(@NonNull String text, float progress) {
+  default void giveBossBar(@NonNull String text, float progress) {
     this.getForward().ifPresent(channel -> channel.giveBossBar(text, progress));
-    return this;
-  }
-
-  @Override
-  @NonNull
-  default ForwardingChannel giveBossBar(@NonNull Line text, float progress) {
-    return (ForwardingChannel) Channel.super.giveBossBar(text, progress);
   }
 
   @Override
@@ -154,22 +109,8 @@ public interface ForwardingChannel extends Channel {
     }
 
     @Override
-    @NonNull
-    default Multiple setTabList(Line header, Line bottom) {
-      return (Multiple) Channel.super.setTabList(header, bottom);
-    }
-
-    @Override
-    @NonNull
-    default Multiple giveBossBar(@NonNull String text, float progress) {
+    default void giveBossBar(@NonNull String text, float progress) {
       this.getChannels().forEach(channel -> channel.giveBossBar(text, progress));
-      return this;
-    }
-
-    @Override
-    @NonNull
-    default Multiple giveBossBar(@NonNull Line text, float progress) {
-      return (Multiple) Channel.super.giveBossBar(text, progress);
     }
 
     @Override
@@ -187,44 +128,24 @@ public interface ForwardingChannel extends Channel {
     Collection<? extends Channel> getChannels();
 
     @Override
-    @NonNull
-    default Multiple send(@NonNull BaseComponent... components) {
+    default void send(@NonNull BaseComponent... components) {
       this.getChannels().forEach(channel -> channel.send(components));
-      return this;
     }
 
     @Override
-    @NonNull
-    default Multiple playSound(
+    default void playSound(
         @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
       this.getChannels().forEach(channel -> channel.playSound(sound, category, volume, pitch));
-      return this;
     }
 
     @Override
-    @NonNull
-    default Channel playSound(@NonNull Sound sound, float volume, float pitch) {
+    default void playSound(@NonNull Sound sound, float volume, float pitch) {
       this.getChannels().forEach(channel -> channel.playSound(sound, volume, pitch));
-      return this;
     }
 
     @Override
-    @NonNull
-    default Multiple sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
-      return (Multiple) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-    }
-
-    @Override
-    @NonNull
-    default Multiple send(@NonNull Line line) {
-      return (Multiple) Channel.super.send(line);
-    }
-
-    @Override
-    @NonNull
-    default Multiple send(@NonNull String text) {
+    default void send(@NonNull String text) {
       this.getChannels().forEach(channel -> channel.send(text));
-      return this;
     }
 
     @Override
@@ -233,8 +154,7 @@ public interface ForwardingChannel extends Channel {
     }
 
     @Override
-    @NonNull
-    default Multiple playSound(
+    default void playSound(
         @NonNull Location location,
         @NonNull Sound sound,
         @NonNull WrappedSoundCategory category,
@@ -242,31 +162,23 @@ public interface ForwardingChannel extends Channel {
         float pitch) {
       this.getChannels()
           .forEach(channel -> channel.playSound(location, sound, category, volume, pitch));
-      return this;
     }
 
     @Override
-    @NonNull
-    default Multiple playSound(
+    default void playSound(
         @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
       this.getChannels().forEach(channel -> channel.playSound(location, sound, volume, pitch));
-      return this;
     }
 
     @Override
-    @NonNull
-    default Multiple sendRawTitle(
-        String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    default void sendRawTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
       this.getChannels()
           .forEach(channel -> channel.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut));
-      return this;
     }
 
     @Override
-    @NonNull
-    default Multiple setRawTabList(String header, String bottom) {
+    default void setRawTabList(String header, String bottom) {
       this.getChannels().forEach(channel -> channel.setRawTabList(header, bottom));
-      return this;
     }
   }
 }

@@ -13,7 +13,6 @@ import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
-import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.scoreboard.PlayerScoreboard;
 import me.googas.chat.api.util.Players;
 import me.googas.chat.api.util.Versions;
@@ -34,12 +33,6 @@ public interface PlayerChannel extends Channel {
   @NonNull BossBarAdapter bossBarAdapter = Players.getBossBarAdapter();
 
   @NonNull Set<PlayerScoreboard> scoreboards = new HashSet<>();
-
-  @Override
-  @NonNull
-  default PlayerChannel send(@NonNull Line line) {
-    return (PlayerChannel) Channel.super.send(line);
-  }
 
   /**
    * Get the unique id of the player.
@@ -70,39 +63,33 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  @NonNull
-  default PlayerChannel send(@NonNull BaseComponent... components) {
+  default void send(@NonNull BaseComponent... components) {
     this.getPlayer().ifPresent(player -> BukkitUtils.send(player, components));
-    return this;
   }
 
   @Override
-  @NonNull
-  default PlayerChannel send(@NonNull String text) {
+  default void send(@NonNull String text) {
     this.getPlayer().ifPresent(player -> player.sendMessage(text));
-    return this;
   }
 
   @Override
-  default @NonNull PlayerChannel sendRawTitle(
-      String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+  default void sendRawTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     this.getPlayer()
         .ifPresent(
             player ->
                 PlayerChannel.titleAdapter.sendTitle(
                     player, title, subtitle, fadeIn, stay, fadeOut));
-    return this;
+    ;
   }
 
   @Override
-  default @NonNull PlayerChannel setRawTabList(String header, String footer) {
+  default void setRawTabList(String header, String footer) {
     this.getPlayer()
         .ifPresent(player -> PlayerChannel.tabListAdapter.setTabList(player, header, footer));
-    return this;
   }
 
   @Override
-  default @NonNull PlayerChannel playSound(
+  default void playSound(
       @NonNull Location location,
       @NonNull Sound sound,
       @NonNull WrappedSoundCategory category,
@@ -117,20 +104,12 @@ public interface PlayerChannel extends Channel {
                 player.playSound(location, sound, category.get().get(), volume, pitch);
               }
             });
-    return this;
   }
 
   @Override
-  @NonNull
-  default PlayerChannel sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
-    return (PlayerChannel) Channel.super.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-  }
-
-  @Override
-  default @NonNull PlayerChannel playSound(
+  default void playSound(
       @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     this.getPlayer().ifPresent(player -> player.playSound(location, sound, volume, pitch));
-    return this;
   }
 
   @Override
@@ -140,24 +119,9 @@ public interface PlayerChannel extends Channel {
 
   @Override
   @NonNull
-  default PlayerChannel setTabList(Line header, Line bottom) {
-    return (PlayerChannel) Channel.super.setTabList(header, bottom);
-  }
-
-  @Override
-  @NonNull
-  default PlayerChannel giveBossBar(@NonNull Line text, float progress) {
-    return (PlayerChannel) Channel.super.giveBossBar(text, progress);
-  }
-
-  @Override
-  @NonNull
   default PlayerScoreboard getScoreboard() {
     return scoreboards.stream()
-        .filter(
-            scoreboard -> {
-              return scoreboard.getOwner().equals(this.getUniqueId());
-            })
+        .filter(scoreboard -> scoreboard.getOwner().equals(this.getUniqueId()))
         .findFirst()
         .orElseGet(
             () -> {
@@ -175,8 +139,7 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  @NonNull
-  default PlayerChannel giveBossBar(@NonNull String text, float progress) {
+  default void giveBossBar(@NonNull String text, float progress) {
     this.getPlayer()
         .ifPresent(
             player -> {
@@ -191,23 +154,18 @@ public interface PlayerChannel extends Channel {
                 bossBarAdapter.create(player, text, progress);
               }
             });
-    return this;
   }
 
   @Override
-  @NonNull
-  default PlayerChannel playSound(
+  default void playSound(
       @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
     this.getPlayer()
         .ifPresent(player -> this.playSound(player.getLocation(), sound, category, volume, pitch));
-    return this;
   }
 
   @Override
-  @NonNull
-  default PlayerChannel playSound(@NonNull Sound sound, float volume, float pitch) {
+  default void playSound(@NonNull Sound sound, float volume, float pitch) {
     this.getPlayer()
         .ifPresent(player -> this.playSound(player.getLocation(), sound, volume, pitch));
-    return this;
   }
 }

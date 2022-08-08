@@ -86,29 +86,23 @@ public interface Channel {
    * Send base components to the channel.
    *
    * @param components the components to send
-   * @return this same instance
    */
-  @NonNull
-  Channel send(@NonNull BaseComponent... components);
+  void send(@NonNull BaseComponent... components);
 
   /**
    * Send a text message to the channel.
    *
    * @param text the text message to send
-   * @return this same instance
    */
-  @NonNull
-  Channel send(@NonNull String text);
+  void send(@NonNull String text);
 
   /**
    * Send a line to this channel.
    *
    * @param line the line to send
-   * @return this same instance
    */
-  @NonNull
-  default Channel send(@NonNull Line line) {
-    return this.send(line.build(this));
+  default void send(@NonNull Line line) {
+    this.send(line.build(this));
   }
 
   /**
@@ -119,10 +113,8 @@ public interface Channel {
    * @param fadeIn how long until the title appears in ticks
    * @param stay how long until the title stays in ticks
    * @param fadeOut how long until the title fades in ticks
-   * @return this same instance
    */
-  @NonNull
-  Channel sendRawTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut);
+  void sendRawTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut);
 
   /**
    * Send a title to this channel.
@@ -132,11 +124,9 @@ public interface Channel {
    * @param fadeIn how long until the title appears in ticks
    * @param stay how long until the title stays in ticks
    * @param fadeOut how long until the title fades in ticks
-   * @return this same instance
    */
-  @NonNull
-  default Channel sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
-    return this.sendRawTitle(
+  default void sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+    this.sendRawTitle(
         title == null ? null : title.asText(this),
         subtitle == null ? null : subtitle.asText(this),
         fadeIn,
@@ -149,21 +139,17 @@ public interface Channel {
    *
    * @param header the header text to set
    * @param bottom the bottom text to set
-   * @return this same instance
    */
-  @NonNull
-  Channel setRawTabList(String header, String bottom);
+  void setRawTabList(String header, String bottom);
 
   /**
    * Set the header and bottom of the tab-list.
    *
    * @param header the header text to set as a line
    * @param bottom the bottom text to set as a line
-   * @return this same instance
    */
-  @NonNull
-  default Channel setTabList(Line header, Line bottom) {
-    return this.setRawTabList(
+  default void setTabList(Line header, Line bottom) {
+    this.setRawTabList(
         header == null ? null : header.asText(this), bottom == null ? null : bottom.asText(this));
   }
 
@@ -174,10 +160,8 @@ public interface Channel {
    * @param category the category in which the sound will play
    * @param volume the volume of the sound
    * @param pitch the pitch of the sound
-   * @return this same instance
    */
-  @NonNull
-  Channel playSound(
+  void playSound(
       @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch);
 
   /**
@@ -186,10 +170,8 @@ public interface Channel {
    * @param sound the sound to play
    * @param volume the volume of the sound
    * @param pitch the pitch of the sound
-   * @return this same instance
    */
-  @NonNull
-  Channel playSound(@NonNull Sound sound, float volume, float pitch);
+  void playSound(@NonNull Sound sound, float volume, float pitch);
 
   /**
    * Play sound to a channel.
@@ -199,10 +181,8 @@ public interface Channel {
    * @param category the category in which the sound will play
    * @param volume the volume of the sound
    * @param pitch the pitch of the sound
-   * @return this same instance
    */
-  @NonNull
-  Channel playSound(
+  void playSound(
       @NonNull Location location,
       @NonNull Sound sound,
       @NonNull WrappedSoundCategory category,
@@ -216,10 +196,8 @@ public interface Channel {
    * @param sound the sound to play
    * @param volume the volume of the sound
    * @param pitch the pitch of the sound
-   * @return this same instance
    */
-  @NonNull
-  Channel playSound(@NonNull Location location, @NonNull Sound sound, float volume, float pitch);
+  void playSound(@NonNull Location location, @NonNull Sound sound, float volume, float pitch);
 
   /**
    * Get the locale of the channel.
@@ -228,12 +206,10 @@ public interface Channel {
    */
   Optional<Locale> getLocale();
 
-  @NonNull
-  Channel giveBossBar(@NonNull String text, float progress);
+  void giveBossBar(@NonNull String text, float progress);
 
-  @NonNull
-  default Channel giveBossBar(@NonNull Line text, float progress) {
-    return this.giveBossBar(text.asText(this), progress);
+  default void giveBossBar(@NonNull Line text, float progress) {
+    this.giveBossBar(text.asText(this), progress);
   }
 
   @NonNull
