@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
-public class ViaVersionProtocol implements Listener {
+public final class ViaVersionProtocol implements Listener {
 
   @NonNull private final Map<UUID, Versions.Player> versions = new HashMap<>();
   @NonNull private final Set<ProtocolPlayerChannel> channels = new HashSet<>();

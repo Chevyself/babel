@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class ViaVersionSoft {
+public final class ViaVersionSoft {
 
   @Getter private static boolean enabled;
   private static ViaVersionProtocol protocol;

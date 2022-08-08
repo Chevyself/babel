@@ -4,7 +4,7 @@ import lombok.NonNull;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
 
-public class PapiPlaceholderBuilder {
+public final class PapiPlaceholderBuilder {
 
   @NonNull
   public String build(@NonNull OfflinePlayer player, @NonNull String raw) {
