@@ -21,15 +21,13 @@ import me.googas.chat.wrappers.WrappedBarColor;
 import me.googas.chat.wrappers.WrappedBarStyle;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public class LegacyBossBarAdapter implements BossBarAdapter {
 
   @NonNull private final Set<LegacyAdaptedBossBar> bossBars = new HashSet<>();
 
   static Location getWitherLocation(Location location) {
-    int sum = location.getPitch() < -10 ? -10 : 10;
-    return location.add(location.getDirection().multiply(36).add(new Vector(0, sum, 0)));
+    return location.add(location.getDirection().multiply(36));
   }
 
   @Override

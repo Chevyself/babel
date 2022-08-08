@@ -21,6 +21,8 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
   @NonNull @Getter private final UUID owner;
   @NonNull private final WrappedEntityWither wither;
   @Getter private boolean destroyed;
+  private String title;
+  private float progress = 1;
 
   LegacyAdaptedBossBar(@NonNull UUID owner, @NonNull WrappedEntityWither wither) {
     this.owner = owner;
@@ -31,20 +33,21 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
   public void setTitle(@NonNull String title) {
     Optional<Player> bukkit = this.getOwnerBukkit();
     if (bukkit.isPresent()) {
-      this.callMetadataPacket(() -> wither.setCustomName(title), bukkit.get());
+      this.title = title;
+      this.callMetadataPacket(bukkit.get());
     } else {
       destroy();
     }
   }
 
-  private void callMetadataPacket(@NonNull WitherRunnable runnable, @NonNull Player player) {
+  private void callMetadataPacket(@NonNull Player player) {
     try {
-      runnable.run();
+
       Packet packet =
           PacketType.Play.ClientBound.ENTITY_METADATA.create(
               new Class[] {int.class, WrappedDataWatcher.CLAZZ.getClazz(), boolean.class},
               wither.getId(),
-              wither.getDataWatcher(),
+              getDataWatcher(),
               true);
       packet.send(player);
     } catch (PacketHandlingException e) {
@@ -52,14 +55,34 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     }
   }
 
+  private Object getDataWatcher() throws PacketHandlingException {
+    WrappedDataWatcher dataWatcher = WrappedDataWatcher.construct();
+    dataWatcher.a(0, (byte) 0x20);
+    dataWatcher.a(2, this.title);
+    dataWatcher.a(3, (byte) 1);
+    dataWatcher.a(6, progress * wither.getMaxHealth());
+    dataWatcher.a(8, (byte) 0);
+    dataWatcher.a(10, this.title);
+    dataWatcher.a(11, (byte) 1);
+    dataWatcher.a(17, 0);
+    dataWatcher.a(18, 0);
+    dataWatcher.a(19, 0);
+    dataWatcher.a(20, 881);
+    return dataWatcher.get().orElseThrow(NullPointerException::new);
+  }
+
   @Override
   public void setProgress(float progress) {
-    Optional<Player> bukkit = this.getOwnerBukkit();
-    if (bukkit.isPresent()) {
-      this.callMetadataPacket(
-          () -> wither.setHealth(progress * wither.getMaxHealth()), bukkit.get());
+    if (progress <= 0) {
+      this.destroy();
     } else {
-      destroy();
+      Optional<Player> bukkit = this.getOwnerBukkit();
+      if (bukkit.isPresent()) {
+        this.progress = progress;
+        this.callMetadataPacket(bukkit.get());
+      } else {
+        destroy();
+      }
     }
   }
 
