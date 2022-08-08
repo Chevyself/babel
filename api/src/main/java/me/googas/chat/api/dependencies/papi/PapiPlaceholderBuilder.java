@@ -1,4 +1,4 @@
-package me.googas.chat.api.softdependencies.papi;
+package me.googas.chat.api.dependencies.papi;
 
 import lombok.NonNull;
 import me.clip.placeholderapi.PlaceholderAPI;

@@ -1,4 +1,4 @@
-package me.googas.chat.api.softdependencies.viaversion;
+package me.googas.chat.api.dependencies.viaversion;
 
 import com.viaversion.viaversion.api.Via;
 import java.util.HashMap;

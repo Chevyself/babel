@@ -1,4 +1,4 @@
-package me.googas.chat.api.softdependencies.papi;
+package me.googas.chat.api.dependencies.papi;
 
 import java.util.Objects;
 import lombok.Getter;

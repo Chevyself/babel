@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.PlayerChannel;
-import me.googas.chat.api.softdependencies.papi.PapiSoft;
+import me.googas.chat.api.dependencies.papi.PapiSoft;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 

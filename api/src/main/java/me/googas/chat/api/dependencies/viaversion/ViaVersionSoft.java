@@ -1,4 +1,4 @@
-package me.googas.chat.api.softdependencies.viaversion;
+package me.googas.chat.api.dependencies.viaversion;
 
 import java.util.Objects;
 import java.util.UUID;

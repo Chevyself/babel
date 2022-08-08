@@ -9,7 +9,7 @@ import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
-import me.googas.chat.api.softdependencies.viaversion.ViaVersionSoft;
+import me.googas.chat.api.dependencies.viaversion.ViaVersionSoft;
 import me.googas.chat.wrappers.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
