@@ -9,7 +9,7 @@ import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
 import me.googas.chat.api.scoreboard.ForwardingScoreboard;
-import me.googas.chat.wrappers.WrappedSoundCategory;
+import me.googas.chat.packet.sound.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.Sound;

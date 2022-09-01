@@ -34,8 +34,8 @@ public class WrappedPlayerConnection extends SimpleWrapper<Object> {
    * @param packet the packet to be sent
    */
   public void sendPacket(@NonNull Packet packet) throws PacketHandlingException {
-    if (packet.get().isPresent()) {
-      Object handle = packet.get().orElse(null);
+    if (packet.isPresent()) {
+      Object handle = packet.getWrapped();
       if (handle != null) {
         try {
           WrappedPlayerConnection.SEND_PACKET.invoke(this.reference, handle);

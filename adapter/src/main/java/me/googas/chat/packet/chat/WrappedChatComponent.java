@@ -5,26 +5,25 @@ import java.lang.reflect.Type;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.packet.Packet;
-import me.googas.chat.packet.PacketDataWrapper;
-import me.googas.reflect.SimpleWrapper;
+import me.googas.reflect.AbstractWrapper;
 import me.googas.reflect.wrappers.WrappedClass;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
 /** Wraps the 'IChatBaseComponent' nms class. */
-public final class WrappedChatComponent extends SimpleWrapper<Object> implements PacketDataWrapper {
+public final class WrappedChatComponent extends AbstractWrapper<Object> {
 
   @NonNull
-  private static final WrappedClass<?> CHAT_BASE_COMPONENT =
+  public static final WrappedClass<?> CLAZZ =
       WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".IChatBaseComponent");
 
   /**
    * Create the wrapper.
    *
-   * @param reference the reference of the wrapper
+   * @param handle the reference of the wrapper
    */
-  WrappedChatComponent(Object reference) {
-    super(reference);
+  public WrappedChatComponent(Object handle) {
+    super(handle);
   }
 
   /**
@@ -35,7 +34,7 @@ public final class WrappedChatComponent extends SimpleWrapper<Object> implements
    */
   @NonNull
   public static WrappedChatComponent of(@NonNull BaseComponent[] components) {
-    return WrappedChatComponent.of(components, WrappedChatComponent.CHAT_BASE_COMPONENT.getClazz());
+    return WrappedChatComponent.of(components, WrappedChatComponent.CLAZZ.getClazz());
   }
 
   /**
@@ -50,11 +49,6 @@ public final class WrappedChatComponent extends SimpleWrapper<Object> implements
       @NonNull BaseComponent[] components, @NonNull Type typeOfComponent) {
     return new WrappedChatComponent(
         Serializer.gson.fromJson(ComponentSerializer.toString(components), typeOfComponent));
-  }
-
-  @Override
-  public Object getHandle() {
-    return this.reference;
   }
 
   /** Wrapper for the 'IChatBaseComponent$ChatSerializer'. */

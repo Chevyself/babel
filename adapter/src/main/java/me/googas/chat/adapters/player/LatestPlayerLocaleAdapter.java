@@ -1,6 +1,7 @@
-package me.googas.chat.adapters;
+package me.googas.chat.adapters.player;
 
 import lombok.NonNull;
+import me.googas.chat.adapters.PlayerLocaleAdapter;
 import org.bukkit.entity.Player;
 
 public final class LatestPlayerLocaleAdapter implements PlayerLocaleAdapter {

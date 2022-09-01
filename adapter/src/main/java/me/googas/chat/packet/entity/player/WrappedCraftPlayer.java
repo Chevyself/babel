@@ -4,13 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.Packet;
-import me.googas.reflect.SimpleWrapper;
+import me.googas.reflect.AbstractWrapper;
 import me.googas.reflect.wrappers.WrappedClass;
 import me.googas.reflect.wrappers.WrappedMethod;
 import org.bukkit.entity.Player;
 
 /** Wraps the 'CraftPlayer' nms class. */
-public final class WrappedCraftPlayer extends SimpleWrapper<Object> {
+public final class WrappedCraftPlayer extends AbstractWrapper<Object> {
 
   @NonNull
   private static final WrappedClass<?> CRAFT_PLAYER =
@@ -27,10 +27,10 @@ public final class WrappedCraftPlayer extends SimpleWrapper<Object> {
   /**
    * Create the wrapper.
    *
-   * @param reference the reference of the wrapper
+   * @param handle the reference of the wrapper
    */
-  private WrappedCraftPlayer(Object reference) {
-    super(reference);
+  private WrappedCraftPlayer(Object handle) {
+    super(handle);
   }
 
   /**
@@ -52,7 +52,7 @@ public final class WrappedCraftPlayer extends SimpleWrapper<Object> {
   @NonNull
   public WrappedEntityPlayer getHandle() throws PacketHandlingException {
     try {
-      return new WrappedEntityPlayer(WrappedCraftPlayer.GET_HANDLE.invoke(this.reference));
+      return new WrappedEntityPlayer(WrappedCraftPlayer.GET_HANDLE.invoke(this.wrapped));
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not get the entity from player", e);
     }

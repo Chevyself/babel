@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.StringJoiner;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.adapters.LatestObjectiveAdapter;
 import me.googas.chat.adapters.ObjectiveAdapter;
+import me.googas.chat.adapters.scoreboard.LatestObjectiveAdapter;
 import me.googas.chat.adapters.v1_12.LegacyObjectiveAdapter;
 import org.bukkit.Bukkit;
 

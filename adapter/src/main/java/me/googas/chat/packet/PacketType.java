@@ -2,6 +2,7 @@ package me.googas.chat.packet;
 
 import lombok.NonNull;
 import me.googas.chat.exceptions.PacketHandlingException;
+import me.googas.reflect.Wrapper;
 import me.googas.reflect.wrappers.WrappedClass;
 
 /**
@@ -48,12 +49,21 @@ public final class PacketType {
   }
 
   @NonNull
-  public Packet create(@NonNull Object... objects) throws PacketHandlingException {
+  public Packet create(Object... objects) throws PacketHandlingException {
     return Packet.forType(this, objects);
   }
 
   @NonNull
-  public Packet create(@NonNull Class<?>[] params, @NonNull Object... objects)
+  public Packet create(@NonNull Wrapper<?>... wrappers) throws PacketHandlingException {
+    Object[] objects = new Object[wrappers.length];
+    for (int i = 0; i < wrappers.length; i++) {
+      objects[i] = wrappers[i].getWrapped();
+    }
+    return Packet.forType(this, objects);
+  }
+
+  @Deprecated
+  public @NonNull Packet create(@NonNull Class<?>[] params, @NonNull Object... objects)
       throws PacketHandlingException {
     return Packet.forType(this, params, objects);
   }
@@ -75,16 +85,22 @@ public final class PacketType {
       public static final PacketType SPAWN_ENTITY_LIVING =
           new PacketType("PacketPlayOutSpawnEntityLiving");
 
+      /** Destroys (de-spawns) an entity for the player */
       @NonNull
       public static final PacketType ENTITY_DESTROY = new PacketType("PacketPlayOutEntityDestroy");
 
+      /** Updates the metadata of an entity for the player */
       @NonNull
       public static final PacketType ENTITY_METADATA =
           new PacketType("PacketPlayOutEntityMetadata");
 
+      /** Teleports an entity for the player */
       @NonNull
       public static final PacketType ENTITY_TELEPORT =
           new PacketType("PacketPlayOutEntityTeleport");
+      /** Sends information about another player to the player */
+      @NonNull
+      public static final PacketType PLAYER_INFO = new PacketType("PacketPlayOutPlayerInfo");
     }
   }
 }

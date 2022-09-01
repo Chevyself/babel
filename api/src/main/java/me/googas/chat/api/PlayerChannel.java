@@ -1,5 +1,6 @@
 package me.googas.chat.api;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
@@ -14,9 +15,14 @@ import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
 import me.googas.chat.api.scoreboard.PlayerScoreboard;
+import me.googas.chat.api.tab.EmptyTabView;
+import me.googas.chat.api.tab.PlayerTabView;
+import me.googas.chat.api.tab.TabSize;
+import me.googas.chat.api.tab.TabView;
 import me.googas.chat.api.util.Players;
 import me.googas.chat.api.util.Versions;
-import me.googas.chat.wrappers.WrappedSoundCategory;
+import me.googas.chat.exceptions.PacketHandlingException;
+import me.googas.chat.packet.sound.WrappedSoundCategory;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
@@ -33,6 +39,8 @@ public interface PlayerChannel extends Channel {
   @NonNull BossBarAdapter bossBarAdapter = Players.getBossBarAdapter();
 
   @NonNull Set<PlayerScoreboard> scoreboards = new HashSet<>();
+
+  @NonNull Set<PlayerTabView> views = new HashSet<>();
 
   /**
    * Get the unique id of the player.
@@ -79,7 +87,6 @@ public interface PlayerChannel extends Channel {
             player ->
                 PlayerChannel.titleAdapter.sendTitle(
                     player, title, subtitle, fadeIn, stay, fadeOut));
-    ;
   }
 
   @Override
@@ -154,6 +161,40 @@ public interface PlayerChannel extends Channel {
                 bossBarAdapter.create(player, text, progress);
               }
             });
+  }
+
+  @Override
+  default @NonNull TabView giveTabView() {
+    return this.getPlayer()
+        .map(
+            player -> {
+              Optional<? extends TabView> optional = this.getTabView();
+              if (optional.isPresent()) {
+                ErrorHandler.getInstance()
+                    .handle(Level.WARNING, "PlayerChannel#giveTabView without #getTabView check");
+                return optional.get();
+              } else {
+                try {
+                  PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
+                  view.initialize();
+                  views.add(view);
+                  return view;
+                } catch (PacketHandlingException
+                    | InvocationTargetException
+                    | InstantiationException
+                    | IllegalAccessException e) {
+                  ErrorHandler.getInstance()
+                      .handle(Level.SEVERE, "Could not initialize tab view for player " + player);
+                  return null;
+                }
+              }
+            })
+        .orElseGet(EmptyTabView::new);
+  }
+
+  @Override
+  default @NonNull Optional<? extends TabView> getTabView() {
+    return views.stream().filter(view -> view.getUniqueId().equals(this.getUniqueId())).findFirst();
   }
 
   @Override

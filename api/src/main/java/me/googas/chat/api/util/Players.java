@@ -2,13 +2,13 @@ package me.googas.chat.api.util;
 
 import lombok.NonNull;
 import me.googas.chat.adapters.BossBarAdapter;
-import me.googas.chat.adapters.LatestBossBarAdapter;
-import me.googas.chat.adapters.LatestPlayerLocaleAdapter;
-import me.googas.chat.adapters.LatestPlayerTabListAdapter;
-import me.googas.chat.adapters.LatestPlayerTitleAdapter;
 import me.googas.chat.adapters.PlayerLocaleAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
+import me.googas.chat.adapters.bossbar.LatestBossBarAdapter;
+import me.googas.chat.adapters.player.LatestPlayerLocaleAdapter;
+import me.googas.chat.adapters.player.LatestPlayerTabListAdapter;
+import me.googas.chat.adapters.player.LatestPlayerTitleAdapter;
 import me.googas.chat.adapters.v1_11.LegacyPlayerLocaleAdapter;
 import me.googas.chat.adapters.v1_11.LegacyPlayerTabListAdapter;
 import me.googas.chat.adapters.v1_11.LegacyPlayerTitleAdapter;

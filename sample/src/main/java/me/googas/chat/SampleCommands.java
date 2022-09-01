@@ -1,14 +1,22 @@
 package me.googas.chat;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.logging.Level;
+import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.lines.Plain;
 import me.googas.chat.api.scoreboard.ScoreboardLine;
+import me.googas.chat.api.tab.PlayerTabView;
+import me.googas.chat.api.tab.TabCoordinate;
+import me.googas.chat.api.tab.TabSize;
+import me.googas.chat.api.tab.TabView;
+import me.googas.chat.api.tab.entries.CoordinateTabEntry;
+import me.googas.chat.api.tab.entries.PlayerTabEntry;
+import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.commands.annotations.Free;
 import me.googas.commands.annotations.Parent;
 import me.googas.commands.annotations.Required;
@@ -20,6 +28,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class SampleCommands {
+
+  @NonNull private final Map<UUID, TabView> views = new HashMap<>();
 
   @Command(aliases = "bossbar")
   public BukkitResult bossbar(
@@ -71,6 +81,66 @@ public class SampleCommands {
           int volume,
       @Free(name = "pitch", description = "The pitch of the sound", suggestions = "1") int pitch) {
     channel.playSound(player.getLocation(), sound, volume, pitch);
+  }
+
+  @Command(aliases = "ctab", description = "tests")
+  public void ctab(Player player) {
+    try {
+      PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
+      view.initialize();
+      views.put(player.getUniqueId(), view);
+    } catch (PacketHandlingException
+        | InvocationTargetException
+        | InstantiationException
+        | IllegalAccessException e) {
+      ErrorHandler.getInstance().handle(Level.SEVERE, "", e);
+    }
+  }
+
+  @Command(aliases = "ctabclear", description = "tests")
+  public Plain ctabclear(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Line.of("No view");
+    } else {
+      view.clear();
+      return Line.of("Done");
+    }
+  }
+
+  @Command(aliases = "ctabadd")
+  public Line ctabadd(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Line.of("No view");
+    } else {
+      view.add(new PlayerTabEntry(player));
+      return Line.of("Done");
+    }
+  }
+
+  @Command(aliases = "ctabremove")
+  public Line ctabremove(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Line.of("No view");
+    } else {
+      view.remove(new PlayerTabEntry(player));
+      return Line.of("Done");
+    }
+  }
+
+  @Command(aliases = "ctabcoords")
+  public Line ctabcoords(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Line.of("No view");
+    } else {
+      for (TabCoordinate coordinate : view.getSize()) {
+        view.set(coordinate, new CoordinateTabEntry());
+      }
+      return Line.of("Done");
+    }
   }
 
   @Command(aliases = "title", description = "Send a title", permission = "chat.title")

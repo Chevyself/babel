@@ -10,14 +10,15 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.entity.player.WrappedCraftPlayer;
-import me.googas.reflect.SimpleWrapper;
+import me.googas.reflect.Wrapper;
+import me.googas.reflect.modifiers.Modifier;
 import me.googas.reflect.wrappers.WrappedClass;
 import me.googas.reflect.wrappers.WrappedConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /** Represents a Packet which can be sent to a player or may be sent by a player. */
-public final class Packet extends SimpleWrapper<Object> {
+public final class Packet extends ReflectWrapper {
 
   @NonNull
   public static final String NMS = Bukkit.getServer().getClass().getCanonicalName().split("\\.")[3];
@@ -36,26 +37,22 @@ public final class Packet extends SimpleWrapper<Object> {
    * @param clazz the class of the type of the packet
    * @param reference the created reference of the packet
    */
-  public Packet(@NonNull PacketType type, @NonNull WrappedClass<?> clazz, Object reference) {
-    super(reference);
+  private Packet(@NonNull PacketType type, @NonNull WrappedClass<?> clazz, Object reference) {
+    super(reference, false);
     this.type = type;
     this.clazz = clazz;
   }
 
-  public static Packet forType(
+  @Deprecated
+  public static @NonNull Packet forType(
       @NonNull PacketType type, @NonNull Class<?>[] params, Object... objects)
       throws PacketHandlingException {
     WrappedClass<?> clazz = type.wrap();
     Object handle;
     try {
       if (objects.length > 0) {
-        if (clazz.hasConstructor(params)) {
-          WrappedConstructor<?> constructor = clazz.getConstructor(params);
-          handle = constructor.invoke(objects);
-        } else {
-          throw new PacketHandlingException(
-              "Could not find constructor with " + Arrays.toString(params));
-        }
+        WrappedConstructor<?> constructor = clazz.getConstructor(params);
+        handle = constructor.invoke(objects);
       } else {
         handle = clazz.getConstructor().invoke();
       }
@@ -65,13 +62,19 @@ public final class Packet extends SimpleWrapper<Object> {
     return new Packet(type, clazz, handle);
   }
 
-  public static Packet forType(@NonNull PacketType type, Object... objects)
+  public static @NonNull Packet forType(@NonNull PacketType type, Object... objects)
       throws PacketHandlingException {
     WrappedClass<?> clazz = type.wrap();
     Object handle;
     try {
       if (objects.length > 0) {
-        return forType(type, getConstructorParameters(objects), objects);
+        WrappedConstructor<?> constructor =
+            clazz.getConstructor(Packet.getConstructorParameters(objects));
+        if (constructor.isPresent()) {
+          handle = constructor.invoke(objects);
+        } else {
+          throw new PacketHandlingException("Could not find constructor for packet");
+        }
       } else {
         handle = clazz.getConstructor().invoke();
       }
@@ -99,20 +102,30 @@ public final class Packet extends SimpleWrapper<Object> {
    */
   @NonNull
   public Packet usingClazz(@NonNull BiConsumer<Object, WrappedClass<?>> consumer) {
-    consumer.accept(this.reference, this.clazz);
+    consumer.accept(this.wrapped, this.clazz);
     return this;
+  }
+
+  @NonNull
+  public Packet setField(int index, @NonNull Wrapper<?> data) throws PacketHandlingException {
+    return this.setField(index, data.getWrapped());
   }
 
   /**
    * Set a field in the packet.
    *
    * @param index the index of the field
-   * @param packetData the packet data to set in the field
+   * @param modifier to modify the value of the field
    * @return this same instance
    */
   @NonNull
-  public Packet setField(int index, PacketDataWrapper packetData) throws PacketHandlingException {
-    return this.setField(index, packetData == null ? null : packetData.getHandle());
+  public Packet setField(int index, @NonNull Modifier modifier) throws PacketHandlingException {
+    try {
+      this.clazz.getDeclaredFields().get(index).set(this.wrapped, modifier);
+    } catch (IllegalAccessException | InvocationTargetException e) {
+      throw new PacketHandlingException("Could not set field in packet", e);
+    }
+    return this;
   }
 
   /**
@@ -125,7 +138,7 @@ public final class Packet extends SimpleWrapper<Object> {
   @NonNull
   public Packet setField(int index, Object object) throws PacketHandlingException {
     try {
-      this.clazz.getDeclaredFields().get(index).set(this.reference, object);
+      this.clazz.getDeclaredFields().get(index).set(this.wrapped, object);
     } catch (IllegalAccessException e) {
       throw new PacketHandlingException("Could not set field in packet", e);
     }
@@ -160,5 +173,10 @@ public final class Packet extends SimpleWrapper<Object> {
    */
   public void sendAll(@NonNull Player... players) throws PacketHandlingException {
     this.sendAll(Arrays.asList(players));
+  }
+
+  @Override
+  public Class<?> getReflectClass() {
+    return this.clazz.getWrapped();
   }
 }

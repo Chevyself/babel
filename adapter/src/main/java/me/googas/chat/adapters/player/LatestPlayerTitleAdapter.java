@@ -1,6 +1,7 @@
-package me.googas.chat.adapters;
+package me.googas.chat.adapters.player;
 
 import lombok.NonNull;
+import me.googas.chat.adapters.PlayerTitleAdapter;
 import org.bukkit.entity.Player;
 
 public final class LatestPlayerTitleAdapter implements PlayerTitleAdapter {

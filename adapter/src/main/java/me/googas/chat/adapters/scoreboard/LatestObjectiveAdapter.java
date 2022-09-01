@@ -1,6 +1,7 @@
-package me.googas.chat.adapters;
+package me.googas.chat.adapters.scoreboard;
 
 import lombok.NonNull;
+import me.googas.chat.adapters.ObjectiveAdapter;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 

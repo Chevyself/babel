@@ -10,7 +10,8 @@ import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.dependencies.viaversion.ViaVersionSoft;
 import me.googas.chat.api.lines.Line;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
-import me.googas.chat.wrappers.WrappedSoundCategory;
+import me.googas.chat.api.tab.TabView;
+import me.googas.chat.packet.sound.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -214,6 +215,12 @@ public interface Channel {
 
   @NonNull
   Optional<? extends AdaptedBossBar> getBossBar();
+
+  @NonNull
+  TabView giveTabView();
+
+  @NonNull
+  Optional<? extends TabView> getTabView();
 
   @NonNull
   ChannelScoreboard getScoreboard();

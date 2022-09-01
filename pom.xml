@@ -75,12 +75,12 @@
   </dependencies>
 
   <properties>
-    <commands.version>1.0.0-PRE-4</commands.version>
+    <commands.version>66213934a7</commands.version>
     <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
     <lombok.version>1.18.24</lombok.version>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <reflect.version>0.0.1-SNAPSHOT</reflect.version>
+    <reflect.version>7f87ada191</reflect.version>
     <spigot-api.version-latest>1.18.2-R0.1-SNAPSHOT</spigot-api.version-latest>
     <spigot-api.version-v12>1.12.2-R0.1-SNAPSHOT</spigot-api.version-v12>
     <spigot-api.version-v11>1.11.2-R0.1-SNAPSHOT</spigot-api.version-v11>

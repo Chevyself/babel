@@ -1,8 +1,9 @@
-package me.googas.chat.adapters;
+package me.googas.chat.adapters.bossbar;
 
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
+import me.googas.chat.adapters.AdaptedBossBar;
 
 public class EmptyAdaptedBossBar implements AdaptedBossBar {
 

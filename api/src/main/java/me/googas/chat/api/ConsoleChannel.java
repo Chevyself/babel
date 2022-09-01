@@ -7,7 +7,9 @@ import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
-import me.googas.chat.wrappers.WrappedSoundCategory;
+import me.googas.chat.api.tab.EmptyTabView;
+import me.googas.chat.api.tab.TabView;
+import me.googas.chat.packet.sound.WrappedSoundCategory;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
@@ -70,6 +72,16 @@ public final class ConsoleChannel implements Channel {
 
   @Override
   public @NonNull Optional<? extends AdaptedBossBar> getBossBar() {
+    return Optional.empty();
+  }
+
+  @Override
+  public @NonNull TabView giveTabView() {
+    return new EmptyTabView();
+  }
+
+  @Override
+  public @NonNull Optional<? extends TabView> getTabView() {
     return Optional.empty();
   }
 

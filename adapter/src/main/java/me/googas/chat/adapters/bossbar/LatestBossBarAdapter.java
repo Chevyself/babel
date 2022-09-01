@@ -1,12 +1,14 @@
-package me.googas.chat.adapters;
+package me.googas.chat.adapters.bossbar;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import lombok.NonNull;
-import me.googas.chat.wrappers.WrappedBarColor;
-import me.googas.chat.wrappers.WrappedBarStyle;
+import me.googas.chat.adapters.AdaptedBossBar;
+import me.googas.chat.adapters.BossBarAdapter;
+import me.googas.chat.packet.bossbar.WrappedBarColor;
+import me.googas.chat.packet.bossbar.WrappedBarStyle;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
