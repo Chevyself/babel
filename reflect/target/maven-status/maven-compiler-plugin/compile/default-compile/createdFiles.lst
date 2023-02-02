@@ -1,0 +1,15 @@
+me\googas\reflect\wrappers\WrappedMethod.class
+me\googas\reflect\Wrapper.class
+me\googas\reflect\wrappers\WrappedConstructor.class
+me\googas\reflect\modifiers\Modifier.class
+me\googas\reflect\AbstractWrapper.class
+me\googas\reflect\SetterWrapper.class
+me\googas\reflect\SimpleWrapper.class
+me\googas\reflect\modifiers\CollectionModifier$Add.class
+me\googas\reflect\wrappers\LangWrapper.class
+me\googas\reflect\modifiers\CollectionModifier.class
+me\googas\reflect\wrappers\WrappedClass.class
+me\googas\reflect\wrappers\WrappedField.class
+me\googas\reflect\modifiers\CollectionModifier$1.class
+me\googas\reflect\modifiers\CollectionModifier$AddAll.class
+me\googas\reflect\util\ReflectUtil.class

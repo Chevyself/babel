@@ -18,6 +18,7 @@ public enum WrappedEnumGameMode implements Wrapper<Object> {
   @NonNull
   public static final WrappedClass<?> CLAZZ =
       WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".WorldSettings$EnumGamemode");
+
   public static final WrappedMethod<?> VALUE_OF = CLAZZ.getMethod("valueOf", String.class);
   @NonNull @Getter private final GameMode bukkit;
 

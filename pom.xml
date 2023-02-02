@@ -14,6 +14,7 @@
     <module>adapter-1.11</module>
     <module>adapter-1.8</module>
     <module>api</module>
+    <module>reflect</module>
     <module>sample</module>
   </modules>
 
@@ -60,12 +61,6 @@
       <artifactId>bukkit</artifactId>
       <version>${commands.version}</version>
     </dependency>
-    <!-- Reflection -->
-    <dependency>
-      <groupId>me.googas</groupId>
-      <artifactId>reflect</artifactId>
-      <version>${reflect.version}</version>
-    </dependency>
     <!--  Annotations  -->
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -80,7 +75,6 @@
     <lombok.version>1.18.24</lombok.version>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <reflect.version>7f87ada191</reflect.version>
     <spigot-api.version-latest>1.18.2-R0.1-SNAPSHOT</spigot-api.version-latest>
     <spigot-api.version-v12>1.12.2-R0.1-SNAPSHOT</spigot-api.version-v12>
     <spigot-api.version-v11>1.11.2-R0.1-SNAPSHOT</spigot-api.version-v11>
