@@ -42,7 +42,8 @@ public class EmptyTabView implements TabView {
   }
 
   @Override
-  public boolean remove(@NonNull Supplier<TabEntry> replacement, @NonNull Collection<? extends TabEntry> entries) {
+  public boolean remove(
+      @NonNull Supplier<TabEntry> replacement, @NonNull Collection<? extends TabEntry> entries) {
     ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#remove");
     return false;
   }

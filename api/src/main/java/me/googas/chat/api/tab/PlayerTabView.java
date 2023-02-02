@@ -219,16 +219,19 @@ public class PlayerTabView implements TabView {
 
   @Override
   public boolean remove(
-          @NonNull Supplier<TabEntry> replacement, @NonNull Collection<? extends TabEntry> entries) {
+      @NonNull Supplier<TabEntry> replacement, @NonNull Collection<? extends TabEntry> entries) {
     Map<TabSlot, TabEntry> toUpdate = new HashMap<>();
-    slots.stream().filter(slot -> {
-      for (TabEntry entry : entries) {
-        if (entry.equals(slot.getEntry())) {
-          return true;
-        }
-      }
-      return false;
-    }).forEach(slot -> toUpdate.put(slot, replacement.get()));
+    slots.stream()
+        .filter(
+            slot -> {
+              for (TabEntry entry : entries) {
+                if (entry.equals(slot.getEntry())) {
+                  return true;
+                }
+              }
+              return false;
+            })
+        .forEach(slot -> toUpdate.put(slot, replacement.get()));
     this.set(toUpdate);
     return toUpdate.size() > 0;
   }
@@ -236,7 +239,8 @@ public class PlayerTabView implements TabView {
   @Override
   public void sort() {
     Map<TabSlot, TabEntry> toUpdate = new HashMap<>();
-    List<TabEntry> sortedEntries = this.slots.stream().map(TabSlot::getEntry).sorted().collect(Collectors.toList());
+    List<TabEntry> sortedEntries =
+        this.slots.stream().map(TabSlot::getEntry).sorted().collect(Collectors.toList());
     for (int i = 0; i < slots.size(); i++) {
       TabSlot tabSlot = slots.get(i);
       TabEntry tabEntry = sortedEntries.get(i);

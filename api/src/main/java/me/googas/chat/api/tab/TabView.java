@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Supplier;
-
 import lombok.NonNull;
 import me.googas.chat.api.tab.entries.EmptyTabEntry;
 import me.googas.chat.api.tab.entries.TabEntry;
@@ -43,7 +42,8 @@ public interface TabView {
     return this.remove(replacement, Arrays.asList(entries));
   }
 
-  boolean remove(@NonNull Supplier<TabEntry> replacement, @NonNull Collection<? extends TabEntry> entries);
+  boolean remove(
+      @NonNull Supplier<TabEntry> replacement, @NonNull Collection<? extends TabEntry> entries);
 
   void sort();
 }
