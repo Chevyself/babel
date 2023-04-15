@@ -16,6 +16,7 @@ import me.googas.chat.api.tab.TabSize;
 import me.googas.chat.api.tab.TabView;
 import me.googas.chat.api.tab.entries.CoordinateTabEntry;
 import me.googas.chat.api.tab.entries.PlayerTabEntry;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.commands.annotations.Free;
 import me.googas.commands.annotations.Parent;
@@ -93,7 +94,7 @@ public class SampleCommands {
         | InvocationTargetException
         | InstantiationException
         | IllegalAccessException e) {
-      ErrorHandler.getInstance().handle(Level.SEVERE, "", e);
+      Debugger.getInstance().handle(Level.SEVERE, "", e);
     }
   }
 

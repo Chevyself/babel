@@ -2,7 +2,7 @@ package me.googas.chat.adapters.v1_11;
 
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.ErrorHandler;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.PacketType;
@@ -29,7 +29,7 @@ public final class LegacyPlayerTabListAdapter implements PlayerTabListAdapter {
                   : WrappedChatComponent.of(Components.deserializePlain('&', bottom)))
           .send(player);
     } catch (PacketHandlingException e) {
-      ErrorHandler.getInstance().handle(Level.SEVERE, "Could not send header_footer packet", e);
+      Debugger.getInstance().handle(Level.SEVERE, "Could not send header_footer packet", e);
     }
   }
 }

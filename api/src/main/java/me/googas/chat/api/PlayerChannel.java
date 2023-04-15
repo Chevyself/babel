@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.ErrorHandler;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
@@ -152,7 +152,7 @@ public interface PlayerChannel extends Channel {
             player -> {
               Optional<? extends AdaptedBossBar> optional = this.getBossBar();
               if (optional.isPresent()) {
-                ErrorHandler.getInstance()
+                Debugger.getInstance()
                     .handle(Level.WARNING, "PlayerChannel#giveBossBar without #getBossBar check");
                 AdaptedBossBar bossBar = optional.get();
                 bossBar.setTitle(text);
@@ -170,7 +170,7 @@ public interface PlayerChannel extends Channel {
             player -> {
               Optional<? extends TabView> optional = this.getTabView();
               if (optional.isPresent()) {
-                ErrorHandler.getInstance()
+                Debugger.getInstance()
                     .handle(Level.WARNING, "PlayerChannel#giveTabView without #getTabView check");
                 return optional.get();
               } else {
@@ -183,7 +183,7 @@ public interface PlayerChannel extends Channel {
                     | InvocationTargetException
                     | InstantiationException
                     | IllegalAccessException e) {
-                  ErrorHandler.getInstance()
+                  Debugger.getInstance()
                       .handle(Level.SEVERE, "Could not initialize tab view for player " + player);
                   return null;
                 }

@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.ErrorHandler;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.packet.PacketType;
 import me.googas.reflect.Wrapper;
 import me.googas.reflect.wrappers.WrappedClass;
@@ -28,7 +28,7 @@ public enum WrappedPlayerInfoAction implements Wrapper<Object> {
     try {
       return VALUE_OF.invoke(null, this.name());
     } catch (InvocationTargetException | IllegalAccessException e) {
-      ErrorHandler.getInstance().handle(Level.SEVERE, "Could not get player info action", e);
+      Debugger.getInstance().handle(Level.SEVERE, "Could not get player info action", e);
       return Optional.empty();
     }
   }

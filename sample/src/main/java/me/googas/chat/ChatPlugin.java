@@ -9,6 +9,7 @@ import me.googas.chat.api.YamlLanguage;
 import me.googas.chat.api.commands.ChannelProvider;
 import me.googas.chat.api.commands.ResultHandler;
 import me.googas.chat.api.util.Versions;
+import me.googas.chat.debug.Debugger;
 import me.googas.commands.bukkit.CommandManager;
 import me.googas.commands.bukkit.context.CommandContext;
 import me.googas.commands.bukkit.messages.BukkitMessagesProvider;
@@ -24,8 +25,8 @@ public class ChatPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    ErrorHandler errors =
-        ErrorHandler.setInstance(new ErrorHandler.LoggerErrorHandler(this.getLogger()));
+    Debugger errors =
+        Debugger.setInstance(new Debugger.LoggerDebugger(this.getLogger()));
     // Load languages
     try {
       ResourceManager.getInstance()
@@ -69,7 +70,7 @@ public class ChatPlugin extends JavaPlugin {
   @Override
   public void onDisable() {
     ResourceManager.getInstance().unregister(this);
-    ErrorHandler.setDefaultInstance();
+    Debugger.setDefaultInstance();
     super.onDisable();
   }
 }

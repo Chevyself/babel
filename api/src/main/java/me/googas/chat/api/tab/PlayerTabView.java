@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.ErrorHandler;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.api.tab.entries.EmptyTabEntry;
 import me.googas.chat.api.tab.entries.TabEntry;
 import me.googas.chat.exceptions.PacketHandlingException;
@@ -67,7 +67,7 @@ public class PlayerTabView implements TabView {
               try {
                 return slot.playerInfoData(player, packet);
               } catch (PacketHandlingException e) {
-                ErrorHandler.getInstance()
+                Debugger.getInstance()
                     .handle(Level.SEVERE, "Could not get PlayerInfoData for slot " + slot);
                 return null;
               }
@@ -108,7 +108,7 @@ public class PlayerTabView implements TabView {
                 packet.setField(1, CollectionModifier.addWrappers(wrappers));
                 packet.send(player);
               } catch (PacketHandlingException e) {
-                ErrorHandler.getInstance()
+                Debugger.getInstance()
                     .handle(Level.SEVERE, "Could not clear tab view for " + player.getName());
               }
             });
@@ -187,7 +187,7 @@ public class PlayerTabView implements TabView {
               } catch (PacketHandlingException
                   | InvocationTargetException
                   | IllegalAccessException e) {
-                ErrorHandler.getInstance()
+                Debugger.getInstance()
                     .handle(Level.SEVERE, "Could not get entity from CraftPlayer", e);
                 return null;
               }
@@ -240,7 +240,7 @@ public class PlayerTabView implements TabView {
                   packet.send(player);
                 }
               } catch (PacketHandlingException e) {
-                ErrorHandler.getInstance().handle(Level.SEVERE, "Could not update tab slot", e);
+                Debugger.getInstance().handle(Level.SEVERE, "Could not update tab slot", e);
               }
             });
   }

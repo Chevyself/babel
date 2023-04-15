@@ -1,4 +1,4 @@
-Chat [![](https://jitpack.io/v/me.googas/reflect.svg)](https://jitpack.io/#me.googas/chat)
+Babel [![](https://jitpack.io/v/me.googas/reflect.svg)](https://jitpack.io/#me.googas/chat)
 ===
 
 User Interface utility for Bukkit

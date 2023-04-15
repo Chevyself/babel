@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.logging.Level;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.ErrorHandler;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.ResourceManager;
@@ -122,13 +122,13 @@ public final class LocalizedReference implements Text {
 
   @Override
   public @NonNull BaseComponent[] build() {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
+    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
     return this.asLocalized().build();
   }
 
   @Override
   public @NonNull BaseComponent[] build(boolean sample) {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
+    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
     return this.asLocalized().build(sample);
   }
 
@@ -144,7 +144,7 @@ public final class LocalizedReference implements Text {
 
   @Override
   public @NonNull String asText(boolean sample) {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#asText");
+    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#asText");
     return this.asLocalized().asText(sample);
   }
 
@@ -175,7 +175,7 @@ public final class LocalizedReference implements Text {
 
   @Override
   public @NonNull String getRaw() {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#getRaw");
+    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#getRaw");
     return this.asLocalized().getRaw();
   }
 

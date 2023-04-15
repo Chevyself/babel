@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.ErrorHandler;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.bossbar.EmptyAdaptedBossBar;
@@ -64,7 +64,7 @@ public class LegacyBossBarAdapter implements BossBarAdapter {
       this.bossBars.add(bossBar);
       return bossBar;
     } catch (PacketHandlingException e) {
-      ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to create boss bar for player", e);
+      Debugger.getInstance().handle(Level.SEVERE, "Failed to create boss bar for player", e);
     }
     return new EmptyAdaptedBossBar(player.getUniqueId());
   }

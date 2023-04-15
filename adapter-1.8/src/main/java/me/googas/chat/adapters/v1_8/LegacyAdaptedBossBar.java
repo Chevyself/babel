@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.ErrorHandler;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.Packet;
@@ -51,7 +51,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
               true);
       packet.send(player);
     } catch (PacketHandlingException e) {
-      ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to send metadata packet", e);
+      Debugger.getInstance().handle(Level.SEVERE, "Failed to send metadata packet", e);
     }
   }
 
@@ -102,7 +102,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                         () -> new PacketHandlingException("Wither is no longer reachable")));
         packet.send(player);
       } catch (PacketHandlingException e) {
-        ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to send teleport packet");
+        Debugger.getInstance().handle(Level.SEVERE, "Failed to send teleport packet");
       }
     } else {
       this.destroy();
@@ -123,7 +123,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                     packet.send(player);
                   }
                 } catch (PacketHandlingException e) {
-                  ErrorHandler.getInstance()
+                  Debugger.getInstance()
                       .handle(Level.SEVERE, "Failed to destroy wither entity", e);
                 }
               });
