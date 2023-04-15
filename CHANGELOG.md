@@ -9,4 +9,5 @@ Changelog
   - [X] Soft dependencies classes
 - Added Javadoc for
   - [X] Custom tab API
+- [X] Renamed `Line` to `Text` 
 - Moved `Versions#getObjectiveAdapter` to `Players#getObjectiveAdapter`
