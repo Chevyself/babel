@@ -4,8 +4,8 @@ import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 
 /**
- * Represents a placeholder. A placeholder in a raw string is shown inside percentages:
- * %name%, this replaces that with text
+ * Represents a placeholder. A placeholder in a raw string is shown inside percentages: %name%, this
+ * replaces that with text
  */
 public interface Placeholder {
 

@@ -6,7 +6,8 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 
 /**
- * Represents the soft dependency of PlaceholderAPI. This class will check if PlaceholderAPI is present.
+ * Represents the soft dependency of PlaceholderAPI. This class will check if PlaceholderAPI is
+ * present.
  */
 public final class PapiSoft {
 
@@ -29,9 +30,7 @@ public final class PapiSoft {
         builder, "Builder has not been enabled. Check if it has been with #isEnabled");
   }
 
-  /**
-   * Checks if the soft dependency is enabled.
-   */
+  /** Checks if the soft dependency is enabled. */
   public static void reload() {
     enabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
     if (enabled) {

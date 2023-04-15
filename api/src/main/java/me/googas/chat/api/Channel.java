@@ -8,7 +8,7 @@ import java.util.UUID;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.dependencies.viaversion.ViaVersionSoft;
-import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.text.Text;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.tab.TabView;
 import me.googas.chat.packet.sound.WrappedSoundCategory;
@@ -107,12 +107,12 @@ public interface Channel {
   void send(@NonNull String text);
 
   /**
-   * Send a line to this channel.
+   * Send text to this channel.
    *
-   * @param line the line to send
+   * @param text the text to send
    */
-  default void send(@NonNull Line line) {
-    this.send(line.build(this));
+  default void send(@NonNull Text text) {
+    this.send(text.build(this));
   }
 
   /**
@@ -129,13 +129,13 @@ public interface Channel {
   /**
    * Send a title to this channel.
    *
-   * @param title the title as a line
-   * @param subtitle the subtitle as a line
+   * @param title the title as line
+   * @param subtitle the subtitle as line
    * @param fadeIn how long until the title appears in ticks
    * @param stay how long until the title stays in ticks
    * @param fadeOut how long until the title fades in ticks
    */
-  default void sendTitle(Line title, Line subtitle, int fadeIn, int stay, int fadeOut) {
+  default void sendTitle(Text title, Text subtitle, int fadeIn, int stay, int fadeOut) {
     this.sendRawTitle(
         title == null ? null : title.asText(this),
         subtitle == null ? null : subtitle.asText(this),
@@ -155,10 +155,10 @@ public interface Channel {
   /**
    * Set the header and bottom of the tab-list.
    *
-   * @param header the header text to set as a line
-   * @param bottom the bottom text to set as a line
+   * @param header the header text to set
+   * @param bottom the bottom text to set
    */
-  default void setTabList(Line header, Line bottom) {
+  default void setTabList(Text header, Text bottom) {
     this.setRawTabList(
         header == null ? null : header.asText(this), bottom == null ? null : bottom.asText(this));
   }
@@ -218,7 +218,7 @@ public interface Channel {
 
   void giveBossBar(@NonNull String text, float progress);
 
-  default void giveBossBar(@NonNull Line text, float progress) {
+  default void giveBossBar(@NonNull Text text, float progress) {
     this.giveBossBar(text.asText(this), progress);
   }
 

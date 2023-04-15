@@ -64,7 +64,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
   public void setLocation(double x, double y, double z, float yaw, float pitch)
       throws PacketHandlingException {
     try {
-      SET_LOCATION.invoke(this.reference, x, y, z, yaw, pitch);
+      SET_LOCATION.invoke(this.wrapped, x, y, z, yaw, pitch);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setLocation", e);
     }
@@ -72,7 +72,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public void setInvisible(boolean visible) throws PacketHandlingException {
     try {
-      SET_INVISIBLE.invoke(this.reference, visible);
+      SET_INVISIBLE.invoke(this.wrapped, visible);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setInvisible", e);
     }
@@ -80,7 +80,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public void setCustomName(String name) throws PacketHandlingException {
     try {
-      SET_CUSTOM_NAME.invoke(this.reference, name);
+      SET_CUSTOM_NAME.invoke(this.wrapped, name);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setCustomName", e);
     }
@@ -88,7 +88,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public float getMaxHealth() throws PacketHandlingException {
     try {
-      return GET_MAX_HEALTH.prepare(this.reference);
+      return GET_MAX_HEALTH.prepare(this.wrapped);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getMaxHealth");
     }
@@ -96,7 +96,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public void setHealth(float health) throws PacketHandlingException {
     try {
-      SET_HEALTH.invoke(this.reference, health);
+      SET_HEALTH.invoke(this.wrapped, health);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setHealth");
     }
@@ -104,7 +104,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public int getId() throws PacketHandlingException {
     try {
-      return GET_ID.prepare(this.reference);
+      return GET_ID.prepare(this.wrapped);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getId");
     }
@@ -112,7 +112,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public Object getDataWatcher() throws PacketHandlingException {
     try {
-      return GET_DATA_WATCHER.invoke(this.reference);
+      return GET_DATA_WATCHER.invoke(this.wrapped);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getDataWatcher");
     }
@@ -120,7 +120,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public WrappedDataWatcher getWrappedDataWatcher() throws PacketHandlingException {
     try {
-      return new WrappedDataWatcher(GET_DATA_WATCHER.invoke(this.reference));
+      return new WrappedDataWatcher(GET_DATA_WATCHER.invoke(this.wrapped));
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getDataWatcher");
     }

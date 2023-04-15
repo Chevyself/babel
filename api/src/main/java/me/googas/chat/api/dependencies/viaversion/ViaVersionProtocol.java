@@ -20,7 +20,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 /**
- * Represents the protocol of ViaVersion. This class will be used to get the version of a player and store it in a map.
+ * Represents the protocol of ViaVersion. This class will be used to get the version of a player and
+ * store it in a map.
  */
 public final class ViaVersionProtocol implements Listener {
 

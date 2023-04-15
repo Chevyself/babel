@@ -7,8 +7,8 @@ import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
-import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.Plain;
+import me.googas.chat.api.text.Text;
+import me.googas.chat.api.text.Plain;
 import me.googas.chat.api.scoreboard.ScoreboardLine;
 import me.googas.chat.api.tab.PlayerTabView;
 import me.googas.chat.api.tab.TabCoordinate;
@@ -45,7 +45,7 @@ public class SampleCommands {
       channel.giveBossBar(text, floatValue);
     }
 
-    return Line.of("Given boss bar");
+    return Text.of("Given boss bar");
   }
 
   @Command(aliases = "scoreboard")
@@ -53,7 +53,7 @@ public class SampleCommands {
     List<ScoreboardLine> layout =
         ScoreboardLine.parse(Arrays.asList("This", "is", "the", "best", ":)"), false);
     channel.getScoreboard().setLayout(layout).initialize("Hey!");
-    return Line.of("Applied");
+    return Text.of("Applied");
   }
 
   @Parent
@@ -69,7 +69,7 @@ public class SampleCommands {
               suggestions = {"$", "$cmd.hello"})
           String line) {
     Locale locale = Language.getLocale(context.getSender());
-    return Line.parse(locale, line);
+    return Text.parse(locale, line);
   }
 
   @Command(aliases = "sound", description = "a")
@@ -101,45 +101,45 @@ public class SampleCommands {
   public Plain ctabclear(Player player) {
     TabView view = views.get(player.getUniqueId());
     if (view == null) {
-      return Line.of("No view");
+      return Text.of("No view");
     } else {
       view.clear();
-      return Line.of("Done");
+      return Text.of("Done");
     }
   }
 
   @Command(aliases = "ctabadd")
-  public Line ctabadd(Player player) {
+  public Text ctabadd(Player player) {
     TabView view = views.get(player.getUniqueId());
     if (view == null) {
-      return Line.of("No view");
+      return Text.of("No view");
     } else {
       view.add(new PlayerTabEntry(player));
-      return Line.of("Done");
+      return Text.of("Done");
     }
   }
 
   @Command(aliases = "ctabremove")
-  public Line ctabremove(Player player) {
+  public Text ctabremove(Player player) {
     TabView view = views.get(player.getUniqueId());
     if (view == null) {
-      return Line.of("No view");
+      return Text.of("No view");
     } else {
       view.remove(new PlayerTabEntry(player));
-      return Line.of("Done");
+      return Text.of("Done");
     }
   }
 
   @Command(aliases = "ctabcoords")
-  public Line ctabcoords(Player player) {
+  public Text ctabcoords(Player player) {
     TabView view = views.get(player.getUniqueId());
     if (view == null) {
-      return Line.of("No view");
+      return Text.of("No view");
     } else {
       for (TabCoordinate coordinate : view.getSize()) {
         view.set(coordinate, new CoordinateTabEntry());
       }
-      return Line.of("Done");
+      return Text.of("Done");
     }
   }
 
@@ -177,6 +177,6 @@ public class SampleCommands {
       @Required(name = "header", behaviour = ArgumentBehaviour.MULTIPLE) String header,
       @Required(name = "footer", behaviour = ArgumentBehaviour.MULTIPLE) String footer) {
     channel.setRawTabList(header, footer);
-    return Line.localized("cmd.tab").format(header, footer);
+    return Text.localized("cmd.tab").format(header, footer);
   }
 }

@@ -1,4 +1,4 @@
-package me.googas.chat.api.lines;
+package me.googas.chat.api.text;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -8,12 +8,12 @@ import me.googas.chat.ErrorHandler;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.ResourceManager;
-import me.googas.chat.api.lines.format.Formatter;
+import me.googas.chat.api.text.format.Formatter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 
-/** A {@link Line} that references a language key to be built into {@link Localized}. */
-public final class LocalizedReference implements Line {
+/** A {@link Text} that references a language key to be built into {@link Localized}. */
+public final class LocalizedReference implements Text {
 
   /** Objects formatters. */
   @NonNull private final List<Object> objects;
@@ -24,7 +24,7 @@ public final class LocalizedReference implements Line {
 
   @NonNull private final List<Placeholder> linePlaceholders;
 
-  @NonNull @Getter private final List<Line> extra;
+  @NonNull @Getter private final List<Text> extra;
 
   @NonNull private final String key;
 
@@ -43,7 +43,7 @@ public final class LocalizedReference implements Line {
       @NonNull Map<String, String> placeholders,
       @NonNull List<Formatter> formatters,
       @NonNull List<Placeholder> linePlaceholders,
-      @NonNull List<Line> extra,
+      @NonNull List<Text> extra,
       @NonNull String key) {
     this.objects = objects;
     this.placeholders = placeholders;
@@ -60,7 +60,7 @@ public final class LocalizedReference implements Line {
    * @return the {@link Localized}
    */
   public @NonNull Localized asLocalized(@NonNull Locale locale) {
-    Localized localized = Line.localized(locale, this.key);
+    Localized localized = Text.localized(locale, this.key);
     if (!extra.isEmpty()) localized.appendMany(this.extra);
     if (!objects.isEmpty()) localized.format(objects.toArray());
     if (!placeholders.isEmpty()) localized.format(placeholders);
@@ -111,13 +111,13 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull LocalizedReference appendMany(@NonNull Collection<Line> extra) {
-    return (LocalizedReference) Line.super.appendMany(extra);
+  public @NonNull LocalizedReference appendMany(@NonNull Collection<Text> extra) {
+    return (LocalizedReference) Text.super.appendMany(extra);
   }
 
   @Override
-  public @NonNull LocalizedReference appendMany(@NonNull Line... lines) {
-    return (LocalizedReference) Line.super.appendMany(lines);
+  public @NonNull LocalizedReference appendMany(@NonNull Text... texts) {
+    return (LocalizedReference) Text.super.appendMany(texts);
   }
 
   @Override
@@ -151,7 +151,7 @@ public final class LocalizedReference implements Line {
   @Override
   public @NonNull LocalizedReference format(@NonNull Object... objects) {
     this.objects.addAll(Arrays.asList(objects));
-    this.extra.forEach(line -> line.format(objects));
+    this.extra.forEach(text -> text.format(objects));
     return this;
   }
 
@@ -162,8 +162,8 @@ public final class LocalizedReference implements Line {
   }
 
   @Override
-  public @NonNull LocalizedReference append(@NonNull Line line) {
-    this.extra.add(line);
+  public @NonNull LocalizedReference append(@NonNull Text text) {
+    this.extra.add(text);
     return this;
   }
 
@@ -186,6 +186,6 @@ public final class LocalizedReference implements Line {
 
   @Override
   public @NonNull LocalizedReference append(@NonNull String string) {
-    return (LocalizedReference) Line.super.append(string);
+    return (LocalizedReference) Text.super.append(string);
   }
 }

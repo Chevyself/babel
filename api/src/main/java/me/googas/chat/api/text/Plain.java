@@ -1,17 +1,17 @@
-package me.googas.chat.api.lines;
+package me.googas.chat.api.text;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.api.lines.format.Formatter;
+import me.googas.chat.api.text.format.Formatter;
 import me.googas.commands.util.Strings;
 
-/** Represents a plain text line. */
-public final class Plain implements Line {
+/** Represents plain text. */
+public final class Plain implements Text {
 
-  @NonNull @Getter private final List<Line> extra;
+  @NonNull @Getter private final List<Text> extra;
   @NonNull private String text;
 
   Plain(@NonNull String text) {
@@ -25,18 +25,18 @@ public final class Plain implements Line {
   }
 
   @Override
-  public @NonNull Plain appendMany(@NonNull Collection<Line> extra) {
-    return (Plain) Line.super.appendMany(extra);
+  public @NonNull Plain appendMany(@NonNull Collection<Text> extra) {
+    return (Plain) Text.super.appendMany(extra);
   }
 
   @Override
   public @NonNull Plain append(@NonNull String string) {
-    return (Plain) Line.super.append(string);
+    return (Plain) Text.super.append(string);
   }
 
   @Override
-  public @NonNull Plain appendMany(@NonNull Line... lines) {
-    return (Plain) Line.super.appendMany(lines);
+  public @NonNull Plain appendMany(@NonNull Text... texts) {
+    return (Plain) Text.super.appendMany(texts);
   }
 
   @Override
@@ -53,7 +53,7 @@ public final class Plain implements Line {
   @Override
   public @NonNull Plain format(@NonNull Object... objects) {
     this.text = Strings.format(text, objects);
-    this.extra.forEach(line -> line.format(objects));
+    this.extra.forEach(text -> text.format(objects));
     return this;
   }
 
@@ -63,15 +63,15 @@ public final class Plain implements Line {
   }
 
   @Override
-  public @NonNull Plain append(@NonNull Line line) {
-    this.extra.add(line);
+  public @NonNull Plain append(@NonNull Text text) {
+    this.extra.add(text);
     return this;
   }
 
   @Override
   public @NonNull Plain format(@NonNull Placeholder placeholder) {
     this.text = placeholder.format(this.text);
-    this.extra.forEach(line -> line.format(placeholder));
+    this.extra.forEach(text -> text.format(placeholder));
     return this;
   }
 }

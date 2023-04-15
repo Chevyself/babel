@@ -3,19 +3,19 @@ package me.googas.chat.api.tab.entries;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.text.Text;
 
 /** A tab entry that represents a text. */
 public class TextTabEntry extends EmptyTabEntry {
 
-  @Getter @NonNull private final Line display;
+  @Getter @NonNull private final Text display;
 
   /**
    * Create the entry
    *
    * @param display the line to display
    */
-  public TextTabEntry(@NonNull Line display) {
+  public TextTabEntry(@NonNull Text display) {
     this.display = display;
   }
 

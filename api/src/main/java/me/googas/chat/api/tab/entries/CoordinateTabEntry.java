@@ -1,7 +1,7 @@
 package me.googas.chat.api.tab.entries;
 
 import lombok.NonNull;
-import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.text.Text;
 import me.googas.chat.api.tab.TabCoordinate;
 import me.googas.chat.api.tab.TabSlot;
 
@@ -12,9 +12,9 @@ import me.googas.chat.api.tab.TabSlot;
  */
 public class CoordinateTabEntry extends EmptyTabEntry {
   @Override
-  public @NonNull Line getDisplay(@NonNull TabSlot slot) {
+  public @NonNull Text getDisplay(@NonNull TabSlot slot) {
     TabCoordinate coordinate = slot.getCoordinate();
-    return Line.of(coordinate.getX() + ", " + coordinate.getY());
+    return Text.of(coordinate.getX() + ", " + coordinate.getY());
   }
 
   @Override

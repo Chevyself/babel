@@ -4,12 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.Packet;
-import me.googas.reflect.SimpleWrapper;
+import me.googas.reflect.AbstractWrapper;
 import me.googas.reflect.wrappers.WrappedClass;
 import me.googas.reflect.wrappers.WrappedMethod;
 
 /** Wraps the 'PlayerConnection' nms class. */
-public class WrappedPlayerConnection extends SimpleWrapper<Object> {
+public class WrappedPlayerConnection extends AbstractWrapper<Object> {
 
   @NonNull
   private static final WrappedClass<?> ENTITY_PLAYER =
@@ -38,7 +38,7 @@ public class WrappedPlayerConnection extends SimpleWrapper<Object> {
       Object handle = packet.getWrapped();
       if (handle != null) {
         try {
-          WrappedPlayerConnection.SEND_PACKET.invoke(this.reference, handle);
+          WrappedPlayerConnection.SEND_PACKET.invoke(this.wrapped, handle);
         } catch (InvocationTargetException | IllegalAccessException e) {
           throw new PacketHandlingException("Could not invoke method to send packet", e);
         }

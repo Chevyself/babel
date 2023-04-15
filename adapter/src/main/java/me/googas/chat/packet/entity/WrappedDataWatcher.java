@@ -4,12 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.Packet;
-import me.googas.reflect.SimpleWrapper;
+import me.googas.reflect.AbstractWrapper;
 import me.googas.reflect.wrappers.WrappedClass;
 import me.googas.reflect.wrappers.WrappedConstructor;
 import me.googas.reflect.wrappers.WrappedMethod;
 
-public class WrappedDataWatcher extends SimpleWrapper<Object> {
+public class WrappedDataWatcher extends AbstractWrapper<Object> {
   @NonNull
   public static final WrappedClass<?> CLAZZ =
       WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".DataWatcher");
@@ -35,7 +35,7 @@ public class WrappedDataWatcher extends SimpleWrapper<Object> {
 
   public void a(int i, Object t) throws PacketHandlingException {
     try {
-      A.invoke(this.reference, i, t);
+      A.invoke(this.wrapped, i, t);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke DataWatcher#a", e);
     }

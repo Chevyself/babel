@@ -1,12 +1,12 @@
-package me.googas.chat.api.lines.format;
+package me.googas.chat.api.text.format;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.NonNull;
 import me.googas.chat.api.ResourceManager;
-import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.Localized;
+import me.googas.chat.api.text.Text;
+import me.googas.chat.api.text.Localized;
 
 /** Formatter for sample lines. */
 public final class SampleFormatter implements Formatter, Localized.LocalizedFormatter {
@@ -21,19 +21,19 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
   public SampleFormatter() {}
 
   @Override
-  public @NonNull Line format(@NonNull Line line) {
+  public @NonNull Text format(@NonNull Text text) {
     Locale locale;
-    if (line instanceof Localized) {
-      locale = ((Localized) line).getLocale();
+    if (text instanceof Localized) {
+      locale = ((Localized) text).getLocale();
     } else {
       locale = ResourceManager.getBase();
     }
-    return this.format(locale, line);
+    return this.format(locale, text);
   }
 
   @Override
-  public @NonNull Line format(@NonNull Locale locale, @NonNull Line line) {
-    String raw = line.getRaw();
+  public @NonNull Text format(@NonNull Locale locale, @NonNull Text text) {
+    String raw = text.getRaw();
     Matcher matcher = SampleFormatter.PATTERN.matcher(raw);
     while (matcher.find()) {
       String group = matcher.group();
@@ -41,9 +41,9 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
       // keep it removed until theres a reason
       // String key = group.replace("\"", "");
       String key = group.substring(2, group.length() - 1);
-      raw = raw.replace(group, Line.localized(locale, key).getRaw());
+      raw = raw.replace(group, Text.localized(locale, key).getRaw());
     }
-    line.getExtra().forEach(child -> this.format(locale, child));
-    return line.setRaw(raw);
+    text.getExtra().forEach(child -> this.format(locale, child));
+    return text.setRaw(raw);
   }
 }

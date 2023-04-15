@@ -1,4 +1,4 @@
-package me.googas.chat.api.lines;
+package me.googas.chat.api.text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import me.googas.chat.api.Channel;
 import me.googas.chat.api.ForwardingChannel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.ResourceManager;
-import me.googas.chat.api.lines.format.Formatter;
+import me.googas.chat.api.text.format.Formatter;
 import me.googas.chat.api.placeholders.PlaceholderManager;
 import me.googas.commands.bukkit.result.BukkitResult;
 import me.googas.commands.bukkit.utils.BukkitUtils;
@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 /**
  * Represents text that can be displayed to the player.
  *
- * <p>A line can either be plain text, or a reference to a localized line. A localized line is a key
+ * <p>Text can either be plain, or a reference to localized text. Localized text is a key
  * that can be translated into different languages depending on the client's locale.
  *
  * <p>Plain and Localized lines are mutable, meaning that their contents can be modified using
@@ -32,13 +32,13 @@ import org.bukkit.command.CommandSender;
  *
  * <p>However, they can also be safely copied using {@link #copy()}.
  *
- * <p>To ensure thread safety, each thread should use its own instance of a line, however, {@link
+ * <p>To ensure thread safety, each thread should use its own instance of text, however, {@link
  * LocalizedReference} is immutable and can be used in multiple threads.
  */
-public interface Line extends BukkitResult {
+public interface Text extends BukkitResult {
 
   /**
-   * Start a localized line.
+   * Start localized text.
    *
    * @param locale the locale to get the language
    * @param key the key to get the json/text message
@@ -51,7 +51,7 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Start a localized line.
+   * Start localized text.
    *
    * @param sender the sender to get the language
    * @param key the key to get the json/text message
@@ -60,11 +60,11 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   static Localized localized(@NonNull CommandSender sender, @NonNull String key) {
-    return Line.localized(Language.getLocale(sender), key);
+    return Text.localized(Language.getLocale(sender), key);
   }
 
   /**
-   * Start a localized line.
+   * Start localized text.
    *
    * @param channel the channel to get the language
    * @param key the key to get the json/text message
@@ -73,7 +73,7 @@ public interface Line extends BukkitResult {
    */
   @NonNull
   static Localized localized(@NonNull Channel channel, String key) {
-    return Line.localized(channel.getLocale().orElse(ResourceManager.getBase()), key);
+    return Text.localized(channel.getLocale().orElse(ResourceManager.getBase()), key);
   }
 
   /**
@@ -88,8 +88,20 @@ public interface Line extends BukkitResult {
   static List<Localized> localized(
       @NonNull ForwardingChannel.Multiple forwardingChannel, @NonNull String key) {
     return forwardingChannel.getChannels().stream()
-        .map(channel -> Line.localized(channel, key))
+        .map(channel -> Text.localized(channel, key))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Start plain text.
+   *
+   * @param text the text to convert to plain
+   * @return plain text
+   * @throws NullPointerException if the text is null
+   */
+  @NonNull
+  static Plain of(@NonNull String text) {
+    return new Plain(text);
   }
 
   /**
@@ -102,18 +114,6 @@ public interface Line extends BukkitResult {
   @NonNull
   static LocalizedReference localized(@NonNull String key) {
     return new LocalizedReference(key);
-  }
-
-  /**
-   * Start a plain line.
-   *
-   * @param text the text of the line
-   * @return a plain line
-   * @throws NullPointerException if the text is null
-   */
-  @NonNull
-  static Plain of(@NonNull String text) {
-    return new Plain(text);
   }
 
   /**
@@ -139,11 +139,11 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Checks whether a string is a localized line. A string is a localized line if it starts with
+   * Checks whether a string is localized text. A string is localized text if it starts with
    * 'localized:' or '$' and it does not contain any spaces.
    *
    * @param string the string to check
-   * @return true if the string is a localized line
+   * @return true if the string is localized text
    * @throws NullPointerException if the string is null
    */
   static boolean isLocalized(@NonNull String string) {
@@ -151,7 +151,7 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Parses a line from a string. If the string starts with 'localized:' or '$' a {@link
+   * Parses text from a string. If the string starts with 'localized:' or '$' a {@link
    * LocalizedReference} will be returned, else a {@link Plain} will be provided/
    *
    * <p>If the string starts with 'localized:', the key will be extracted from the string and a
@@ -161,7 +161,7 @@ public interface Line extends BukkitResult {
    *
    * <p>Otherwise, a {@link Plain} will be created using the string
    *
-   * <p>By default all Lines are treated as "samples" which means that the raw content of the line
+   * <p>By default all Lines are treated as "samples" which means that the raw content of the text
    * will be treated as if it had references to other lines. If you want to disable this behaviour,
    * you can use {@link #build(boolean)} or {@link #build(Channel, boolean, boolean)}.
    *
@@ -169,57 +169,57 @@ public interface Line extends BukkitResult {
    * If you want to disable this behaviour, you can use {@link #build(Channel, boolean, boolean)}.
    *
    * @param string the string to parse
-   * @return the parsed line
+   * @return the parsed text
    * @throws NullPointerException if the string is null
    */
   @NonNull
-  static Line parse(@NonNull String string) {
-    if (Line.isLocalized(string)) {
-      return Line.localized(Line.extractKey(string));
+  static Text parse(@NonNull String string) {
+    if (Text.isLocalized(string)) {
+      return Text.localized(Text.extractKey(string));
     }
-    return Line.of(string);
+    return Text.of(string);
   }
 
   /**
-   * Parses a line from a string, returning a {@link Localized} instance if the string starts with
+   * Parses text from a string, returning a {@link Localized} instance if the string starts with
    * 'localized:', otherwise a {@link Plain} instance will be returned.
    *
-   * @param locale the locale parsing the line
+   * @param locale the locale parsing the text
    * @param string the string to parse
-   * @return the parsed line
+   * @return the parsed text
    * @throws NullPointerException if the string is null
    */
   @NonNull
-  static Line parse(Locale locale, @NonNull String string) {
-    if (Line.isLocalized(string) && locale != null) {
-      return Line.localized(locale, Line.extractKey(string));
+  static Text parse(Locale locale, @NonNull String string) {
+    if (Text.isLocalized(string) && locale != null) {
+      return Text.localized(locale, Text.extractKey(string));
     } else {
-      return Line.of(string);
+      return Text.of(string);
     }
   }
 
   /**
-   * Parse a line from a string.
+   * Parse text from a string.
    *
    * @see #parse(Locale, String)
    * @param channel to get the locale from
    * @param string the string to parse
-   * @return the parsed line
+   * @return the parsed text
    * @throws NullPointerException if the channel or string is null
    */
   @NonNull
-  static Line parse(Channel channel, @NonNull String string) {
+  static Text parse(Channel channel, @NonNull String string) {
     return parse(
         channel == null ? null : channel.getLocale().orElse(ResourceManager.getBase()), string);
   }
 
   /**
-   * Creates a copy of this line.
+   * Creates a copy of this text.
    *
-   * @return a new copied instance of this line
+   * @return a new copied instance of this text
    */
   @NonNull
-  Line copy();
+  Text copy();
 
   /**
    * Build the message.
@@ -232,21 +232,21 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Build the line as an array of {@link BaseComponent}.
+   * Build the text as an array of {@link BaseComponent}.
    *
-   * @param sample this line is a sample and should be formatted accordingly using {@link
-   *     me.googas.chat.api.lines.format.SampleFormatter}
+   * @param sample this text is a sample and should be formatted accordingly using {@link
+   *     me.googas.chat.api.text.format.SampleFormatter}
    * @return the built array
    */
   @NonNull
   default BaseComponent[] build(boolean sample) {
-    Line copy = this.copy();
+    Text copy = this.copy();
     if (sample) {
       ResourceManager.getInstance().getSampleFormatter().format(ResourceManager.getBase(), copy);
     }
     List<BaseComponent> components =
         new ArrayList<>(Arrays.asList(Components.getComponent(copy.getRaw())));
-    copy.getExtra().forEach(line -> components.addAll(Arrays.asList(line.build(sample))));
+    copy.getExtra().forEach(text -> components.addAll(Arrays.asList(text.build(sample))));
     return components.toArray(new BaseComponent[0]);
   }
 
@@ -255,12 +255,12 @@ public interface Line extends BukkitResult {
    *
    * @param channel the channel to build the message for
    * @param placeholders whether to append placeholders
-   * @param sample whether the line must be formatted using {@link
-   *     me.googas.chat.api.lines.format.SampleFormatter}
+   * @param sample whether the text must be formatted using {@link
+   *     me.googas.chat.api.text.format.SampleFormatter}
    * @return the built message
    */
   default BaseComponent[] build(@NonNull Channel channel, boolean placeholders, boolean sample) {
-    Line copy = this.copy();
+    Text copy = this.copy();
     if (placeholders) {
       copy.setRaw(PlaceholderManager.getInstance().build(channel, copy.getRaw()));
     }
@@ -273,7 +273,7 @@ public interface Line extends BukkitResult {
         new ArrayList<>(Arrays.asList(Components.getComponent(copy.getRaw())));
     copy.getExtra()
         .forEach(
-            line -> components.addAll(Arrays.asList(line.build(channel, placeholders, sample))));
+            text -> components.addAll(Arrays.asList(text.build(channel, placeholders, sample))));
     return components.toArray(new BaseComponent[0]);
   }
 
@@ -300,29 +300,13 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Set the raw text of the line.
-   *
-   * @see #getRaw()
-   * @param raw the new raw text
-   * @return this same instance
-   */
-  @NonNull
-  Line setRaw(@NonNull String raw);
-
-  /**
    * Format the message using an array of objects.
    *
    * @param objects the objects to format the message
    * @return this same instance
    */
   @NonNull
-  Line format(@NonNull Object... objects);
-
-  @Override
-  @NonNull
-  default List<BaseComponent> getComponents() {
-    return Arrays.asList(this.build());
-  }
+  Text format(@NonNull Object... objects);
 
   /**
    * Format the message using a formatter.
@@ -331,32 +315,38 @@ public interface Line extends BukkitResult {
    * @return this same instance
    */
   @NonNull
-  Line format(@NonNull Formatter formatter);
+  Text format(@NonNull Formatter formatter);
+
+  @Override
+  @NonNull
+  default List<BaseComponent> getComponents() {
+    return Arrays.asList(this.build());
+  }
 
   /**
-   * Append a line.
+   * Append text.
    *
-   * @param line the line to append
+   * @param text the text to append
    * @return this same instance
    */
   @NonNull
-  Line append(@NonNull Line line);
+  Text append(@NonNull Text text);
 
   @NonNull
-  Line format(@NonNull Line.Placeholder placeholder);
+  Text format(@NonNull Text.Placeholder placeholder);
 
   @NonNull
-  default Line placeholder(@NonNull String key, Object value, @NonNull String def) {
-    return this.format(new Line.Placeholder(key, value, def));
+  default Text placeholder(@NonNull String key, Object value, @NonNull String def) {
+    return this.format(new Text.Placeholder(key, value, def));
   }
 
   @NonNull
-  default Line placeholder(@NonNull String key, Object value) {
-    return this.format(new Line.Placeholder(key, value));
+  default Text placeholder(@NonNull String key, Object value) {
+    return this.format(new Text.Placeholder(key, value));
   }
 
   @NonNull
-  default Line placeholders(@NonNull Placeholder... placeholders) {
+  default Text placeholders(@NonNull Placeholder... placeholders) {
     for (Placeholder placeholder : placeholders) {
       this.format(placeholder);
     }
@@ -364,18 +354,18 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Append a string. This will use {@link #of(String)} which means it will append a plain line
+   * Append a string. This will use {@link #of(String)} which means it will append plain text
    *
    * @param string the string to append
    * @return this same instance
    */
   @NonNull
-  default Line append(@NonNull String string) {
-    return this.append(Line.of(string));
+  default Text append(@NonNull String string) {
+    return this.append(Text.of(string));
   }
 
   /**
-   * Get the raw text of the line. This is the line without being formatted.
+   * Get the raw text. This is the text without being formatted.
    *
    * <p>Ex: {@link Localized} the raw text is its json
    *
@@ -385,7 +375,17 @@ public interface Line extends BukkitResult {
   String getRaw();
 
   /**
-   * Get this line as a {@link ArgumentProviderException}.
+   * Set the raw text.
+   *
+   * @see #getRaw()
+   * @param raw the new raw text
+   * @return this same instance
+   */
+  @NonNull
+  Text setRaw(@NonNull String raw);
+
+  /**
+   * Get this text as a {@link ArgumentProviderException}.
    *
    * @return the new {@link ArgumentProviderException}
    */
@@ -399,13 +399,13 @@ public interface Line extends BukkitResult {
    *
    * @param channel the channel to build the message for
    * @param placeholders whether to append placeholders
-   * @param sample whether the line must be formatted using {@link
-   *     me.googas.chat.api.lines.format.SampleFormatter}
+   * @param sample whether the text must be formatted using {@link
+   *     me.googas.chat.api.text.format.SampleFormatter}
    * @return the built message as text
    */
   @NonNull
   default String asText(@NonNull Channel channel, boolean placeholders, boolean sample) {
-    Line copy = this.copy();
+    Text copy = this.copy();
     if (placeholders) {
       copy.setRaw(PlaceholderManager.getInstance().build(channel, copy.getRaw()));
     }
@@ -414,12 +414,12 @@ public interface Line extends BukkitResult {
           .getSampleFormatter()
           .format(channel.getLocale().orElseGet(ResourceManager::getBase), copy);
     }
-    if (Line.isJson(copy.getRaw())) {
+    if (Text.isJson(copy.getRaw())) {
       return new TextComponent(copy.build(channel, placeholders, sample)).toLegacyText();
     } else {
       StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
       copy.getExtra().stream()
-          .map(line -> line.asText(channel, placeholders, sample))
+          .map(text -> text.asText(channel, placeholders, sample))
           .forEach(builder::append);
       return builder.toString();
     }
@@ -439,21 +439,21 @@ public interface Line extends BukkitResult {
   /**
    * Build the message as text.
    *
-   * @param sample whether the line must be formatted using {@link
-   *     me.googas.chat.api.lines.format.SampleFormatter}
+   * @param sample whether the text must be formatted using {@link
+   *     me.googas.chat.api.text.format.SampleFormatter}
    * @return the built message as text
    */
   @NonNull
   default String asText(boolean sample) {
-    Line copy = this.copy();
+    Text copy = this.copy();
     if (sample) {
       ResourceManager.getInstance().getSampleFormatter().format(ResourceManager.getBase(), copy);
     }
-    if (Line.isJson(copy.getRaw())) {
+    if (Text.isJson(copy.getRaw())) {
       return new TextComponent(copy.build()).toLegacyText();
     } else {
       StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
-      copy.getExtra().stream().map(line -> line.asText(sample)).forEach(builder::append);
+      copy.getExtra().stream().map(text -> text.asText(sample)).forEach(builder::append);
       return builder.toString();
     }
   }
@@ -474,17 +474,17 @@ public interface Line extends BukkitResult {
    * @return the extra lines in a list
    */
   @NonNull
-  Collection<Line> getExtra();
+  Collection<Text> getExtra();
 
   @NonNull
-  default Line appendMany(@NonNull Collection<Line> extra) {
+  default Text appendMany(@NonNull Collection<Text> extra) {
     extra.forEach(this::append);
     return this;
   }
 
   @NonNull
-  default Line appendMany(@NonNull Line... lines) {
-    return this.appendMany(Arrays.asList(lines));
+  default Text appendMany(@NonNull Text... texts) {
+    return this.appendMany(Arrays.asList(texts));
   }
 
   static boolean isJson(@NonNull String string) {

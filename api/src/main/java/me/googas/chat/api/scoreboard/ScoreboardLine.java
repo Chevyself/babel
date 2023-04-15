@@ -6,16 +6,16 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
-import me.googas.chat.api.lines.Line;
-import me.googas.chat.api.lines.LocalizedReference;
+import me.googas.chat.api.text.Text;
+import me.googas.chat.api.text.LocalizedReference;
 import org.bukkit.OfflinePlayer;
 
 public class ScoreboardLine {
 
-  @NonNull @Getter private final Line child;
+  @NonNull @Getter private final Text child;
   @Getter private final int position;
 
-  public ScoreboardLine(@NonNull Line child, int position) {
+  public ScoreboardLine(@NonNull Text child, int position) {
     this.child = child;
     this.position = position;
   }
@@ -32,16 +32,16 @@ public class ScoreboardLine {
 
   @NonNull
   public static ScoreboardLine parse(@NonNull String string, int position) {
-    return new ScoreboardLine(Line.parse(string), position);
+    return new ScoreboardLine(Text.parse(string), position);
   }
 
   @NonNull
   public String build(@NonNull OfflinePlayer player) {
     Channel channel = Channel.of(player);
-    Line line = child;
+    Text text = child;
     if (child instanceof LocalizedReference) {
-      line = ((LocalizedReference) child).asLocalized(channel);
+      text = ((LocalizedReference) child).asLocalized(channel);
     }
-    return line.asText(channel, true, true);
+    return text.asText(channel, true, true);
   }
 }

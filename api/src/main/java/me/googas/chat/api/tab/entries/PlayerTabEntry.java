@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import lombok.NonNull;
 import me.googas.chat.ErrorHandler;
-import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.text.Text;
 import me.googas.chat.api.tab.TabSlot;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.entity.player.Skin;
@@ -50,8 +50,8 @@ public class PlayerTabEntry implements TabEntry {
   }
 
   @Override
-  public @NonNull Line getDisplay(@NonNull TabSlot slot) {
-    return Line.of(getPlayer().map(Player::getPlayerListName).orElse(""));
+  public @NonNull Text getDisplay(@NonNull TabSlot slot) {
+    return Text.of(getPlayer().map(Player::getPlayerListName).orElse(""));
   }
 
   @Override

@@ -3,7 +3,7 @@ package me.googas.chat.api.tab.entries;
 import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
-import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.text.Text;
 import me.googas.chat.api.tab.TabSlot;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.Packet;
@@ -83,7 +83,7 @@ public interface TabEntry extends Comparable<TabEntry> {
    * @throws NullPointerException if the slot is null
    */
   @NonNull
-  Line getDisplay(@NonNull TabSlot slot);
+  Text getDisplay(@NonNull TabSlot slot);
 
   /**
    * Get the game mode of the entry. This is used to display the game mode of the entry.

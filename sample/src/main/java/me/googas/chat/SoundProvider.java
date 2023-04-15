@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NonNull;
-import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.text.Text;
 import me.googas.commands.bukkit.context.CommandContext;
 import me.googas.commands.bukkit.providers.type.BukkitArgumentProvider;
 import me.googas.commands.exceptions.ArgumentProviderException;
@@ -26,7 +26,7 @@ public class SoundProvider implements BukkitArgumentProvider<Sound> {
     try {
       return Sound.valueOf(string.toUpperCase(Locale.ROOT));
     } catch (IllegalArgumentException e) {
-      throw Line.localized(context.getSender(), "error.not-sound").asProviderException();
+      throw Text.localized(context.getSender(), "error.not-sound").asProviderException();
     }
   }
 

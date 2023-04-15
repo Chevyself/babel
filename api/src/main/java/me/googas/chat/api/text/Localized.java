@@ -1,4 +1,4 @@
-package me.googas.chat.api.lines;
+package me.googas.chat.api.text;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,14 +8,14 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.ResourceManager;
-import me.googas.chat.api.lines.format.Formatter;
+import me.googas.chat.api.text.format.Formatter;
 import me.googas.commands.util.Strings;
 
-/** This is a {@link Line} which uses a message obtained from {@link ResourceManager}. */
-public final class Localized implements Line {
+/** This is a {@link Text} which uses a message obtained from {@link ResourceManager}. */
+public final class Localized implements Text {
 
   @NonNull @Getter private final Locale locale;
-  @NonNull @Getter private final List<Line> extra;
+  @NonNull @Getter private final List<Text> extra;
   @NonNull private String text;
 
   Localized(@NonNull Locale locale, @NonNull String text) {
@@ -25,13 +25,13 @@ public final class Localized implements Line {
   }
 
   @Override
-  public @NonNull Localized appendMany(@NonNull Collection<Line> extra) {
-    return (Localized) Line.super.appendMany(extra);
+  public @NonNull Localized appendMany(@NonNull Collection<Text> extra) {
+    return (Localized) Text.super.appendMany(extra);
   }
 
   @Override
-  public @NonNull Localized appendMany(@NonNull Line... lines) {
-    return (Localized) Line.super.appendMany(lines);
+  public @NonNull Localized appendMany(@NonNull Text... texts) {
+    return (Localized) Text.super.appendMany(texts);
   }
 
   @Override
@@ -53,13 +53,13 @@ public final class Localized implements Line {
   @Override
   public @NonNull Localized format(@NonNull Object... objects) {
     text = Strings.format(text, objects);
-    this.extra.forEach(line -> line.format(objects));
+    this.extra.forEach(text -> text.format(objects));
     return this;
   }
 
   public @NonNull Localized format(@NonNull Map<String, String> map) {
     text = Strings.format(text, map);
-    this.extra.forEach(line -> line.format(map));
+    this.extra.forEach(text -> text.format(map));
     return this;
   }
 
@@ -69,33 +69,33 @@ public final class Localized implements Line {
   }
 
   @Override
-  public @NonNull Localized append(@NonNull Line line) {
-    this.extra.add(line);
+  public @NonNull Localized append(@NonNull Text text) {
+    this.extra.add(text);
     return this;
   }
 
   @Override
-  public @NonNull Line format(@NonNull Placeholder placeholder) {
+  public @NonNull Text format(@NonNull Placeholder placeholder) {
     this.text = placeholder.format(this.text);
-    this.extra.forEach(line -> line.format(placeholder));
+    this.extra.forEach(text -> text.format(placeholder));
     return this;
   }
 
   @Override
   public @NonNull Localized append(@NonNull String string) {
-    return (Localized) Line.super.append(string);
+    return (Localized) Text.super.append(string);
   }
 
-  /** Represents a formatter which can format {@link Line} using {@link Locale}. */
+  /** Represents a formatter which can format {@link Text} using {@link Locale}. */
   public interface LocalizedFormatter {
     /**
-     * Format the line.
+     * Format text.
      *
-     * @param locale the locale to format the line with
-     * @param line the line to format
-     * @return the formatted line
+     * @param locale the locale to format the text with
+     * @param text the text to format
+     * @return the formatted text
      */
     @NonNull
-    Line format(@NonNull Locale locale, @NonNull Line line);
+    Text format(@NonNull Locale locale, @NonNull Text text);
   }
 }

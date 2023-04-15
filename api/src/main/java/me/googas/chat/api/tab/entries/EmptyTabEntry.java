@@ -1,7 +1,7 @@
 package me.googas.chat.api.tab.entries;
 
 import lombok.NonNull;
-import me.googas.chat.api.lines.Line;
+import me.googas.chat.api.text.Text;
 import me.googas.chat.api.tab.TabSlot;
 import me.googas.chat.packet.entity.player.Skin;
 import me.googas.chat.packet.world.WrappedEnumGameMode;
@@ -10,8 +10,8 @@ import me.googas.chat.packet.world.WrappedEnumGameMode;
 public class EmptyTabEntry implements TabEntry {
 
   @Override
-  public @NonNull Line getDisplay(@NonNull TabSlot slot) {
-    return Line.of("");
+  public @NonNull Text getDisplay(@NonNull TabSlot slot) {
+    return Text.of("");
   }
 
   @Override
