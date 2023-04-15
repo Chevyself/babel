@@ -13,7 +13,7 @@ import lombok.NonNull;
 import me.googas.chat.adapters.ObjectiveAdapter;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.PlayerChannel;
-import me.googas.chat.api.util.Versions;
+import me.googas.chat.api.util.Players;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.util.Strings;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ import org.bukkit.scoreboard.Team;
 public class PlayerScoreboard implements ChannelScoreboard {
 
   @NonNull private static final Map<Integer, String> characters = new HashMap<>();
-  @NonNull private static final ObjectiveAdapter objectiveAdapter = Versions.getObjectiveAdapter();
+  @NonNull private static final ObjectiveAdapter objectiveAdapter = Players.getObjectiveAdapter();
 
   static {
     characters.put(10, "a");
