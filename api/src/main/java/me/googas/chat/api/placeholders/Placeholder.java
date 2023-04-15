@@ -4,8 +4,8 @@ import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 
 /**
- * Must be implemented by placeholders. A placeholder in a raw string is shown inside percentages:
- * %name%, this replaces that with a message
+ * Represents a placeholder. A placeholder in a raw string is shown inside percentages:
+ * %name%, this replaces that with text
  */
 public interface Placeholder {
 
@@ -14,6 +14,7 @@ public interface Placeholder {
    *
    * @param name the name to check
    * @return true if this placeholder applies for the name
+   * @throws NullPointerException if the name is null
    */
   boolean hasName(@NonNull String name);
 
@@ -23,6 +24,7 @@ public interface Placeholder {
    * @param key the key/name that was used in {@link #hasName(String)}
    * @param player the player to build the placeholder to
    * @return the built placeholder
+   * @throws NullPointerException if the key or player is null
    */
   @NonNull
   String build(@NonNull String key, @NonNull OfflinePlayer player);
