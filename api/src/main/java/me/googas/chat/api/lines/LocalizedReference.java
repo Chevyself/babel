@@ -22,11 +22,11 @@ public final class LocalizedReference implements Line {
   /** Formatters. */
   @NonNull private final List<Formatter> formatters;
 
-  @NonNull private final List<Placeholder> linePlaceholder;
+  @NonNull private final List<Placeholder> linePlaceholders;
 
   @NonNull @Getter private final List<Line> extra;
 
-  @NonNull private String key;
+  @NonNull private final String key;
 
   LocalizedReference(@NonNull String key) {
     this(
@@ -42,13 +42,13 @@ public final class LocalizedReference implements Line {
       @NonNull List<Object> objects,
       @NonNull Map<String, String> placeholders,
       @NonNull List<Formatter> formatters,
-      @NonNull List<Placeholder> linePlaceholder,
+      @NonNull List<Placeholder> linePlaceholders,
       @NonNull List<Line> extra,
       @NonNull String key) {
     this.objects = objects;
     this.placeholders = placeholders;
     this.formatters = formatters;
-    this.linePlaceholder = linePlaceholder;
+    this.linePlaceholders = linePlaceholders;
     this.extra = extra;
     this.key = key;
   }
@@ -65,8 +65,8 @@ public final class LocalizedReference implements Line {
     if (!objects.isEmpty()) localized.format(objects.toArray());
     if (!placeholders.isEmpty()) localized.format(placeholders);
     if (!formatters.isEmpty()) localized.format(formatters);
-    if (!linePlaceholder.isEmpty())
-      localized.placeholders(linePlaceholder.toArray(new Placeholder[0]));
+    if (!linePlaceholders.isEmpty())
+      localized.placeholders(linePlaceholders.toArray(new Placeholder[0]));
     return localized;
   }
 
@@ -105,8 +105,8 @@ public final class LocalizedReference implements Line {
         new ArrayList<>(this.objects),
         new HashMap<>(this.placeholders),
         new ArrayList<>(this.formatters),
-        linePlaceholder,
-        this.extra,
+        new ArrayList<>(linePlaceholders),
+        new ArrayList<>(this.extra),
         this.key);
   }
 
@@ -169,7 +169,7 @@ public final class LocalizedReference implements Line {
 
   @Override
   public @NonNull LocalizedReference format(@NonNull Placeholder placeholder) {
-    this.linePlaceholder.add(placeholder);
+    this.linePlaceholders.add(placeholder);
     return this;
   }
 
@@ -181,8 +181,7 @@ public final class LocalizedReference implements Line {
 
   @Override
   public @NonNull LocalizedReference setRaw(@NonNull String raw) {
-    this.key = raw;
-    return this;
+    throw new UnsupportedOperationException("Cannot change the key of a LocalizedReference");
   }
 
   @Override

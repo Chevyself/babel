@@ -19,7 +19,10 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/** A channel to send different type of data. */
+/**
+ * A channel to send different types of data, such as text messages, titles, action bars, sounds, or
+ * boss bars. It can also edit the player's tab list or scoreboard.
+ */
 public interface Channel {
 
   @NonNull List<PlayerChannel> players = new ArrayList<>();
@@ -29,6 +32,7 @@ public interface Channel {
    *
    * @param sender the sender to get the channel from
    * @return the channel of the sender
+   * @throws NullPointerException if the sender is null
    */
   @NonNull
   static Channel of(@NonNull CommandSender sender) {
@@ -44,6 +48,7 @@ public interface Channel {
    *
    * @param player the player to get the channel from
    * @return the channel
+   * @throws NullPointerException if the player is null
    */
   static PlayerChannel of(@NonNull OfflinePlayer player) {
     return Channel.of(player.getUniqueId());
@@ -54,7 +59,9 @@ public interface Channel {
    *
    * @param player the player to get the channel from
    * @return the channel
+   * @throws NullPointerException if the player is null
    */
+  @NonNull
   static PlayerChannel of(@NonNull Player player) {
     return Channel.of(player.getUniqueId());
   }
@@ -64,7 +71,9 @@ public interface Channel {
    *
    * @param uniqueId the unique id of the player
    * @return the channel of the player
+   * @throws NullPointerException if the unique id is null
    */
+  @NonNull
   static PlayerChannel of(@NonNull UUID uniqueId) {
     return new ArrayList<>(Channel.players)
         .stream()

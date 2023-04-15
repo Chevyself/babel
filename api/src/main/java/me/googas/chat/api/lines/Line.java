@@ -21,6 +21,20 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 
+/**
+ * Represents text that can be displayed to the player.
+ *
+ * <p>A line can either be plain text, or a reference to a localized line. A localized line is a key
+ * that can be translated into different languages depending on the client's locale.
+ *
+ * <p>Plain and Localized lines are mutable, meaning that their contents can be modified using
+ * methods such as {#setraw(String)} or any of the formatting methods.
+ *
+ * <p>However, they can also be safely copied using {@link #copy()}.
+ *
+ * <p>To ensure thread safety, each thread should use its own instance of a line, however, {@link
+ * LocalizedReference} is immutable and can be used in multiple threads.
+ */
 public interface Line extends BukkitResult {
 
   /**
@@ -29,6 +43,7 @@ public interface Line extends BukkitResult {
    * @param locale the locale to get the language
    * @param key the key to get the json/text message
    * @return a new {@link Localized} instance
+   * @throws NullPointerException if the locale or key is null
    */
   @NonNull
   static Localized localized(@NonNull Locale locale, @NonNull String key) {
@@ -41,6 +56,7 @@ public interface Line extends BukkitResult {
    * @param sender the sender to get the language
    * @param key the key to get the json/text message
    * @return a new {@link Localized} instance
+   * @throws NullPointerException if the sender or key is null
    */
   @NonNull
   static Localized localized(@NonNull CommandSender sender, @NonNull String key) {
@@ -53,6 +69,7 @@ public interface Line extends BukkitResult {
    * @param channel the channel to get the language
    * @param key the key to get the json/text message
    * @return a new {@link Localized} instance
+   * @throws NullPointerException if the channel or key is null
    */
   @NonNull
   static Localized localized(@NonNull Channel channel, String key) {
@@ -65,6 +82,7 @@ public interface Line extends BukkitResult {
    * @param forwardingChannel the forwarding channel to get the lines
    * @param key the key to get the json/text message
    * @return a {@link List} containing the lines
+   * @throws NullPointerException if the forwarding channel or key is null
    */
   @NonNull
   static List<Localized> localized(
@@ -79,6 +97,7 @@ public interface Line extends BukkitResult {
    *
    * @param key the key of the localized message
    * @return ta new {@link LocalizedReference} instance
+   * @throws NullPointerException if the key is null
    */
   @NonNull
   static LocalizedReference localized(@NonNull String key) {
@@ -90,6 +109,7 @@ public interface Line extends BukkitResult {
    *
    * @param text the text of the line
    * @return a plain line
+   * @throws NullPointerException if the text is null
    */
   @NonNull
   static Plain of(@NonNull String text) {
@@ -97,47 +117,82 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Parse a line from a string. If the string starts with 'localized:' a {@link LocalizedReference}
-   * will be returned else a {@link Plain} will be provided
+   * Extracts the key from a string. If the prefix is '$', it will remove the prefix and return the
+   * rest of the string, otherwise it will remove the prefix 'localized' and the colon.
+   *
+   * @param string the string to extract the key from
+   * @return the extracted key
+   * @throws NullPointerException if the string is null
+   */
+  @NonNull
+  static String extractKey(@NonNull String string) {
+    String prefix = string.startsWith("localized:") ? "localized:" : "$";
+    if (prefix.equals("$")) {
+      if (string.startsWith("${") && string.endsWith("}")) {
+        return string.substring(2, string.length() - 1);
+      } else {
+        return string.substring(1);
+      }
+    } else {
+      return string.substring(10);
+    }
+  }
+
+  /**
+   * Checks whether a string is a localized line. A string is a localized line if it starts with
+   * 'localized:' or '$' and it does not contain any spaces.
+   *
+   * @param string the string to check
+   * @return true if the string is a localized line
+   * @throws NullPointerException if the string is null
+   */
+  static boolean isLocalized(@NonNull String string) {
+    return !string.contains(" ") && (string.startsWith("localized:") || string.startsWith("$"));
+  }
+
+  /**
+   * Parses a line from a string. If the string starts with 'localized:' or '$' a {@link
+   * LocalizedReference} will be returned, else a {@link Plain} will be provided/
+   *
+   * <p>If the string starts with 'localized:', the key will be extracted from the string and a
+   * {@link LocalizedReference} will be created using it. If the string starts with '$', the dollar
+   * sign will be removed from the string and a new {@link LocalizedReference} will be created using
+   * the resulting string.
+   *
+   * <p>Otherwise, a {@link Plain} will be created using the string
+   *
+   * <p>By default all Lines are treated as "samples" which means that the raw content of the line
+   * will be treated as if it had references to other lines. If you want to disable this behaviour,
+   * you can use {@link #build(boolean)} or {@link #build(Channel, boolean, boolean)}.
+   *
+   * <p>By default all lines will be formatted using placeholders in the {@link PlaceholderManager}.
+   * If you want to disable this behaviour, you can use {@link #build(Channel, boolean, boolean)}.
    *
    * @param string the string to parse
    * @return the parsed line
+   * @throws NullPointerException if the string is null
    */
   @NonNull
   static Line parse(@NonNull String string) {
-    if (!string.contains(" ") && (string.startsWith("localized:") || string.startsWith("$"))) {
-      if (string.startsWith("localized:")) {
-        string = string.substring(10);
-      } else if (string.startsWith("$")) {
-        string = string.substring(1);
-      }
-      return Line.localized(string);
+    if (Line.isLocalized(string)) {
+      return Line.localized(Line.extractKey(string));
     }
     return Line.of(string);
   }
 
   /**
-   * Parse a line from a string. If the string starts with 'localized:' a {@link Localized} will be
-   * returned else a {@link Plain} will be provided
+   * Parses a line from a string, returning a {@link Localized} instance if the string starts with
+   * 'localized:', otherwise a {@link Plain} instance will be returned.
    *
    * @param locale the locale parsing the line
    * @param string the string to parse
    * @return the parsed line
+   * @throws NullPointerException if the string is null
    */
   @NonNull
   static Line parse(Locale locale, @NonNull String string) {
-    if (!string.contains(" ")
-        && (string.startsWith("localized:") || string.startsWith("$") && locale != null)) {
-      if (string.startsWith("localized:")) {
-        string = string.substring(10);
-      } else if (string.startsWith("$")) {
-        if (string.startsWith("${") && string.endsWith("}")) {
-          string = string.substring(2, string.length() - 1);
-        } else {
-          string = string.substring(1);
-        }
-      }
-      return Line.localized(locale, string);
+    if (Line.isLocalized(string) && locale != null) {
+      return Line.localized(locale, Line.extractKey(string));
     } else {
       return Line.of(string);
     }
@@ -150,6 +205,7 @@ public interface Line extends BukkitResult {
    * @param channel to get the locale from
    * @param string the string to parse
    * @return the parsed line
+   * @throws NullPointerException if the channel or string is null
    */
   @NonNull
   static Line parse(Channel channel, @NonNull String string) {
@@ -158,7 +214,7 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Copy this line.
+   * Creates a copy of this line.
    *
    * @return a new copied instance of this line
    */
@@ -176,9 +232,11 @@ public interface Line extends BukkitResult {
   }
 
   /**
-   * Build the message.
+   * Build the line as an array of {@link BaseComponent}.
    *
-   * @return the built message
+   * @param sample this line is a sample and should be formatted accordingly using {@link
+   *     me.googas.chat.api.lines.format.SampleFormatter}
+   * @return the built array
    */
   @NonNull
   default BaseComponent[] build(boolean sample) {
@@ -217,6 +275,10 @@ public interface Line extends BukkitResult {
         .forEach(
             line -> components.addAll(Arrays.asList(line.build(channel, placeholders, sample))));
     return components.toArray(new BaseComponent[0]);
+  }
+
+  default BaseComponent[] build(@NonNull Channel channel, boolean sample) {
+    return this.build(channel, true, sample);
   }
 
   /**
