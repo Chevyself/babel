@@ -6,6 +6,7 @@ Changelog
 - Improved Javadoc for:
   - [X] Utility classes
   - [X] Placeholder API
+  - [X] Soft dependencies classes
 - Added Javadoc for
   - [X] Custom tab API
 - Moved `Versions#getObjectiveAdapter` to `Players#getObjectiveAdapter`

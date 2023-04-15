@@ -19,6 +19,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Represents the protocol of ViaVersion. This class will be used to get the version of a player and store it in a map.
+ */
 public final class ViaVersionProtocol implements Listener {
 
   @NonNull private final Map<UUID, Versions.Player> versions = new HashMap<>();
