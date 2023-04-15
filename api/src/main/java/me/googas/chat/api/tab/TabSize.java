@@ -3,6 +3,9 @@ package me.googas.chat.api.tab;
 import lombok.Getter;
 import lombok.NonNull;
 
+/**
+ * Represents the size of the tab list. This is the number of rows and slots that the tab list has.
+ */
 @Getter
 public enum TabSize implements Iterable<TabCoordinate> {
   ONE(20, 1),
@@ -21,10 +24,11 @@ public enum TabSize implements Iterable<TabCoordinate> {
   @NonNull
   @Override
   public TabSize.Iterator iterator() {
-    return new TabSize.Iterator(this);
+    return new Iterator(this);
   }
 
-  public class Iterator implements java.util.Iterator<TabCoordinate> {
+  /** Iterator for the slots of the size of the tab list. */
+  public static class Iterator implements java.util.Iterator<TabCoordinate> {
 
     @NonNull private final TabSize size;
     int index = 0;

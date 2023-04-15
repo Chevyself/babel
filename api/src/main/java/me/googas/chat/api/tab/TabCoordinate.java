@@ -4,11 +4,22 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class TabCoordinate implements Comparable<TabCoordinate> {
+/**
+ * Represents the coordinate of a tab entry. This is the position of the entry in the tab list.
+ *
+ * <p>This class is immutable and thread-safe
+ */
+public final class TabCoordinate implements Comparable<TabCoordinate> {
 
   @Getter private final int x;
   @Getter private final int y;
 
+  /**
+   * Create the coordinate.
+   *
+   * @param x the x coordinate
+   * @param y the y coordinate
+   */
   public TabCoordinate(int x, int y) {
     this.x = x;
     this.y = y;

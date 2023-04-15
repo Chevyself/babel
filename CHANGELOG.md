@@ -8,4 +8,6 @@ Changelog
     - [X] util
       - [X] Players
       - [X] Versions
+- Added Javadoc for
+  - [X] Custom tab API
 - Moved `Versions#getObjectiveAdapter` to `Players#getObjectiveAdapter`

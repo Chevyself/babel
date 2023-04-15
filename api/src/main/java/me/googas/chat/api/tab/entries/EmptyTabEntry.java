@@ -6,6 +6,7 @@ import me.googas.chat.api.tab.TabSlot;
 import me.googas.chat.packet.entity.player.Skin;
 import me.googas.chat.packet.world.WrappedEnumGameMode;
 
+/** An entry that does not display anything. It does not have text and has a default gray skin. */
 public class EmptyTabEntry implements TabEntry {
 
   @Override

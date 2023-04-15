@@ -7,6 +7,12 @@ import lombok.NonNull;
 import me.googas.chat.ErrorHandler;
 import me.googas.chat.api.tab.entries.TabEntry;
 
+/**
+ * An empty implementation of {@link TabView}. It should not be used as it will log a warning when
+ * any of its methods are called.
+ *
+ * <p>It is used as a not null value for {@link TabView}
+ */
 public class EmptyTabView implements TabView {
   @Override
   public void clear() {

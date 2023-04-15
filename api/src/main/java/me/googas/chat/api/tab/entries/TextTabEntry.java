@@ -5,10 +5,16 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.lines.Line;
 
+/** A tab entry that represents a text. */
 public class TextTabEntry extends EmptyTabEntry {
 
   @Getter @NonNull private final Line display;
 
+  /**
+   * Create the entry
+   *
+   * @param display the line to display
+   */
   public TextTabEntry(@NonNull Line display) {
     this.display = display;
   }

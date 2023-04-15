@@ -22,6 +22,12 @@ import me.googas.reflect.modifiers.CollectionModifier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+/**
+ * This class represents a tab view for a player. This is the implementation of {@link TabView} for
+ * players, and it does send the packets to change the client.
+ *
+ * <p>This class is thread safe.
+ */
 @Getter
 public class PlayerTabView implements TabView {
 
@@ -30,6 +36,13 @@ public class PlayerTabView implements TabView {
   @NonNull private final TabSize size;
   private boolean destroyed;
 
+  /**
+   * Create the tab view.
+   *
+   * @param viewer the uuid of the viewer of the tab view
+   * @param size the size of the tab view
+   * @throws NullPointerException if the viewer or size is null
+   */
   public PlayerTabView(@NonNull UUID viewer, @NonNull TabSize size) {
     this.viewer = viewer;
     this.slots = new ArrayList<>();
@@ -37,6 +50,15 @@ public class PlayerTabView implements TabView {
     this.destroyed = false;
   }
 
+  /**
+   * Converts the slots into a list of {@link WrappedPlayerInfo} to send to the client.
+   *
+   * @param slots the slots to convert
+   * @param player the player that will view the entries
+   * @param packet the packet that will send the player info
+   * @return the list of player info
+   * @throws NullPointerException if any argument is null
+   */
   private static List<WrappedPlayerInfo> collectSlotsPlayerInfo(
       @NonNull Collection<TabSlot> slots, @NonNull Player player, @NonNull Packet packet) {
     return slots.stream()
@@ -44,10 +66,7 @@ public class PlayerTabView implements TabView {
             slot -> {
               try {
                 return slot.playerInfoData(player, packet);
-              } catch (PacketHandlingException
-                  | InvocationTargetException
-                  | InstantiationException
-                  | IllegalAccessException e) {
+              } catch (PacketHandlingException e) {
                 ErrorHandler.getInstance()
                     .handle(Level.SEVERE, "Could not get PlayerInfoData for slot " + slot);
                 return null;
@@ -57,11 +76,21 @@ public class PlayerTabView implements TabView {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Get the unique id of the viewer.
+   *
+   * @return the unique id of the viewer
+   */
   @NonNull
   public UUID getUniqueId() {
     return viewer;
   }
 
+  /**
+   * Get the viewers' entity. This means the actual instance of the player.
+   *
+   * @return the entity wrapped in an optional
+   */
   @NonNull
   public Optional<Player> getViewer() {
     return Optional.ofNullable(Bukkit.getPlayer(this.viewer));
@@ -85,8 +114,18 @@ public class PlayerTabView implements TabView {
             });
   }
 
+  /**
+   * Converts the slots into a list of {@link WrappedPlayerInfo} to send to the client.
+   *
+   * @see #collectSlotsPlayerInfo(Collection, Player, Packet)
+   * @param player the player that will view the entries
+   * @param packet the packet that will send the player info
+   * @return the list of player info
+   * @throws NullPointerException if any argument is null
+   */
   @NonNull
-  private List<WrappedPlayerInfo> collectSlotsPlayerInfo(Player player, Packet packet) {
+  private List<WrappedPlayerInfo> collectSlotsPlayerInfo(
+      @NonNull Player player, @NonNull Packet packet) {
     return collectSlotsPlayerInfo(slots, player, packet);
   }
 
@@ -108,10 +147,17 @@ public class PlayerTabView implements TabView {
     }
   }
 
+  /**
+   * Fills the slots with empty entries.
+   *
+   * @param packet the packet that will send the player info
+   * @param player the player that will view the entries
+   * @return the list of player info from the slots
+   * @throws PacketHandlingException if the packet could not be handled
+   */
   @NonNull
   private List<WrappedPlayerInfo> populate(@NonNull Packet packet, @NonNull Player player)
-      throws PacketHandlingException, InvocationTargetException, InstantiationException,
-          IllegalAccessException {
+      throws PacketHandlingException {
     List<WrappedPlayerInfo> info = new ArrayList<>();
     for (TabCoordinate coordinate : size) {
       TabSlot slot = new TabSlot(coordinate, new EmptyTabEntry());
@@ -123,11 +169,13 @@ public class PlayerTabView implements TabView {
   }
 
   /**
-   * Get the online players as {@link WrappedPlayerInfo}
+   * Get the online players as {@link WrappedPlayerInfo}. This is used to send the information of
+   * actual players to the client.
    *
    * @deprecated This may no longer be needed as it is safer to push the players out of the tab list
    * @param packet the packet that will send the player info
    * @return the wrapped player info
+   * @throws NullPointerException if the packet is null
    */
   private @NonNull List<WrappedPlayerInfo> getPlayers(@NonNull Packet packet) {
     return Bukkit.getOnlinePlayers().stream()
@@ -154,11 +202,25 @@ public class PlayerTabView implements TabView {
     this.set(slot, entry, updatesSkin(slot, entry));
   }
 
+  /**
+   * Set the entry of a slot.
+   *
+   * @param slot the slot to set
+   * @param entry the entry to set
+   * @param skin whether the skin of the slot should be updated
+   * @throws NullPointerException if slot or entry is null
+   */
   public void set(@NonNull TabSlot slot, @NonNull TabEntry entry, boolean skin) {
     slot.setEntry(entry);
     this.update(Collections.singleton(slot), skin);
   }
 
+  /**
+   * Update the slots view in the client.
+   *
+   * @param slots the slots to update
+   * @param skin whether the skin of the slots should be updated
+   */
   private void update(@NonNull Collection<TabSlot> slots, boolean skin) {
     this.getViewer()
         .ifPresent(
@@ -257,6 +319,13 @@ public class PlayerTabView implements TabView {
     return getReplacements(entries, (slot, entry) -> slot.getEntry().canBeReplaced(entry));
   }
 
+  /**
+   * Get the slots from which the current entry can be replaced by any of the entries.
+   *
+   * @param entries the entries to replace
+   * @param predicate the predicate to check if a slot can be replaced by an entry
+   * @return the slots that can be replaced by the entries
+   */
   @NonNull
   private Pair<List<TabSlot>, List<TabEntry>> getReplacements(
       @NonNull Collection<? extends TabEntry> entries,
@@ -294,6 +363,14 @@ public class PlayerTabView implements TabView {
     update(updateSkin, true);
   }
 
+  /**
+   * Checks whether the skin of the slot should be updated with a new entry.
+   *
+   * @param slot the slot to check
+   * @param entry the entry to check
+   * @return true if the new entry replaces the skin
+   * @throws NullPointerException if the slot or entry is null
+   */
   private boolean updatesSkin(@NonNull TabSlot slot, @NonNull TabEntry entry) {
     return slot.getEntry().getSkin() == null && entry.getSkin() != null
         || !slot.getEntry().getSkin().equals(entry.getSkin());

@@ -16,18 +16,34 @@ import me.googas.chat.packet.world.WrappedEnumGameMode;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+/** A tab entry that represents a player. This can only be replaced by other player entries */
 public class PlayerTabEntry implements TabEntry {
 
   @NonNull private final UUID uuid;
 
+  /**
+   * Create the entry
+   *
+   * @param uuid the uuid of the player
+   */
   public PlayerTabEntry(@NonNull UUID uuid) {
     this.uuid = uuid;
   }
 
+  /**
+   * Create the entry
+   *
+   * @param player the player to represent
+   */
   public PlayerTabEntry(@NonNull Player player) {
     this(player.getUniqueId());
   }
 
+  /**
+   * Get the player that is represented by this entry
+   *
+   * @return the player wrapped in an optional
+   */
   @NonNull
   private Optional<Player> getPlayer() {
     return Optional.ofNullable(Bukkit.getPlayer(this.uuid));
