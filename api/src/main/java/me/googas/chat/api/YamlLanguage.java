@@ -14,8 +14,8 @@ import java.util.Optional;
 import java.util.logging.Level;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.debug.Debugger;
 import me.googas.chat.api.exceptions.LanguageParsingException;
+import me.googas.chat.debug.Debugger;
 import me.googas.commands.bukkit.utils.Components;
 import me.googas.commands.util.Strings;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -86,14 +86,12 @@ public final class YamlLanguage implements Language {
               languages.add(YamlLanguage.load(resource, file));
             }
           } catch (LanguageParsingException e) {
-            Debugger.getInstance()
-                .handle(Level.SEVERE, "Could not parse language in " + file, e);
+            Debugger.getInstance().handle(Level.SEVERE, "Could not parse language in " + file, e);
           } catch (IOException e) {
             Debugger.getInstance().handle(Level.SEVERE, "Failed to create file in " + file, e);
           }
         } else {
-          Debugger.getInstance()
-              .handle(Level.SEVERE, "Could not find resource " + resourcePath);
+          Debugger.getInstance().handle(Level.SEVERE, "Could not find resource " + resourcePath);
         }
       }
       return languages;

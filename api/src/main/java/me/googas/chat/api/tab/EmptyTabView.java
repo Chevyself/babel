@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.debug.Debugger;
 import me.googas.chat.api.tab.entries.TabEntry;
+import me.googas.chat.debug.Debugger;
 
 /**
  * An empty implementation of {@link TabView}. It should not be used as it will log a warning when

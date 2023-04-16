@@ -2,8 +2,8 @@ package me.googas.chat.adapters.v1_11;
 
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.debug.Debugger;
 import me.googas.chat.adapters.PlayerTitleAdapter;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.PacketType;
 import me.googas.chat.packet.chat.WrappedChatComponent;

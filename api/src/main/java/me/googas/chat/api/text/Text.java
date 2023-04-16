@@ -1,18 +1,19 @@
 package me.googas.chat.api.text;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
+import me.googas.chat.api.ConsoleChannel;
 import me.googas.chat.api.ForwardingChannel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.ResourceManager;
-import me.googas.chat.api.text.format.Formatter;
 import me.googas.chat.api.placeholders.PlaceholderManager;
+import me.googas.chat.api.text.format.Formatter;
 import me.googas.commands.bukkit.result.BukkitResult;
 import me.googas.commands.bukkit.utils.BukkitUtils;
 import me.googas.commands.bukkit.utils.Components;
@@ -24,8 +25,8 @@ import org.bukkit.command.CommandSender;
 /**
  * Represents text that can be displayed to the player.
  *
- * <p>Text can either be plain, or a reference to localized text. Localized text is a key
- * that can be translated into different languages depending on the client's locale.
+ * <p>Text can either be plain, or a reference to localized text. Localized text is a key that can
+ * be translated into different languages depending on the client's locale.
  *
  * <p>Plain and Localized lines are mutable, meaning that their contents can be modified using
  * methods such as {#setraw(String)} or any of the formatting methods.
@@ -117,40 +118,6 @@ public interface Text extends BukkitResult {
   }
 
   /**
-   * Extracts the key from a string. If the prefix is '$', it will remove the prefix and return the
-   * rest of the string, otherwise it will remove the prefix 'localized' and the colon.
-   *
-   * @param string the string to extract the key from
-   * @return the extracted key
-   * @throws NullPointerException if the string is null
-   */
-  @NonNull
-  static String extractKey(@NonNull String string) {
-    String prefix = string.startsWith("localized:") ? "localized:" : "$";
-    if (prefix.equals("$")) {
-      if (string.startsWith("${") && string.endsWith("}")) {
-        return string.substring(2, string.length() - 1);
-      } else {
-        return string.substring(1);
-      }
-    } else {
-      return string.substring(10);
-    }
-  }
-
-  /**
-   * Checks whether a string is localized text. A string is localized text if it starts with
-   * 'localized:' or '$' and it does not contain any spaces.
-   *
-   * @param string the string to check
-   * @return true if the string is localized text
-   * @throws NullPointerException if the string is null
-   */
-  static boolean isLocalized(@NonNull String string) {
-    return !string.contains(" ") && (string.startsWith("localized:") || string.startsWith("$"));
-  }
-
-  /**
    * Parses text from a string. If the string starts with 'localized:' or '$' a {@link
    * LocalizedReference} will be returned, else a {@link Plain} will be provided/
    *
@@ -161,21 +128,14 @@ public interface Text extends BukkitResult {
    *
    * <p>Otherwise, a {@link Plain} will be created using the string
    *
-   * <p>By default all Lines are treated as "samples" which means that the raw content of the text
-   * will be treated as if it had references to other lines. If you want to disable this behaviour,
-   * you can use {@link #build(boolean)} or {@link #build(Channel, boolean, boolean)}.
-   *
-   * <p>By default all lines will be formatted using placeholders in the {@link PlaceholderManager}.
-   * If you want to disable this behaviour, you can use {@link #build(Channel, boolean, boolean)}.
-   *
    * @param string the string to parse
    * @return the parsed text
    * @throws NullPointerException if the string is null
    */
   @NonNull
   static Text parse(@NonNull String string) {
-    if (Text.isLocalized(string)) {
-      return Text.localized(Text.extractKey(string));
+    if (TextUtils.isLocalized(string)) {
+      return Text.localized(TextUtils.extractKey(string));
     }
     return Text.of(string);
   }
@@ -191,8 +151,8 @@ public interface Text extends BukkitResult {
    */
   @NonNull
   static Text parse(Locale locale, @NonNull String string) {
-    if (Text.isLocalized(string) && locale != null) {
-      return Text.localized(locale, Text.extractKey(string));
+    if (TextUtils.isLocalized(string) && locale != null) {
+      return Text.localized(locale, TextUtils.extractKey(string));
     } else {
       return Text.of(string);
     }
@@ -205,13 +165,56 @@ public interface Text extends BukkitResult {
    * @param channel to get the locale from
    * @param string the string to parse
    * @return the parsed text
-   * @throws NullPointerException if the channel or string is null
+   * @throws NullPointerException if the string is null
    */
   @NonNull
   static Text parse(Channel channel, @NonNull String string) {
     return parse(
         channel == null ? null : channel.getLocale().orElse(ResourceManager.getBase()), string);
   }
+
+  /**
+   * Check whether this text is a sample. If the text is sample it will be formatted using {@link
+   * me.googas.chat.api.text.format.SampleFormatter}.
+   *
+   * <p>A sample text is one which contains references to other texts. For example, if you have a
+   * text with the content "Hello ${owner.name}" it is referencing as a {@link LocalizedReference}
+   * to the text with the key "owner.name".
+   *
+   * @return true if this text is a sample
+   */
+  boolean isSample();
+
+  /**
+   * Set whether this text is a sample.
+   *
+   * @see #isSample()
+   * @param sample whether this text is a sample
+   * @return this instance
+   */
+  @NonNull
+  Text setSample(boolean sample);
+
+  /**
+   * Check whether this text has placeholders. If the text has placeholders it will be formatted
+   * using the {@link PlaceholderManager}.
+   *
+   * <p>A text has placeholders if it contains a placeholder. For example, if you have a text with
+   * the content "Hello %owner.name%" it has a placeholder.
+   *
+   * @return true if this text has placeholders
+   */
+  boolean hasPlaceholders();
+
+  /**
+   * Set whether this text has placeholders.
+   *
+   * @see #hasPlaceholders()
+   * @param placeholders whether this text has placeholders
+   * @return this instance
+   */
+  @NonNull
+  Text setHasPlaceholders(boolean placeholders);
 
   /**
    * Creates a copy of this text.
@@ -222,81 +225,38 @@ public interface Text extends BukkitResult {
   Text copy();
 
   /**
-   * Build the message.
-   *
-   * @return the built message
-   */
-  @NonNull
-  default BaseComponent[] build() {
-    return this.build(true);
-  }
-
-  /**
    * Build the text as an array of {@link BaseComponent}.
    *
-   * @param sample this text is a sample and should be formatted accordingly using {@link
-   *     me.googas.chat.api.text.format.SampleFormatter}
    * @return the built array
    */
   @NonNull
-  default BaseComponent[] build(boolean sample) {
-    Text copy = this.copy();
-    if (sample) {
-      ResourceManager.getInstance().getSampleFormatter().format(ResourceManager.getBase(), copy);
-    }
-    List<BaseComponent> components =
-        new ArrayList<>(Arrays.asList(Components.getComponent(copy.getRaw())));
-    copy.getExtra().forEach(text -> components.addAll(Arrays.asList(text.build(sample))));
-    return components.toArray(new BaseComponent[0]);
+  default BaseComponent[] build() {
+    return this.build(ConsoleChannel.getInstance());
   }
 
   /**
    * Build the message.
    *
    * @param channel the channel to build the message for
-   * @param placeholders whether to append placeholders
-   * @param sample whether the text must be formatted using {@link
    *     me.googas.chat.api.text.format.SampleFormatter}
    * @return the built message
    */
-  default BaseComponent[] build(@NonNull Channel channel, boolean placeholders, boolean sample) {
-    Text copy = this.copy();
-    if (placeholders) {
-      copy.setRaw(PlaceholderManager.getInstance().build(channel, copy.getRaw()));
-    }
-    if (sample) {
-      ResourceManager.getInstance()
-          .getSampleFormatter()
-          .format(channel.getLocale().orElseGet(ResourceManager::getBase), copy);
-    }
-    List<BaseComponent> components =
-        new ArrayList<>(Arrays.asList(Components.getComponent(copy.getRaw())));
-    copy.getExtra()
-        .forEach(
-            text -> components.addAll(Arrays.asList(text.build(channel, placeholders, sample))));
-    return components.toArray(new BaseComponent[0]);
-  }
-
-  default BaseComponent[] build(@NonNull Channel channel, boolean sample) {
-    return this.build(channel, true, sample);
-  }
-
-  /**
-   * Build the message.
-   *
-   * @param channel the channel to build the message for
-   * @return the built message
-   */
   default BaseComponent[] build(@NonNull Channel channel) {
-    return this.build(channel, true, true);
+    Text copy = this.copy();
+    if (this.hasPlaceholders()) {
+      TextUtils.formatPlaceholders(channel, copy);
+    }
+    if (this.isSample()) {
+      TextUtils.formatSample(channel.getLocale().orElseGet(ResourceManager::getBase), copy);
+    }
+    return Stream.concat(
+            Stream.of(Components.getComponent(copy.getRaw())),
+            copy.getExtra().stream().flatMap(line -> Arrays.stream(line.build(channel))))
+        .toArray(BaseComponent[]::new);
   }
 
   default void send(@NonNull Channel channel) {
     channel.send(this);
-  }
-
-  default void send(@NonNull Channel channel, boolean placeholders, boolean sample) {
-    channel.send(this.build(channel, placeholders, sample));
   }
 
   /**
@@ -391,81 +351,41 @@ public interface Text extends BukkitResult {
    */
   @NonNull
   default ArgumentProviderException asProviderException() {
-    return new ArgumentProviderException(this.asText());
+    return new ArgumentProviderException(this.asString());
   }
 
   /**
-   * Build the message as text.
-   *
-   * @param channel the channel to build the message for
-   * @param placeholders whether to append placeholders
-   * @param sample whether the text must be formatted using {@link
-   *     me.googas.chat.api.text.format.SampleFormatter}
-   * @return the built message as text
-   */
-  @NonNull
-  default String asText(@NonNull Channel channel, boolean placeholders, boolean sample) {
-    Text copy = this.copy();
-    if (placeholders) {
-      copy.setRaw(PlaceholderManager.getInstance().build(channel, copy.getRaw()));
-    }
-    if (sample) {
-      ResourceManager.getInstance()
-          .getSampleFormatter()
-          .format(channel.getLocale().orElseGet(ResourceManager::getBase), copy);
-    }
-    if (Text.isJson(copy.getRaw())) {
-      return new TextComponent(copy.build(channel, placeholders, sample)).toLegacyText();
-    } else {
-      StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
-      copy.getExtra().stream()
-          .map(text -> text.asText(channel, placeholders, sample))
-          .forEach(builder::append);
-      return builder.toString();
-    }
-  }
-
-  /**
-   * Build the message as text.
+   * Build the text as string.
    *
    * @param channel the channel to build the message for
    * @return the built message as text
    */
   @NonNull
-  default String asText(@NonNull Channel channel) {
-    return this.asText(channel, true, true);
-  }
-
-  /**
-   * Build the message as text.
-   *
-   * @param sample whether the text must be formatted using {@link
-   *     me.googas.chat.api.text.format.SampleFormatter}
-   * @return the built message as text
-   */
-  @NonNull
-  default String asText(boolean sample) {
+  default String asString(@NonNull Channel channel) {
     Text copy = this.copy();
-    if (sample) {
-      ResourceManager.getInstance().getSampleFormatter().format(ResourceManager.getBase(), copy);
+    if (this.hasPlaceholders()) {
+      TextUtils.formatPlaceholders(channel, copy);
     }
-    if (Text.isJson(copy.getRaw())) {
-      return new TextComponent(copy.build()).toLegacyText();
+    if (this.isSample()) {
+      TextUtils.formatSample(channel.getLocale().orElseGet(ResourceManager::getBase), copy);
+    }
+    if (TextUtils.isJson(copy.getRaw())) {
+      return new TextComponent(copy.build(channel)).toLegacyText();
     } else {
       StringBuilder builder = new StringBuilder(BukkitUtils.format(copy.getRaw()));
-      copy.getExtra().stream().map(text -> text.asText(sample)).forEach(builder::append);
+      copy.getExtra().stream().map(text -> text.asString(channel)).forEach(builder::append);
       return builder.toString();
     }
   }
 
   /**
-   * Build the message as text.
+   * Build the message as string.
    *
    * @return the built message as text
    */
   @NonNull
-  default String asText() {
-    return this.asText(true);
+  default String asString() {
+    return this.asString(ConsoleChannel.getInstance());
   }
 
   /**
@@ -487,39 +407,78 @@ public interface Text extends BukkitResult {
     return this.appendMany(Arrays.asList(texts));
   }
 
-  static boolean isJson(@NonNull String string) {
-    return string.startsWith("{") && string.endsWith("}")
-        || string.startsWith("[") && string.endsWith("]");
-  }
-
+  /**
+   * Represents a placeholder which may be used in a {@link Text} to replace a key with a value.
+   * Placeholders are identified with a key inside percent signs. For example, if the key is "name"
+   * then the placeholder will be "%name%".
+   */
   final class Placeholder {
 
     @NonNull private final String key;
     private final Object value;
     @NonNull private final String def;
 
+    /**
+     * Create the text placeholder.
+     *
+     * @param key the key to identify the placeholder
+     * @param value the value to replace the placeholder
+     * @param def the default value to replace the placeholder if the value is null
+     * @throws NullPointerException if the key or the default value is null
+     */
     public Placeholder(@NonNull String key, Object value, @NonNull String def) {
       this.key = key;
       this.value = value;
       this.def = def;
     }
 
+    /**
+     * Create the text placeholder. The default value will be the literal "null"
+     *
+     * @param key the key to identify the placeholder
+     * @param value the value to replace the placeholder
+     * @throws NullPointerException if the key is null
+     */
     public Placeholder(@NonNull String key, Object value) {
       this(key, value, "null");
     }
 
+    /**
+     * Get the key of the placeholder
+     *
+     * @return the key
+     */
     @NonNull
     public String getKey() {
       return this.key;
     }
 
+    /**
+     * Get the value of the placeholder
+     *
+     * @return the value
+     */
     @NonNull
     public String getValue() {
       return this.value == null ? this.def : this.value.toString();
     }
 
+    /**
+     * Formats a string using the placeholder. This will replace the key with the value, for
+     * instance:
+     *
+     * <pre>
+     *     Placeholder placeholder = new Placeholder("name", "John");
+     *     String formatted = placeholder.format("Hello %name%");
+     *     System.out.println(formatted); // Hello John
+     * </pre>
+     *
+     * @param text the text to format
+     * @return the formatted text
+     * @throws NullPointerException if the text is null
+     */
     @NonNull
-    public String format(String text) {
+    public String format(@NonNull String text) {
       return text.replace("%" + key + "%", this.getValue());
     }
   }

@@ -4,11 +4,11 @@ import java.util.*;
 import java.util.logging.Level;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.debug.Debugger;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.text.format.Formatter;
+import me.googas.chat.debug.Debugger;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 
@@ -27,6 +27,8 @@ public final class LocalizedReference implements Text {
   @NonNull @Getter private final List<Text> extra;
 
   @NonNull private final String key;
+  @Getter private final boolean sample;
+  private final boolean hasPlaceholders;
 
   LocalizedReference(@NonNull String key) {
     this(
@@ -35,7 +37,9 @@ public final class LocalizedReference implements Text {
         new ArrayList<>(),
         new ArrayList<>(),
         new ArrayList<>(),
-        key);
+        key,
+        false,
+        false);
   }
 
   private LocalizedReference(
@@ -44,13 +48,17 @@ public final class LocalizedReference implements Text {
       @NonNull List<Formatter> formatters,
       @NonNull List<Placeholder> linePlaceholders,
       @NonNull List<Text> extra,
-      @NonNull String key) {
+      @NonNull String key,
+      boolean sample,
+      boolean hasPlaceholders) {
     this.objects = objects;
     this.placeholders = placeholders;
     this.formatters = formatters;
     this.linePlaceholders = linePlaceholders;
     this.extra = extra;
     this.key = key;
+    this.sample = sample;
+    this.hasPlaceholders = hasPlaceholders;
   }
 
   /**
@@ -100,14 +108,35 @@ public final class LocalizedReference implements Text {
   }
 
   @Override
+  public boolean hasPlaceholders() {
+    return this.hasPlaceholders;
+  }
+
+  @Override
+  public @NonNull Text setSample(boolean sample) {
+    return copy(sample, this.hasPlaceholders);
+  }
+
+  @Override
+  public @NonNull Text setHasPlaceholders(boolean placeholders) {
+    return copy(this.sample, placeholders);
+  }
+
+  @Override
   public @NonNull LocalizedReference copy() {
+    return this.copy(this.sample, this.hasPlaceholders);
+  }
+
+  public @NonNull LocalizedReference copy(boolean sample, boolean hasPlaceholders) {
     return new LocalizedReference(
         new ArrayList<>(this.objects),
         new HashMap<>(this.placeholders),
         new ArrayList<>(this.formatters),
         new ArrayList<>(linePlaceholders),
         new ArrayList<>(this.extra),
-        this.key);
+        this.key,
+        sample,
+        hasPlaceholders);
   }
 
   @Override
@@ -124,28 +153,6 @@ public final class LocalizedReference implements Text {
   public @NonNull BaseComponent[] build() {
     Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
     return this.asLocalized().build();
-  }
-
-  @Override
-  public @NonNull BaseComponent[] build(boolean sample) {
-    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
-    return this.asLocalized().build(sample);
-  }
-
-  @Override
-  public BaseComponent[] build(@NonNull Channel channel, boolean placeholders, boolean sample) {
-    return this.asLocalized(channel).build(channel, placeholders, sample);
-  }
-
-  @Override
-  public @NonNull String asText(@NonNull Channel channel, boolean placeholders, boolean sample) {
-    return this.asLocalized(channel).asText(channel, placeholders, sample);
-  }
-
-  @Override
-  public @NonNull String asText(boolean sample) {
-    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#asText");
-    return this.asLocalized().asText(sample);
   }
 
   @Override

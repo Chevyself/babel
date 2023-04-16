@@ -6,9 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.debug.Debugger;
-import me.googas.chat.api.text.Text;
 import me.googas.chat.api.tab.TabSlot;
+import me.googas.chat.api.text.Text;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.entity.player.Skin;
 import me.googas.chat.packet.entity.player.WrappedCraftPlayer;
@@ -81,8 +81,7 @@ public class PlayerTabEntry implements TabEntry {
               } catch (InvocationTargetException
                   | IllegalAccessException
                   | PacketHandlingException e) {
-                Debugger.getInstance()
-                    .handle(Level.SEVERE, "Could not get skin from player", e);
+                Debugger.getInstance().handle(Level.SEVERE, "Could not get skin from player", e);
                 return null;
               }
             })

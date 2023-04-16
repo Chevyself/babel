@@ -3,7 +3,6 @@ package me.googas.chat.debug;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -28,23 +27,23 @@ public abstract class Debugger {
     return Objects.requireNonNull(Debugger.instance, "Error handler has not been initialized");
   }
 
-    /**
-     * Set the instance of the debugger.
-     *
-     * @param instance the instance to set
-     * @return the instance
-     */
+  /**
+   * Set the instance of the debugger.
+   *
+   * @param instance the instance to set
+   * @return the instance
+   */
   @NonNull
   public static Debugger setInstance(@NonNull Debugger instance) {
     Debugger.instance = instance;
     return Debugger.instance;
   }
 
-    /**
-     * Set the default instance of the debugger.
-     *
-     * <p>This instance is {@link LoggerDebugger} which only prints the messages to the console.
-     */
+  /**
+   * Set the default instance of the debugger.
+   *
+   * <p>This instance is {@link LoggerDebugger} which only prints the messages to the console.
+   */
   public static void setDefaultInstance() {
     Debugger.instance = new LoggerDebugger(Logger.getLogger("Babel"));
   }
@@ -66,8 +65,7 @@ public abstract class Debugger {
 
   public static class LoggerDebugger extends Debugger {
 
-    @NonNull @Getter
-    private final Logger logger;
+    @NonNull @Getter private final Logger logger;
 
     public LoggerDebugger(@NonNull Logger logger) {
       this.logger = logger;

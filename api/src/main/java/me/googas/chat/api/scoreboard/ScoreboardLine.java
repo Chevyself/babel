@@ -6,8 +6,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.Channel;
-import me.googas.chat.api.text.Text;
 import me.googas.chat.api.text.LocalizedReference;
+import me.googas.chat.api.text.Text;
 import org.bukkit.OfflinePlayer;
 
 public class ScoreboardLine {
@@ -42,6 +42,6 @@ public class ScoreboardLine {
     if (child instanceof LocalizedReference) {
       text = ((LocalizedReference) child).asLocalized(channel);
     }
-    return text.asText(channel, true, true);
+    return text.setSample(true).setHasPlaceholders(true).asString(channel);
   }
 }

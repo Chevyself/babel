@@ -1,9 +1,9 @@
 package me.googas.chat.api.tab.entries;
 
 import lombok.NonNull;
-import me.googas.chat.api.text.Text;
 import me.googas.chat.api.tab.TabCoordinate;
 import me.googas.chat.api.tab.TabSlot;
+import me.googas.chat.api.text.Text;
 
 /**
  * Displays the coordinate of the slot that contains this entry.

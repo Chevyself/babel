@@ -5,8 +5,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.debug.Debugger;
 import me.googas.chat.adapters.AdaptedBossBar;
+import me.googas.chat.debug.Debugger;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.Packet;
 import me.googas.chat.packet.PacketType;
@@ -123,8 +123,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                     packet.send(player);
                   }
                 } catch (PacketHandlingException e) {
-                  Debugger.getInstance()
-                      .handle(Level.SEVERE, "Failed to destroy wither entity", e);
+                  Debugger.getInstance().handle(Level.SEVERE, "Failed to destroy wither entity", e);
                 }
               });
       wither.set(null);

@@ -25,8 +25,7 @@ public class ChatPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    Debugger errors =
-        Debugger.setInstance(new Debugger.LoggerDebugger(this.getLogger()));
+    Debugger errors = Debugger.setInstance(new Debugger.LoggerDebugger(this.getLogger()));
     // Load languages
     try {
       ResourceManager.getInstance()

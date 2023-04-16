@@ -5,8 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.NonNull;
 import me.googas.chat.api.ResourceManager;
-import me.googas.chat.api.text.Text;
 import me.googas.chat.api.text.Localized;
+import me.googas.chat.api.text.Text;
 
 /** Formatter for sample lines. */
 public final class SampleFormatter implements Formatter, Localized.LocalizedFormatter {

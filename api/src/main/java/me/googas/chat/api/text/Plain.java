@@ -13,10 +13,29 @@ public final class Plain implements Text {
 
   @NonNull @Getter private final List<Text> extra;
   @NonNull private String text;
+  @Getter private boolean sample = false;
+  private boolean hasPlaceholders = false;
 
   Plain(@NonNull String text) {
     this.text = text;
     this.extra = new ArrayList<>();
+  }
+
+  @Override
+  public boolean hasPlaceholders() {
+    return this.hasPlaceholders;
+  }
+
+  @Override
+  public @NonNull Text setSample(boolean sample) {
+    this.sample = sample;
+    return this;
+  }
+
+  @Override
+  public @NonNull Text setHasPlaceholders(boolean hasPlaceholders) {
+    this.hasPlaceholders = hasPlaceholders;
+    return this;
   }
 
   @Override

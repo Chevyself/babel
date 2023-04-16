@@ -17,7 +17,7 @@ public final class ResultHandler implements Middleware<CommandContext> {
     CommandSender sender = context.getSender();
     Channel channel = Channel.of(sender);
     if (result instanceof Text) {
-      channel.send(((Text) result));
+      ((Text) result).setSample(true).send(channel);
     } else if (result instanceof BukkitResult) {
       BukkitUtils.send(sender, ((BukkitResult) result).getComponents());
     }

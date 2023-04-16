@@ -17,6 +17,8 @@ public final class Localized implements Text {
   @NonNull @Getter private final Locale locale;
   @NonNull @Getter private final List<Text> extra;
   @NonNull private String text;
+  @Getter private boolean sample = false;
+  private boolean hasPlaceholders = false;
 
   Localized(@NonNull Locale locale, @NonNull String text) {
     this.locale = locale;
@@ -42,6 +44,23 @@ public final class Localized implements Text {
   @NonNull
   public Localized setRaw(@NonNull String json) {
     this.text = json;
+    return this;
+  }
+
+  @Override
+  public boolean hasPlaceholders() {
+    return this.hasPlaceholders;
+  }
+
+  @Override
+  public @NonNull Text setSample(boolean sample) {
+    this.sample = sample;
+    return this;
+  }
+
+  @Override
+  public @NonNull Text setHasPlaceholders(boolean hasPlaceholders) {
+    this.hasPlaceholders = hasPlaceholders;
     return this;
   }
 

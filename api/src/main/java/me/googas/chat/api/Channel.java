@@ -8,9 +8,9 @@ import java.util.UUID;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.dependencies.viaversion.ViaVersionSoft;
-import me.googas.chat.api.text.Text;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.tab.TabView;
+import me.googas.chat.api.text.Text;
 import me.googas.chat.packet.sound.WrappedSoundCategory;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
@@ -137,8 +137,8 @@ public interface Channel {
    */
   default void sendTitle(Text title, Text subtitle, int fadeIn, int stay, int fadeOut) {
     this.sendRawTitle(
-        title == null ? null : title.asText(this),
-        subtitle == null ? null : subtitle.asText(this),
+        title == null ? null : title.asString(this),
+        subtitle == null ? null : subtitle.asString(this),
         fadeIn,
         stay,
         fadeOut);
@@ -160,7 +160,8 @@ public interface Channel {
    */
   default void setTabList(Text header, Text bottom) {
     this.setRawTabList(
-        header == null ? null : header.asText(this), bottom == null ? null : bottom.asText(this));
+        header == null ? null : header.asString(this),
+        bottom == null ? null : bottom.asString(this));
   }
 
   /**
@@ -219,7 +220,7 @@ public interface Channel {
   void giveBossBar(@NonNull String text, float progress);
 
   default void giveBossBar(@NonNull Text text, float progress) {
-    this.giveBossBar(text.asText(this), progress);
+    this.giveBossBar(text.asString(this), progress);
   }
 
   @NonNull

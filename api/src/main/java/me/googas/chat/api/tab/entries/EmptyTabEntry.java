@@ -1,8 +1,8 @@
 package me.googas.chat.api.tab.entries;
 
 import lombok.NonNull;
-import me.googas.chat.api.text.Text;
 import me.googas.chat.api.tab.TabSlot;
+import me.googas.chat.api.text.Text;
 import me.googas.chat.packet.entity.player.Skin;
 import me.googas.chat.packet.world.WrappedEnumGameMode;
 
