@@ -83,12 +83,12 @@ public interface Channel {
                 () -> {
                   PlayerChannel channel;
                   if (ViaVersionSoft.isEnabled()) {
-                    return ViaVersionSoft.getProtocolChannel(uniqueId);
+                    channel = ViaVersionSoft.getProtocolChannel(uniqueId);
                   } else {
                     channel = () -> uniqueId;
-                    Channel.players.add(channel);
-                    return channel;
                   }
+                  Channel.players.add(channel);
+                  return channel;
                 });
   }
 
