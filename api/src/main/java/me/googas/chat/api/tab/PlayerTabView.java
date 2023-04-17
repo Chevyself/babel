@@ -131,8 +131,7 @@ public class PlayerTabView implements TabView {
 
   @Override
   public void initialize()
-      throws PacketHandlingException, InvocationTargetException, InstantiationException,
-          IllegalAccessException {
+      throws PacketHandlingException {
     if (destroyed || !slots.isEmpty()) return;
     Optional<Player> optional = this.getViewer();
     if (optional.isPresent()) {

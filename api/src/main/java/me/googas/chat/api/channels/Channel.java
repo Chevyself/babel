@@ -221,10 +221,7 @@ public interface Channel {
   AdaptedBossBar getBossBar();
 
   @NonNull
-  TabView giveTabView();
-
-  @NonNull
-  Optional<? extends TabView> getTabView();
+  TabView getTabView();
 
   @NonNull
   ChannelScoreboard getScoreboard();

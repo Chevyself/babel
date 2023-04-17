@@ -81,10 +81,7 @@ public class SampleCommands {
       PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
       view.initialize();
       views.put(player.getUniqueId(), view);
-    } catch (PacketHandlingException
-        | InvocationTargetException
-        | InstantiationException
-        | IllegalAccessException e) {
+    } catch (PacketHandlingException e) {
       Debugger.getInstance().handle(Level.SEVERE, "", e);
     }
   }

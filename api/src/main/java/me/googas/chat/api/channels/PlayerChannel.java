@@ -1,12 +1,12 @@
 package me.googas.chat.api.channels;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.logging.Level;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
@@ -159,37 +159,24 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  default @NonNull TabView giveTabView() {
-    return this.getPlayer()
-        .map(
-            player -> {
-              Optional<? extends TabView> optional = this.getTabView();
-              if (optional.isPresent()) {
-                Debugger.getInstance()
-                    .handle(Level.WARNING, "PlayerChannel#giveTabView without #getTabView check");
-                return optional.get();
-              } else {
-                try {
-                  PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
-                  view.initialize();
-                  views.add(view);
-                  return view;
-                } catch (PacketHandlingException
-                    | InvocationTargetException
-                    | InstantiationException
-                    | IllegalAccessException e) {
-                  Debugger.getInstance()
-                      .handle(Level.SEVERE, "Could not initialize tab view for player " + player);
-                  return null;
-                }
-              }
-            })
-        .orElseGet(EmptyTabView::new);
-  }
-
-  @Override
-  default @NonNull Optional<? extends TabView> getTabView() {
-    return views.stream().filter(view -> view.getUniqueId().equals(this.getUniqueId())).findFirst();
+  default @NonNull TabView getTabView() {
+    Optional<PlayerTabView> tabView = views.stream().filter(view -> view.getUniqueId().equals(this.getUniqueId())).findFirst();
+    if (tabView.isPresent()) {
+      return tabView.get();
+    } else {
+      return this.getPlayer().map(player -> {
+        try {
+          PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
+          view.initialize();
+          views.add(view);
+          return view;
+        } catch (PacketHandlingException e) {
+          Debugger.getInstance()
+                  .handle(Level.SEVERE, "Could not initialize tab view for player " + player);
+          return new EmptyTabView();
+        }
+      }).orElseGet(EmptyTabView::new);
+    }
   }
 
   @Override

@@ -74,13 +74,8 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public @NonNull TabView giveTabView() {
+  public @NonNull TabView getTabView() {
     return new EmptyTabView();
-  }
-
-  @Override
-  public @NonNull Optional<? extends TabView> getTabView() {
-    return Optional.empty();
   }
 
   @Override
