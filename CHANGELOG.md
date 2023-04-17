@@ -9,6 +9,7 @@ Changelog
   - [X] Soft dependencies classes
 - Added Javadoc for
   - [X] Custom tab API
+  - [X] Packets adapter
 - [X] Renamed `Line` to `Text`
 - [X] Renamed `ErrorHandler` to `Debugger`
 - [X] Improvements to `Text`
