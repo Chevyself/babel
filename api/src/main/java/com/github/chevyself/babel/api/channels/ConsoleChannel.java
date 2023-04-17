@@ -84,6 +84,21 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
+  public boolean hasBossBar() {
+    return false;
+  }
+
+  @Override
+  public boolean hasTabView() {
+    return false;
+  }
+
+  @Override
+  public boolean hasScoreboard() {
+    return false;
+  }
+
+  @Override
   public void playSound(
       @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
     // Empty

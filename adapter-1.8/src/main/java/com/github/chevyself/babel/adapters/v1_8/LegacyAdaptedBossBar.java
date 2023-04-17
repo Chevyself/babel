@@ -121,7 +121,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     Optional<Player> bukkit = this.getOwnerBukkit();
     if (bukkit.isPresent()) {
       if (!this.isDisplayed()) {
-         return;
+        return;
       }
       try {
         Player player = bukkit.get();

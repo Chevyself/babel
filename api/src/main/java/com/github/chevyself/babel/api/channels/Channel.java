@@ -225,4 +225,25 @@ public interface Channel {
 
   @NonNull
   ChannelScoreboard getScoreboard();
+
+  /**
+   * Checks whether this channel has a boss bar
+   *
+   * @return true if the channel has a boss bar
+   */
+  boolean hasBossBar();
+
+    /**
+     * Checks whether this channel has a tab view
+     *
+     * @return true if the channel has a tab view
+     */
+  boolean hasTabView();
+
+    /**
+     * Checks whether this channel has a scoreboard
+     *
+     * @return true if the channel has a scoreboard
+     */
+  boolean hasScoreboard();
 }

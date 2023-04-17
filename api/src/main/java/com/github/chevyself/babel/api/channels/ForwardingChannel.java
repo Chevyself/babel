@@ -94,6 +94,21 @@ public interface ForwardingChannel extends Channel {
             this.getForward().map(Channel::getScoreboard).orElseGet(EmptyScoreboard::new));
   }
 
+  @Override
+  default boolean hasBossBar() {
+    return this.getForward().map(Channel::hasBossBar).orElse(false);
+  }
+
+  @Override
+  default boolean hasTabView() {
+    return this.getForward().map(Channel::hasTabView).orElse(false);
+  }
+
+  @Override
+  default boolean hasScoreboard() {
+    return this.getForward().map(Channel::hasScoreboard).orElse(false);
+  }
+
   /** This type of forwarding channel wraps more than one channel. */
   interface Multiple extends Channel {
 
@@ -108,6 +123,21 @@ public interface ForwardingChannel extends Channel {
     default @NonNull AdaptedBossBarTuple getBossBar() {
       return new AdaptedBossBarTuple(
           this.getChannels().stream().map(Channel::getBossBar).collect(Collectors.toList()));
+    }
+
+    @Override
+    default boolean hasBossBar() {
+        return this.getChannels().stream().allMatch(Channel::hasBossBar);
+    }
+
+    @Override
+    default boolean hasTabView() {
+        return this.getChannels().stream().allMatch(Channel::hasTabView);
+    }
+
+    @Override
+    default boolean hasScoreboard() {
+        return this.getChannels().stream().allMatch(Channel::hasScoreboard);
     }
 
     /**

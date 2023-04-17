@@ -182,6 +182,23 @@ public interface PlayerChannel extends Channel {
     }
   }
 
+
+  @Override
+  default boolean hasBossBar() {
+    return bossBarAdapter.getBossBar(this.getUniqueId()).isPresent();
+  }
+
+  @Override
+  default boolean hasTabView() {
+    return views.stream().anyMatch(view -> view.getUniqueId().equals(this.getUniqueId()));
+  }
+
+  @Override
+  default boolean hasScoreboard() {
+    return scoreboards.stream()
+        .anyMatch(scoreboard -> scoreboard.getOwner().equals(this.getUniqueId()));
+  }
+
   @Override
   default void playSound(
       @NonNull Sound sound, @NonNull WrappedSoundCategory category, float volume, float pitch) {
