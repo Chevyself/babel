@@ -1,0 +1,170 @@
+package com.github.chevyself.babel;
+
+import chevyself.github.commands.annotations.Free;
+import chevyself.github.commands.annotations.Parent;
+import chevyself.github.commands.annotations.Required;
+import chevyself.github.commands.arguments.ArgumentBehaviour;
+import chevyself.github.commands.bukkit.annotations.Command;
+import chevyself.github.commands.bukkit.context.CommandContext;
+import chevyself.github.commands.bukkit.result.BukkitResult;
+import com.github.chevyself.babel.api.channels.Channel;
+import com.github.chevyself.babel.api.lang.Language;
+import com.github.chevyself.babel.api.scoreboard.ScoreboardLine;
+import com.github.chevyself.babel.api.tab.PlayerTabView;
+import com.github.chevyself.babel.api.tab.TabCoordinate;
+import com.github.chevyself.babel.api.tab.TabSize;
+import com.github.chevyself.babel.api.tab.TabView;
+import com.github.chevyself.babel.api.tab.entries.CoordinateTabEntry;
+import com.github.chevyself.babel.api.tab.entries.PlayerTabEntry;
+import com.github.chevyself.babel.api.text.Plain;
+import com.github.chevyself.babel.api.text.Text;
+import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.exceptions.PacketHandlingException;
+import java.util.*;
+import java.util.logging.Level;
+import lombok.NonNull;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
+public class SampleCommands {
+
+  @NonNull private final Map<UUID, TabView> views = new HashMap<>();
+
+  @Command(aliases = "bossbar")
+  public BukkitResult bossbar(
+      Channel channel,
+      @Required(name = "progress") double progress,
+      @Required(name = "text", behaviour = ArgumentBehaviour.CONTINUOUS) String text) {
+    channel.getBossBar().setTitle(text).setProgress((float) progress).display();
+    return Text.of("Given boss bar");
+  }
+
+  @Command(aliases = "scoreboard")
+  public BukkitResult scoreboard(Channel channel) {
+    List<ScoreboardLine> layout =
+        ScoreboardLine.parse(Arrays.asList("This", "is", "the", "best", ":)"), false);
+    channel.getScoreboard().setLayout(layout).initialize("Hey!");
+    return Text.of("Applied");
+  }
+
+  @Parent
+  @Command(
+      aliases = "chat",
+      description = "Parent command for the commands of Chat sample plugin",
+      permission = "chat.main")
+  public BukkitResult chat(
+      CommandContext context,
+      @Required(
+              name = "line",
+              behaviour = ArgumentBehaviour.CONTINUOUS,
+              suggestions = {"$", "$cmd.hello"})
+          String line) {
+    Locale locale = Language.getLocale(context.getSender());
+    return Text.parse(locale, line);
+  }
+
+  @Command(aliases = "sound", description = "a")
+  public void sound(
+      Player player,
+      Channel channel,
+      @Required(name = "sound", description = "The sound to play") Sound sound,
+      @Free(name = "volume", description = "The volume to play the sound", suggestions = "1")
+          int volume,
+      @Free(name = "pitch", description = "The pitch of the sound", suggestions = "1") int pitch) {
+    channel.playSound(player.getLocation(), sound, volume, pitch);
+  }
+
+  @Command(aliases = "ctab", description = "tests")
+  public void ctab(Player player) {
+    try {
+      PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
+      view.initialize();
+      views.put(player.getUniqueId(), view);
+    } catch (PacketHandlingException e) {
+      Debugger.getInstance().handle(Level.SEVERE, "", e);
+    }
+  }
+
+  @Command(aliases = "ctabclear", description = "tests")
+  public Plain ctabclear(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Text.of("No view");
+    } else {
+      view.clear();
+      return Text.of("Done");
+    }
+  }
+
+  @Command(aliases = "ctabadd")
+  public Text ctabadd(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Text.of("No view");
+    } else {
+      view.add(new PlayerTabEntry(player));
+      return Text.of("Done");
+    }
+  }
+
+  @Command(aliases = "ctabremove")
+  public Text ctabremove(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Text.of("No view");
+    } else {
+      view.remove(new PlayerTabEntry(player));
+      return Text.of("Done");
+    }
+  }
+
+  @Command(aliases = "ctabcoords")
+  public Text ctabcoords(Player player) {
+    TabView view = views.get(player.getUniqueId());
+    if (view == null) {
+      return Text.of("No view");
+    } else {
+      for (TabCoordinate coordinate : view.getSize()) {
+        view.set(coordinate, new CoordinateTabEntry());
+      }
+      return Text.of("Done");
+    }
+  }
+
+  @Command(aliases = "title", description = "Send a title", permission = "chat.title")
+  public void title(
+      Channel channel,
+      @Required(
+              name = "title",
+              description = "The title to show",
+              behaviour = ArgumentBehaviour.MULTIPLE)
+          String title,
+      @Required(
+              name = "subtitle",
+              description = "The subtitle to show",
+              behaviour = ArgumentBehaviour.MULTIPLE)
+          String subtitle,
+      @Free(
+              name = "fade in",
+              description = "The time that the title will have to show",
+              suggestions = "20")
+          int fadeIn,
+      @Free(name = "stay", description = "The time that the title will stay", suggestions = "20")
+          int stay,
+      @Free(
+              name = "fade in",
+              description = "The time that the title will have to show",
+              suggestions = "20")
+          int fadeOut) {
+    channel.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut);
+  }
+
+  @Command(aliases = "tab", permission = "chat.tab")
+  public BukkitResult tab(
+      Channel channel,
+      @Required(name = "header", behaviour = ArgumentBehaviour.MULTIPLE) String header,
+      @Required(name = "footer", behaviour = ArgumentBehaviour.MULTIPLE) String footer) {
+    channel.setRawTabList(header, footer);
+    return Text.localized("cmd.tab").format(header, footer);
+  }
+}

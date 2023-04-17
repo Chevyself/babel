@@ -1,9 +1,9 @@
+import com.github.chevyself.babel.api.tab.TabCoordinate;
+import com.github.chevyself.babel.api.tab.TabSize;
+import com.github.chevyself.babel.api.tab.TabSlot;
+import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
 import java.util.*;
 import lombok.NonNull;
-import me.googas.chat.api.tab.TabCoordinate;
-import me.googas.chat.api.tab.TabSize;
-import me.googas.chat.api.tab.TabSlot;
-import me.googas.chat.api.tab.entries.EmptyTabEntry;
 
 public class ClassTest {
 

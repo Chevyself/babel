@@ -4,8 +4,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <parent>
-    <groupId>me.googas.chat</groupId>
-    <artifactId>chat</artifactId>
+    <groupId>com.github.chevyself.babel</groupId>
+    <artifactId>babel</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -24,11 +24,11 @@
             <configuration>
               <artifactSet>
                 <includes>
-                  <include>me.googas.chat:api</include>
-                  <include>me.googas.chat:adapter</include>
-                  <include>me.googas.chat:adapter-1.12</include>
-                  <include>me.googas.chat:adapter-1.11</include>
-                  <include>me.googas.chat:adapter-1.8</include>
+                  <include>com.github.chevyself.babel:api</include>
+                  <include>com.github.chevyself.babel:adapter</include>
+                  <include>com.github.chevyself.babel:adapter-1.12</include>
+                  <include>com.github.chevyself.babel:adapter-1.11</include>
+                  <include>com.github.chevyself.babel:adapter-1.8</include>
                   <include>me.googas.starbox-commands:bukkit</include>
                   <include>me.googas.starbox-commands:core</include>
                   <include>me.googas:reflect</include>
@@ -56,7 +56,7 @@
   <dependencies>
     <!-- API -->
     <dependency>
-      <groupId>me.googas.chat</groupId>
+      <groupId>com.github.chevyself.babel</groupId>
       <artifactId>api</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>compile</scope>
