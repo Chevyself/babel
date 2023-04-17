@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import me.googas.chat.api.lang.Language;
 import me.googas.chat.api.text.format.SampleFormatter;
 import org.bukkit.plugin.Plugin;
 

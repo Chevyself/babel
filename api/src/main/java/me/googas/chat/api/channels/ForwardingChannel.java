@@ -1,4 +1,4 @@
-package me.googas.chat.api;
+package me.googas.chat.api.channels;
 
 import java.util.Collection;
 import java.util.Collections;

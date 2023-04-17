@@ -4,7 +4,7 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import me.googas.chat.api.PlayerChannel;
+import me.googas.chat.api.channels.PlayerChannel;
 import me.googas.chat.api.util.Versions;
 
 /**

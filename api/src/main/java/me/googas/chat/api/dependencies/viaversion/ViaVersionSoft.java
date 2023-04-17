@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.api.PlayerChannel;
+import me.googas.chat.api.channels.PlayerChannel;
 import me.googas.chat.api.util.Versions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

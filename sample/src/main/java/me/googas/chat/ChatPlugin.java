@@ -3,7 +3,7 @@ package me.googas.chat;
 import java.io.IOException;
 import java.util.logging.Level;
 import me.googas.chat.api.ResourceManager;
-import me.googas.chat.api.YamlLanguage;
+import me.googas.chat.api.lang.YamlLanguage;
 import me.googas.chat.api.bossbar.WitherTask;
 import me.googas.chat.api.commands.ChannelProvider;
 import me.googas.chat.api.commands.ResultHandler;

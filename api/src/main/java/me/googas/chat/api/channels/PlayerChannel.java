@@ -1,4 +1,4 @@
-package me.googas.chat.api;
+package me.googas.chat.api.channels;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
 import me.googas.chat.adapters.bossbar.EmptyAdaptedBossBar;
+import me.googas.chat.api.lang.Language;
 import me.googas.chat.api.scoreboard.PlayerScoreboard;
 import me.googas.chat.api.tab.EmptyTabView;
 import me.googas.chat.api.tab.PlayerTabView;

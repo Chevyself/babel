@@ -1,4 +1,4 @@
-package me.googas.chat.api;
+package me.googas.chat.api.lang;
 
 import java.io.File;
 import java.io.FileReader;

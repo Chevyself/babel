@@ -1,9 +1,10 @@
-package me.googas.chat.api;
+package me.googas.chat.api.lang;
 
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
+import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.util.Players;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.OfflinePlayer;

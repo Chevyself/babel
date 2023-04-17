@@ -2,7 +2,7 @@ package me.googas.chat.api.text;
 
 import java.util.Locale;
 import lombok.NonNull;
-import me.googas.chat.api.Channel;
+import me.googas.chat.api.channels.Channel;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.placeholders.PlaceholderManager;
 

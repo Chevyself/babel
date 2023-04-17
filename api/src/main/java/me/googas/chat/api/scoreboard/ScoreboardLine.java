@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
-import me.googas.chat.api.Channel;
+import me.googas.chat.api.channels.Channel;
 import me.googas.chat.api.text.LocalizedReference;
 import me.googas.chat.api.text.Text;
 import org.bukkit.OfflinePlayer;

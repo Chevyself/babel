@@ -1,7 +1,7 @@
 package me.googas.chat.api.commands;
 
 import lombok.NonNull;
-import me.googas.chat.api.Channel;
+import me.googas.chat.api.channels.Channel;
 import me.googas.chat.api.text.Text;
 import me.googas.commands.Middleware;
 import me.googas.commands.bukkit.context.CommandContext;

@@ -1,4 +1,4 @@
-package me.googas.chat.api;
+package me.googas.chat.api.channels;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.adapters.bossbar.EmptyAdaptedBossBar;
+import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
 import me.googas.chat.api.tab.EmptyTabView;
