@@ -20,9 +20,15 @@ import org.bukkit.entity.Player;
 /** Represents a Packet which can be sent to a player or may be sent by a player. */
 public final class Packet extends ReflectWrapper {
 
+  /**
+   * The NMS version of the server.
+   */
   @NonNull
   public static final String NMS = Bukkit.getServer().getClass().getCanonicalName().split("\\.")[3];
 
+  /**
+   * The class of the packet.
+   */
   @NonNull
   public static final WrappedClass<?> PACKET_CLASS =
       WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".Packet");
@@ -43,6 +49,16 @@ public final class Packet extends ReflectWrapper {
     this.clazz = clazz;
   }
 
+  /**
+   * Create a packet.
+   *
+   * @param type the type of the packet
+   * @param params the parameters of the constructor
+   * @param objects the objects to pass to the constructor
+   * @return the packet
+   * @throws PacketHandlingException if the constructor of the packet could not be invoked
+   * @deprecated use {@link #forType(PacketType, Object...)} instead. Such method gets the parameters automatically.
+   */
   @Deprecated
   public static @NonNull Packet forType(
       @NonNull PacketType type, @NonNull Class<?>[] params, Object... objects)
@@ -62,6 +78,14 @@ public final class Packet extends ReflectWrapper {
     return new Packet(type, clazz, handle);
   }
 
+    /**
+     * Create a packet.
+     *
+     * @param type the type of the packet
+     * @param objects the objects to pass to the constructor
+     * @return the packet
+     * @throws PacketHandlingException if the constructor of the packet could not be invoked
+     */
   public static @NonNull Packet forType(@NonNull PacketType type, Object... objects)
       throws PacketHandlingException {
     WrappedClass<?> clazz = type.wrap();
@@ -84,6 +108,12 @@ public final class Packet extends ReflectWrapper {
     return new Packet(type, clazz, handle);
   }
 
+  /**
+   * Get the parameters of the constructor of the packet.
+   *
+   * @param objects the objects to pass to the constructor
+   * @return the parameters of the constructor
+   */
   private static Class<?>[] getConstructorParameters(Object... objects) {
     List<Class<?>> classes = new ArrayList<>();
     for (Object object : objects) {

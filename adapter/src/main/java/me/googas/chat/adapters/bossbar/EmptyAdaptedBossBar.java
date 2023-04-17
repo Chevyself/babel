@@ -7,6 +7,7 @@ import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.packet.bossbar.WrappedBarColor;
 import me.googas.chat.packet.bossbar.WrappedBarStyle;
 
+/** An empty {@link AdaptedBossBar} that does nothing. This is to avoid null checks */
 public class EmptyAdaptedBossBar implements AdaptedBossBar {
 
   @NonNull @Getter private final UUID owner;

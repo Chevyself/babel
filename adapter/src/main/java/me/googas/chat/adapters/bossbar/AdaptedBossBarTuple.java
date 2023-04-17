@@ -10,6 +10,10 @@ import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.packet.bossbar.WrappedBarColor;
 import me.googas.chat.packet.bossbar.WrappedBarStyle;
 
+/**
+ * Reperesents many {@link AdaptedBossBar} as one. This is useful when you want to display the same
+ * boss bar to many players
+ */
 public class AdaptedBossBarTuple implements AdaptedBossBar {
 
   @NonNull @Getter private final UUID owner = UUID.randomUUID();

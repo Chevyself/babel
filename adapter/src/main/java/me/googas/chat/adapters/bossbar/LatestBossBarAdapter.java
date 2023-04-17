@@ -10,6 +10,7 @@ import me.googas.chat.packet.bossbar.WrappedBarColor;
 import me.googas.chat.packet.bossbar.WrappedBarStyle;
 import org.bukkit.entity.Player;
 
+/** This is the latest implementation of {@link BossBarAdapter} that uses the latest Spigot API. */
 public class LatestBossBarAdapter implements BossBarAdapter {
 
   @NonNull private final Set<LatestAdaptedBossBar> bossBars = new HashSet<>();

@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
+/** This is the latest implementation of {@link AdaptedBossBar} that uses the latest Spigot API. */
 public class LatestAdaptedBossBar implements AdaptedBossBar {
   @NonNull @Getter private final UUID owner;
   @NonNull private String title;

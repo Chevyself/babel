@@ -5,6 +5,9 @@ import me.googas.chat.adapters.ObjectiveAdapter;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+/**
+ * This is the latest objective adapter which will use the latest methods to create the objective.
+ */
 public class LatestObjectiveAdapter implements ObjectiveAdapter {
   @Override
   public @NonNull Objective create(
