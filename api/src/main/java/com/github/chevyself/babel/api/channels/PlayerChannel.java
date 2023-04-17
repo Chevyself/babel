@@ -182,7 +182,6 @@ public interface PlayerChannel extends Channel {
     }
   }
 
-
   @Override
   default boolean hasBossBar() {
     return bossBarAdapter.getBossBar(this.getUniqueId()).isPresent();

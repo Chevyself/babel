@@ -127,17 +127,17 @@ public interface ForwardingChannel extends Channel {
 
     @Override
     default boolean hasBossBar() {
-        return this.getChannels().stream().allMatch(Channel::hasBossBar);
+      return this.getChannels().stream().allMatch(Channel::hasBossBar);
     }
 
     @Override
     default boolean hasTabView() {
-        return this.getChannels().stream().allMatch(Channel::hasTabView);
+      return this.getChannels().stream().allMatch(Channel::hasTabView);
     }
 
     @Override
     default boolean hasScoreboard() {
-        return this.getChannels().stream().allMatch(Channel::hasScoreboard);
+      return this.getChannels().stream().allMatch(Channel::hasScoreboard);
     }
 
     /**

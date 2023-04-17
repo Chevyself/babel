@@ -233,17 +233,17 @@ public interface Channel {
    */
   boolean hasBossBar();
 
-    /**
-     * Checks whether this channel has a tab view
-     *
-     * @return true if the channel has a tab view
-     */
+  /**
+   * Checks whether this channel has a tab view
+   *
+   * @return true if the channel has a tab view
+   */
   boolean hasTabView();
 
-    /**
-     * Checks whether this channel has a scoreboard
-     *
-     * @return true if the channel has a scoreboard
-     */
+  /**
+   * Checks whether this channel has a scoreboard
+   *
+   * @return true if the channel has a scoreboard
+   */
   boolean hasScoreboard();
 }
