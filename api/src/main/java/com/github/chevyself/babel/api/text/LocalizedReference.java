@@ -75,7 +75,9 @@ public final class LocalizedReference implements Text {
     if (!formatters.isEmpty()) localized.format(formatters);
     if (!linePlaceholders.isEmpty())
       localized.placeholders(linePlaceholders.toArray(new Placeholder[0]));
-    return localized;
+    return localized
+            .setSample(this.sample)
+            .setHasPlaceholders(this.hasPlaceholders);
   }
 
   /**
@@ -153,6 +155,16 @@ public final class LocalizedReference implements Text {
   public @NonNull BaseComponent[] build() {
     Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
     return this.asLocalized().build();
+  }
+
+  @Override
+  public BaseComponent[] build(@NonNull Channel channel) {
+    return asLocalized(channel).build();
+  }
+
+  @Override
+  public @NonNull String asString(@NonNull Channel channel) {
+    return asLocalized(channel).asString();
   }
 
   @Override

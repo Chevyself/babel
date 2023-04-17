@@ -53,13 +53,13 @@ public final class Localized implements Text {
   }
 
   @Override
-  public @NonNull Text setSample(boolean sample) {
+  public @NonNull Localized setSample(boolean sample) {
     this.sample = sample;
     return this;
   }
 
   @Override
-  public @NonNull Text setHasPlaceholders(boolean hasPlaceholders) {
+  public @NonNull Localized setHasPlaceholders(boolean hasPlaceholders) {
     this.hasPlaceholders = hasPlaceholders;
     return this;
   }
