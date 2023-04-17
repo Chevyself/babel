@@ -2,6 +2,14 @@ package me.googas.chat;
 
 import java.io.IOException;
 import java.util.logging.Level;
+
+import chevyself.github.commands.bukkit.CommandManager;
+import chevyself.github.commands.bukkit.context.CommandContext;
+import chevyself.github.commands.bukkit.messages.BukkitMessagesProvider;
+import chevyself.github.commands.bukkit.messages.MessagesProvider;
+import chevyself.github.commands.bukkit.middleware.PermissionMiddleware;
+import chevyself.github.commands.bukkit.providers.registry.BukkitProvidersRegistry;
+import chevyself.github.commands.providers.registry.ProvidersRegistry;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.lang.YamlLanguage;
 import me.googas.chat.api.bossbar.WitherTask;
@@ -9,13 +17,6 @@ import me.googas.chat.api.commands.ChannelProvider;
 import me.googas.chat.api.commands.ResultHandler;
 import me.googas.chat.api.util.Versions;
 import me.googas.chat.debug.Debugger;
-import me.googas.commands.bukkit.CommandManager;
-import me.googas.commands.bukkit.context.CommandContext;
-import me.googas.commands.bukkit.messages.BukkitMessagesProvider;
-import me.googas.commands.bukkit.messages.MessagesProvider;
-import me.googas.commands.bukkit.middleware.PermissionMiddleware;
-import me.googas.commands.bukkit.providers.registry.BukkitProvidersRegistry;
-import me.googas.commands.providers.registry.ProvidersRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

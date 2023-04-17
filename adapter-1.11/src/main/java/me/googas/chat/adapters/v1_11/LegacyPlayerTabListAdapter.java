@@ -1,13 +1,14 @@
 package me.googas.chat.adapters.v1_11;
 
 import java.util.logging.Level;
+
+import chevyself.github.commands.bukkit.utils.Components;
 import lombok.NonNull;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.debug.Debugger;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.PacketType;
 import me.googas.chat.packet.chat.WrappedChatComponent;
-import me.googas.commands.bukkit.utils.Components;
 import org.bukkit.entity.Player;
 
 public final class LegacyPlayerTabListAdapter implements PlayerTabListAdapter {

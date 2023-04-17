@@ -12,12 +12,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
+
+import chevyself.github.commands.bukkit.utils.Components;
+import chevyself.github.commands.util.Strings;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.exceptions.LanguageParsingException;
 import me.googas.chat.debug.Debugger;
-import me.googas.commands.bukkit.utils.Components;
-import me.googas.commands.util.Strings;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;

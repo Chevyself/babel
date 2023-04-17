@@ -5,11 +5,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import chevyself.github.commands.util.Strings;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.text.format.Formatter;
-import me.googas.commands.util.Strings;
 
 /** This is a {@link Text} which uses a message obtained from {@link ResourceManager}. */
 public final class Localized implements Text {

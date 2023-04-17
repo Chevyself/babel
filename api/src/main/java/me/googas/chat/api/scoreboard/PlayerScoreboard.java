@@ -8,14 +8,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import chevyself.github.commands.bukkit.utils.BukkitUtils;
+import chevyself.github.commands.util.Strings;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.adapters.ObjectiveAdapter;
 import me.googas.chat.api.channels.Channel;
 import me.googas.chat.api.channels.PlayerChannel;
 import me.googas.chat.api.util.Players;
-import me.googas.commands.bukkit.utils.BukkitUtils;
-import me.googas.commands.util.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;

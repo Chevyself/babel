@@ -3,6 +3,14 @@ package me.googas.chat;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Level;
+
+import chevyself.github.commands.annotations.Free;
+import chevyself.github.commands.annotations.Parent;
+import chevyself.github.commands.annotations.Required;
+import chevyself.github.commands.arguments.ArgumentBehaviour;
+import chevyself.github.commands.bukkit.annotations.Command;
+import chevyself.github.commands.bukkit.context.CommandContext;
+import chevyself.github.commands.bukkit.result.BukkitResult;
 import lombok.NonNull;
 import me.googas.chat.api.channels.Channel;
 import me.googas.chat.api.lang.Language;
@@ -17,13 +25,6 @@ import me.googas.chat.api.text.Plain;
 import me.googas.chat.api.text.Text;
 import me.googas.chat.debug.Debugger;
 import me.googas.chat.exceptions.PacketHandlingException;
-import me.googas.commands.annotations.Free;
-import me.googas.commands.annotations.Parent;
-import me.googas.commands.annotations.Required;
-import me.googas.commands.arguments.ArgumentBehaviour;
-import me.googas.commands.bukkit.annotations.Command;
-import me.googas.commands.bukkit.context.CommandContext;
-import me.googas.commands.bukkit.result.BukkitResult;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 

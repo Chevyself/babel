@@ -3,10 +3,11 @@ package me.googas.chat.api.text;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import chevyself.github.commands.util.Strings;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.text.format.Formatter;
-import me.googas.commands.util.Strings;
 
 /** Represents plain text. */
 public final class Plain implements Text {

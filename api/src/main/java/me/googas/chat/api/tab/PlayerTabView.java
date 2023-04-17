@@ -6,6 +6,8 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+
+import chevyself.github.commands.util.Pair;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.api.tab.entries.EmptyTabEntry;
@@ -17,7 +19,6 @@ import me.googas.chat.packet.PacketType;
 import me.googas.chat.packet.entity.player.WrappedCraftPlayer;
 import me.googas.chat.packet.entity.player.WrappedPlayerInfo;
 import me.googas.chat.packet.entity.player.WrappedPlayerInfoAction;
-import me.googas.commands.util.Pair;
 import me.googas.reflect.modifiers.CollectionModifier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

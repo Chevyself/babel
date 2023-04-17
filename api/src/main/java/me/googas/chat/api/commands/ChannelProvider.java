@@ -1,9 +1,9 @@
 package me.googas.chat.api.commands;
 
+import chevyself.github.commands.bukkit.context.CommandContext;
+import chevyself.github.commands.bukkit.providers.type.BukkitExtraArgumentProvider;
 import lombok.NonNull;
 import me.googas.chat.api.channels.Channel;
-import me.googas.commands.bukkit.context.CommandContext;
-import me.googas.commands.bukkit.providers.type.BukkitExtraArgumentProvider;
 
 public final class ChannelProvider implements BukkitExtraArgumentProvider<Channel> {
   @Override

@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import chevyself.github.commands.bukkit.context.CommandContext;
+import chevyself.github.commands.bukkit.providers.type.BukkitArgumentProvider;
+import chevyself.github.commands.exceptions.ArgumentProviderException;
 import lombok.NonNull;
 import me.googas.chat.api.text.Text;
-import me.googas.commands.bukkit.context.CommandContext;
-import me.googas.commands.bukkit.providers.type.BukkitArgumentProvider;
-import me.googas.commands.exceptions.ArgumentProviderException;
 import org.bukkit.Sound;
 
 public class SoundProvider implements BukkitArgumentProvider<Sound> {
