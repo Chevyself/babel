@@ -120,6 +120,9 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
   public void teleport() {
     Optional<Player> bukkit = this.getOwnerBukkit();
     if (bukkit.isPresent()) {
+      if (!this.isDisplayed()) {
+         return;
+      }
       try {
         Player player = bukkit.get();
         Location location = getWitherLocation(player.getLocation());
