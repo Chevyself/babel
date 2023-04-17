@@ -1,11 +1,9 @@
 package me.googas.chat.api.dependencies.viaversion;
 
-import java.util.Optional;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.PlayerChannel;
 import me.googas.chat.api.util.Versions;
 
@@ -47,10 +45,5 @@ public class ProtocolPlayerChannel implements PlayerChannel {
     if (this.version.getBukkit() >= 8) {
       PlayerChannel.super.setRawTabList(header, bottom);
     }
-  }
-
-  @Override
-  public @NonNull Optional<? extends AdaptedBossBar> getBossBar() {
-    return PlayerChannel.super.getBossBar();
   }
 }

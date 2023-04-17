@@ -13,6 +13,7 @@ import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.adapters.BossBarAdapter;
 import me.googas.chat.adapters.PlayerTabListAdapter;
 import me.googas.chat.adapters.PlayerTitleAdapter;
+import me.googas.chat.adapters.bossbar.EmptyAdaptedBossBar;
 import me.googas.chat.api.scoreboard.PlayerScoreboard;
 import me.googas.chat.api.tab.EmptyTabView;
 import me.googas.chat.api.tab.PlayerTabView;
@@ -141,26 +142,19 @@ public interface PlayerChannel extends Channel {
 
   @Override
   @NonNull
-  default Optional<? extends AdaptedBossBar> getBossBar() {
-    return bossBarAdapter.getBossBar(this.getUniqueId());
-  }
-
-  @Override
-  default void giveBossBar(@NonNull String text, float progress) {
-    this.getPlayer()
-        .ifPresent(
-            player -> {
-              Optional<? extends AdaptedBossBar> optional = this.getBossBar();
-              if (optional.isPresent()) {
-                Debugger.getInstance()
-                    .handle(Level.WARNING, "PlayerChannel#giveBossBar without #getBossBar check");
-                AdaptedBossBar bossBar = optional.get();
-                bossBar.setTitle(text);
-                bossBar.setProgress(progress);
-              } else {
-                bossBarAdapter.create(player, text, progress);
-              }
-            });
+  default AdaptedBossBar getBossBar() {
+    Optional<Player> optional = this.getPlayer();
+    if (optional.isPresent()) {
+      Player player = optional.get();
+      Optional<? extends AdaptedBossBar> bossBar = bossBarAdapter.getBossBar(player.getUniqueId());
+      if (bossBar.isPresent()) {
+        return bossBar.get();
+      } else {
+        return bossBarAdapter.create(player);
+      }
+    } else {
+      return new EmptyAdaptedBossBar(this.getUniqueId());
+    }
   }
 
   @Override

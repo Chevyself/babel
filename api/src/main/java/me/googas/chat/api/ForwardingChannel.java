@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
+import me.googas.chat.adapters.bossbar.AdaptedBossBarTuple;
+import me.googas.chat.adapters.bossbar.EmptyAdaptedBossBar;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
 import me.googas.chat.api.scoreboard.ForwardingScoreboard;
 import me.googas.chat.packet.sound.WrappedSoundCategory;
@@ -80,14 +82,8 @@ public interface ForwardingChannel extends Channel {
   }
 
   @Override
-  default void giveBossBar(@NonNull String text, float progress) {
-    this.getForward().ifPresent(channel -> channel.giveBossBar(text, progress));
-  }
-
-  @Override
-  @NonNull
-  default Optional<? extends AdaptedBossBar> getBossBar() {
-    return this.getForward().flatMap(Channel::getBossBar);
+  default @NonNull AdaptedBossBar getBossBar() {
+    return this.getForward().map(Channel::getBossBar).orElseGet(EmptyAdaptedBossBar::new);
   }
 
   @Override
@@ -109,14 +105,9 @@ public interface ForwardingChannel extends Channel {
     }
 
     @Override
-    default void giveBossBar(@NonNull String text, float progress) {
-      this.getChannels().forEach(channel -> channel.giveBossBar(text, progress));
-    }
-
-    @Override
-    @NonNull
-    default Optional<? extends AdaptedBossBar> getBossBar() {
-      return Optional.empty();
+    default @NonNull AdaptedBossBarTuple getBossBar() {
+      return new AdaptedBossBarTuple(
+          this.getChannels().stream().map(Channel::getBossBar).collect(Collectors.toList()));
     }
 
     /**

@@ -2,9 +2,11 @@ package me.googas.chat.api;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
+import me.googas.chat.adapters.bossbar.EmptyAdaptedBossBar;
 import me.googas.chat.api.scoreboard.ChannelScoreboard;
 import me.googas.chat.api.scoreboard.EmptyScoreboard;
 import me.googas.chat.api.tab.EmptyTabView;
@@ -66,13 +68,8 @@ public final class ConsoleChannel implements Channel {
   }
 
   @Override
-  public void giveBossBar(@NonNull String text, float progress) {
-    // Empty
-  }
-
-  @Override
-  public @NonNull Optional<? extends AdaptedBossBar> getBossBar() {
-    return Optional.empty();
+  public @NonNull AdaptedBossBar getBossBar() {
+    return new EmptyAdaptedBossBar(UUID.randomUUID());
   }
 
   @Override

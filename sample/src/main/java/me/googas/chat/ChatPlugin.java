@@ -2,10 +2,9 @@ package me.googas.chat;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import me.googas.chat.adapters.v1_8.LegacyAdaptedBossBar;
-import me.googas.chat.api.Channel;
 import me.googas.chat.api.ResourceManager;
 import me.googas.chat.api.YamlLanguage;
+import me.googas.chat.api.bossbar.WitherTask;
 import me.googas.chat.api.commands.ChannelProvider;
 import me.googas.chat.api.commands.ResultHandler;
 import me.googas.chat.api.util.Versions;
@@ -18,7 +17,6 @@ import me.googas.commands.bukkit.middleware.PermissionMiddleware;
 import me.googas.commands.bukkit.providers.registry.BukkitProvidersRegistry;
 import me.googas.commands.providers.registry.ProvidersRegistry;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ChatPlugin extends JavaPlugin {
@@ -44,23 +42,7 @@ public class ChatPlugin extends JavaPlugin {
         .registerPlugin();
 
     if (Versions.BUKKIT == 8) {
-      Bukkit.getScheduler()
-          .runTaskTimer(
-              this,
-              () -> {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                  Channel.of(player)
-                      .getBossBar()
-                      .ifPresent(
-                          bossBar -> {
-                            if (bossBar instanceof LegacyAdaptedBossBar) {
-                              ((LegacyAdaptedBossBar) bossBar).teleport();
-                            }
-                          });
-                }
-              },
-              0,
-              2);
+      Bukkit.getScheduler().runTaskTimer(this, new WitherTask(), 0, 2);
     }
 
     super.onEnable();

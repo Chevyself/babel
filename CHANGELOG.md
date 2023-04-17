@@ -14,4 +14,6 @@ Changelog
 - [X] Improvements to `Text`
   - [X] Instead of having `Text#build` with different parameters for Text with placeholders and samples. Now the class has the methods `#isSample`, `#hasPlaceholders` to check and `#setSample` and `#setHasPlaceholders` to set the values.
   - [X] Moved static utility methods to `TextUtility` class.
+- [X] Simplify boss-bars, instead of having two methods as `Channel#getBossBar` and `Channel#giveBossBar` now there is only one method `Channel#getBossBar` which returns one that can be displayed.
+  - [X] Boss bars must be displayed using `AdaptedBossBar#display`
 - Moved `Versions#getObjectiveAdapter` to `Players#getObjectiveAdapter`

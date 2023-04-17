@@ -1,5 +1,7 @@
 package me.googas.chat.adapters.v1_8;
 
+import static me.googas.chat.adapters.v1_8.LegacyBossBarAdapter.getWitherLocation;
+
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -10,39 +12,49 @@ import me.googas.chat.debug.Debugger;
 import me.googas.chat.exceptions.PacketHandlingException;
 import me.googas.chat.packet.Packet;
 import me.googas.chat.packet.PacketType;
+import me.googas.chat.packet.bossbar.WrappedBarColor;
+import me.googas.chat.packet.bossbar.WrappedBarStyle;
 import me.googas.chat.packet.entity.WrappedDataWatcher;
 import me.googas.chat.packet.entity.WrappedEntity;
+import me.googas.chat.packet.entity.WrappedEntityLiving;
 import me.googas.chat.packet.entity.WrappedEntityWither;
+import me.googas.chat.packet.world.WrappedCraftWorld;
+import me.googas.chat.packet.world.WrappedWorldServer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class LegacyAdaptedBossBar implements AdaptedBossBar {
 
   @NonNull @Getter private final UUID owner;
-  @NonNull private final WrappedEntityWither wither;
-  @Getter private boolean destroyed;
   private String title;
-  private float progress = 1;
+  private float progress;
+  private WrappedEntityWither wither;
+  @Getter private boolean destroyed;
 
-  LegacyAdaptedBossBar(@NonNull UUID owner, @NonNull WrappedEntityWither wither) {
+  public LegacyAdaptedBossBar(@NonNull UUID owner) {
     this.owner = owner;
-    this.wither = wither;
+    this.title = "";
+    this.progress = 1;
+    this.destroyed = false;
   }
 
+  @NonNull
   @Override
-  public void setTitle(@NonNull String title) {
+  public LegacyAdaptedBossBar setTitle(@NonNull String title) {
     Optional<Player> bukkit = this.getOwnerBukkit();
     if (bukkit.isPresent()) {
       this.title = title;
-      this.callMetadataPacket(bukkit.get());
+      if (this.isDisplayed()) {
+        this.callMetadataPacket(bukkit.get());
+      }
     } else {
       destroy();
     }
+    return this;
   }
 
   private void callMetadataPacket(@NonNull Player player) {
     try {
-
       Packet packet =
           PacketType.Play.ClientBound.ENTITY_METADATA.create(
               new Class[] {int.class, WrappedDataWatcher.CLAZZ.getClazz(), boolean.class},
@@ -71,19 +83,38 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     return dataWatcher.get().orElseThrow(NullPointerException::new);
   }
 
+  @NonNull
   @Override
-  public void setProgress(float progress) {
+  public LegacyAdaptedBossBar setProgress(float progress) {
     if (progress <= 0) {
       this.destroy();
     } else {
       Optional<Player> bukkit = this.getOwnerBukkit();
       if (bukkit.isPresent()) {
         this.progress = progress;
-        this.callMetadataPacket(bukkit.get());
+        if (this.isDisplayed()) {
+          this.callMetadataPacket(bukkit.get());
+        }
       } else {
         destroy();
       }
     }
+    return this;
+  }
+
+  @Override
+  public @NonNull LegacyAdaptedBossBar setColor(@NonNull WrappedBarColor color) {
+    return this;
+  }
+
+  @Override
+  public @NonNull LegacyAdaptedBossBar setStyle(@NonNull WrappedBarStyle style) {
+    return this;
+  }
+
+  @Override
+  public boolean isDisplayed() {
+    return wither != null && wither.isPresent();
   }
 
   public void teleport() {
@@ -91,7 +122,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     if (bukkit.isPresent()) {
       try {
         Player player = bukkit.get();
-        Location location = LegacyBossBarAdapter.getWitherLocation(player.getLocation());
+        Location location = getWitherLocation(player.getLocation());
         wither.setLocation(location.getX(), location.getY(), location.getZ(), 0, 0);
         Packet packet =
             PacketType.Play.ClientBound.ENTITY_TELEPORT.create(
@@ -130,7 +161,41 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     }
   }
 
-  private interface WitherRunnable {
-    void run() throws PacketHandlingException;
+  @Override
+  public @NonNull LegacyAdaptedBossBar display() {
+    Optional<Player> owner = this.getOwnerBukkit();
+    if (owner.isPresent()) {
+      if (!this.isDisplayed()) {
+        this.displayWither(owner.get());
+      }
+    } else {
+      this.destroy();
+    }
+    return this;
+  }
+
+  private void displayWither(@NonNull Player player) {
+    try {
+      Location location = player.getLocation();
+      Location witherLocation = getWitherLocation(location);
+      WrappedWorldServer world = WrappedCraftWorld.of(player.getWorld()).getHandle();
+      wither = WrappedEntityWither.construct(world);
+      wither.setCustomName(title);
+      wither.setInvisible(true);
+      wither.setHealth(progress * wither.getMaxHealth());
+      wither.setLocation(witherLocation.getX(), witherLocation.getY(), witherLocation.getZ(), 0, 0);
+      Packet packet =
+          PacketType.Play.ClientBound.SPAWN_ENTITY_LIVING.create(
+              new Class[] {WrappedEntityLiving.CLAZZ.getClazz()},
+              wither
+                  .get()
+                  .orElseThrow(
+                      () ->
+                          new PacketHandlingException("Wither could not be created successfully")));
+      packet.send(player);
+    } catch (PacketHandlingException e) {
+      Debugger.getInstance().handle(Level.SEVERE, "Failed to create boss bar for player", e);
+      this.destroyed = true;
+    }
   }
 }

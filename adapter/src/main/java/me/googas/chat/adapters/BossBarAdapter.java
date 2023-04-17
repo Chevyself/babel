@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 
 public interface BossBarAdapter {
 
+  @Deprecated
+  @NonNull
   AdaptedBossBar create(
       @NonNull Player player,
       @NonNull String title,
@@ -16,7 +18,12 @@ public interface BossBarAdapter {
       WrappedBarColor color,
       WrappedBarStyle style);
 
+  @Deprecated
+  @NonNull
   AdaptedBossBar create(@NonNull Player player, @NonNull String title, float progress);
+
+  @NonNull
+  AdaptedBossBar create(@NonNull Player player);
 
   @NonNull
   Optional<? extends AdaptedBossBar> getBossBar(@NonNull UUID owner);

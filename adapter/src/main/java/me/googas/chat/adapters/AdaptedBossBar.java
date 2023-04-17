@@ -3,6 +3,8 @@ package me.googas.chat.adapters;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.NonNull;
+import me.googas.chat.packet.bossbar.WrappedBarColor;
+import me.googas.chat.packet.bossbar.WrappedBarStyle;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -16,11 +18,24 @@ public interface AdaptedBossBar {
     return Optional.ofNullable(Bukkit.getPlayer(this.getOwner()));
   }
 
-  void setTitle(@NonNull String title);
+  @NonNull
+  AdaptedBossBar setTitle(@NonNull String title);
 
-  void setProgress(float progress);
+  @NonNull
+  AdaptedBossBar setProgress(float progress);
+
+  @NonNull
+  AdaptedBossBar setColor(@NonNull WrappedBarColor color);
+
+  @NonNull
+  AdaptedBossBar setStyle(@NonNull WrappedBarStyle style);
 
   boolean isDestroyed();
 
+  boolean isDisplayed();
+
   void destroy();
+
+  @NonNull
+  AdaptedBossBar display();
 }

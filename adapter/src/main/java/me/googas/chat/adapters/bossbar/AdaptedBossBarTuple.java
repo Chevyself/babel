@@ -1,0 +1,70 @@
+package me.googas.chat.adapters.bossbar;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import lombok.Getter;
+import lombok.NonNull;
+import me.googas.chat.adapters.AdaptedBossBar;
+import me.googas.chat.packet.bossbar.WrappedBarColor;
+import me.googas.chat.packet.bossbar.WrappedBarStyle;
+
+public class AdaptedBossBarTuple implements AdaptedBossBar {
+
+  @NonNull @Getter private final UUID owner = UUID.randomUUID();
+  @NonNull private final Set<AdaptedBossBar> bossBars;
+
+  public AdaptedBossBarTuple(@NonNull Set<AdaptedBossBar> bossBars) {
+    this.bossBars = bossBars;
+  }
+
+  public AdaptedBossBarTuple(@NonNull Collection<AdaptedBossBar> bossBars) {
+    this(new HashSet<>(bossBars));
+  }
+
+  @Override
+  public @NonNull AdaptedBossBarTuple setTitle(@NonNull String title) {
+    this.bossBars.forEach(bossBar -> bossBar.setTitle(title));
+    return this;
+  }
+
+  @Override
+  public @NonNull AdaptedBossBarTuple setProgress(float progress) {
+    this.bossBars.forEach(bossBar -> bossBar.setProgress(progress));
+    return this;
+  }
+
+  @Override
+  public @NonNull AdaptedBossBarTuple setColor(@NonNull WrappedBarColor color) {
+    this.bossBars.forEach(bossBar -> bossBar.setColor(color));
+    return this;
+  }
+
+  @Override
+  public @NonNull AdaptedBossBarTuple setStyle(@NonNull WrappedBarStyle style) {
+    this.bossBars.forEach(bossBar -> bossBar.setStyle(style));
+    return this;
+  }
+
+  @Override
+  public boolean isDestroyed() {
+    return this.bossBars.stream().anyMatch(AdaptedBossBar::isDestroyed);
+  }
+
+  @Override
+  public boolean isDisplayed() {
+    return this.bossBars.stream().allMatch(AdaptedBossBar::isDisplayed);
+  }
+
+  @Override
+  public void destroy() {
+    this.bossBars.forEach(AdaptedBossBar::destroy);
+  }
+
+  @Override
+  public @NonNull AdaptedBossBarTuple display() {
+    this.bossBars.forEach(AdaptedBossBar::display);
+    return this;
+  }
+}

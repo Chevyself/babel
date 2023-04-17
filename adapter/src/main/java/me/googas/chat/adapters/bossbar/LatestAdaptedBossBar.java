@@ -1,21 +1,51 @@
 package me.googas.chat.adapters.bossbar;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
 import me.googas.chat.adapters.AdaptedBossBar;
+import me.googas.chat.packet.bossbar.WrappedBarColor;
+import me.googas.chat.packet.bossbar.WrappedBarStyle;
+import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 
 public class LatestAdaptedBossBar implements AdaptedBossBar {
-
-  @NonNull private final BossBar bukkit;
   @NonNull @Getter private final UUID owner;
+  @NonNull private String title;
+  private float progress;
+  @NonNull private WrappedBarColor color;
+  @NonNull private WrappedBarStyle style;
+
+  private BossBar bukkit;
   @Getter private boolean destroyed;
 
-  LatestAdaptedBossBar(@NonNull BossBar bukkit, @NonNull UUID owner) {
-    this.bukkit = bukkit;
+  public LatestAdaptedBossBar(@NonNull UUID owner) {
     this.owner = owner;
+    this.title = "";
+    this.progress = 1;
+    this.color = WrappedBarColor.BLUE;
+    this.style = WrappedBarStyle.SOLID;
+    this.destroyed = false;
+  }
+
+  @NonNull
+  @Override
+  public LatestAdaptedBossBar display() {
+    Optional<Player> owner = this.getOwnerBukkit();
+    if (owner.isPresent()) {
+      if (!this.isDisplayed()) {
+        this.bukkit =
+            Bukkit.createBossBar(this.title, this.color.getWrapped(), this.style.getWrapped());
+        this.bukkit.setProgress(this.progress);
+        this.bukkit.addPlayer(owner.get());
+      }
+    } else {
+      this.destroy();
+    }
+    return this;
   }
 
   @Override
@@ -32,28 +62,71 @@ public class LatestAdaptedBossBar implements AdaptedBossBar {
   }
 
   @Override
-  public void setTitle(@NonNull String title) {
+  @NonNull
+  public LatestAdaptedBossBar setTitle(@NonNull String title) {
     if (this.getOwnerBukkit().isPresent()) {
-      this.bukkit.setTitle(title);
+      this.title = title;
+      if (this.isDisplayed()) {
+        this.bukkit.setTitle(title);
+      }
     } else {
       this.destroy();
     }
+    return this;
   }
 
   @Override
-  public void setProgress(float progress) {
-    if (this.getOwnerBukkit().isPresent()) {
-      this.setProgress(progress);
+  @NonNull
+  public LatestAdaptedBossBar setProgress(float progress) {
+    if (this.getOwnerBukkit().isPresent() && progress >= 0) {
+      this.progress = progress;
+      if (this.isDisplayed()) {
+        this.bukkit.setProgress(progress);
+      }
     } else {
       this.destroy();
     }
+    return this;
+  }
+
+  @Override
+  public @NonNull AdaptedBossBar setColor(@NonNull WrappedBarColor color) {
+    if (this.getOwnerBukkit().isPresent()) {
+      this.color = color;
+      if (this.isDisplayed()) {
+        this.bukkit.setColor(color.getWrapped());
+      }
+    } else {
+      this.destroy();
+    }
+    return this;
+  }
+
+  @Override
+  public @NonNull AdaptedBossBar setStyle(@NonNull WrappedBarStyle style) {
+    if (this.getOwnerBukkit().isPresent()) {
+      this.style = style;
+      if (this.isDisplayed()) {
+        this.bukkit.setStyle(style.getWrapped());
+      }
+    } else {
+      this.destroy();
+    }
+    return this;
+  }
+
+  @Override
+  public boolean isDisplayed() {
+    return this.bukkit != null;
   }
 
   @Override
   public void destroy() {
     if (!this.destroyed) {
       this.destroyed = true;
-      this.bukkit.removeAll();
+      if (this.bukkit != null) {
+        this.bukkit.removeAll();
+      }
     }
   }
 }

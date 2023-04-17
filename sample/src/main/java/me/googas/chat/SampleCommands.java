@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Level;
 import lombok.NonNull;
-import me.googas.chat.adapters.AdaptedBossBar;
 import me.googas.chat.api.Channel;
 import me.googas.chat.api.Language;
 import me.googas.chat.api.scoreboard.ScoreboardLine;
@@ -37,15 +36,7 @@ public class SampleCommands {
       Channel channel,
       @Required(name = "progress") double progress,
       @Required(name = "text", behaviour = ArgumentBehaviour.CONTINUOUS) String text) {
-    Optional<? extends AdaptedBossBar> bossBar = channel.getBossBar();
-    float floatValue = ((Double) progress).floatValue();
-    if (bossBar.isPresent()) {
-      bossBar.get().setTitle(text);
-      bossBar.get().setProgress(floatValue);
-    } else {
-      channel.giveBossBar(text, floatValue);
-    }
-
+    channel.getBossBar().setTitle(text).setProgress((float) progress).display();
     return Text.of("Given boss bar");
   }
 

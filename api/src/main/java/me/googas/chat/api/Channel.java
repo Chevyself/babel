@@ -217,14 +217,8 @@ public interface Channel {
    */
   Optional<Locale> getLocale();
 
-  void giveBossBar(@NonNull String text, float progress);
-
-  default void giveBossBar(@NonNull Text text, float progress) {
-    this.giveBossBar(text.asString(this), progress);
-  }
-
   @NonNull
-  Optional<? extends AdaptedBossBar> getBossBar();
+  AdaptedBossBar getBossBar();
 
   @NonNull
   TabView giveTabView();

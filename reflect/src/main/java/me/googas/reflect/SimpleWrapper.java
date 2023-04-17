@@ -29,7 +29,7 @@ public abstract class SimpleWrapper<T> implements Wrapper<T> {
   }
 
   @Override
-  public Optional<T> get() {
+  public @NonNull Optional<T> get() {
     return Optional.ofNullable(this.reference);
   }
 

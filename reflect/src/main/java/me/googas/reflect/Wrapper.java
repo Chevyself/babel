@@ -35,7 +35,7 @@ public interface Wrapper<T> {
   /**
    * Get the wrapped object.
    *
-   * @return the wrapped objet
+   * @return the wrapped object
    */
   T getWrapped();
 
