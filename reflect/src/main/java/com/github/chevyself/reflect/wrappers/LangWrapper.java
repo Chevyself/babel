@@ -2,7 +2,6 @@ package com.github.chevyself.reflect.wrappers;
 
 import com.github.chevyself.reflect.Wrapper;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -17,12 +16,6 @@ class LangWrapper<T> implements Wrapper<T> {
 
   LangWrapper(T wrapped) {
     this.wrapped = wrapped;
-  }
-
-  @Override
-  @Deprecated
-  public @NonNull Optional<T> get() {
-    return Optional.ofNullable(this.wrapped);
   }
 
   @Override

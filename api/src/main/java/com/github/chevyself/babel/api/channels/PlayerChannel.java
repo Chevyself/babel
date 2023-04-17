@@ -106,10 +106,10 @@ public interface PlayerChannel extends Channel {
     this.getPlayer()
         .ifPresent(
             player -> {
-              if (Versions.BUKKIT < 11 || !category.get().isPresent()) {
+              if (Versions.BUKKIT < 11) {
                 player.playSound(location, sound, volume, pitch);
               } else {
-                player.playSound(location, sound, category.get().get(), volume, pitch);
+                player.playSound(location, sound, category.getWrapped(), volume, pitch);
               }
             });
   }

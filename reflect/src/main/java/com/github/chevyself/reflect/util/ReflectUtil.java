@@ -105,4 +105,10 @@ public final class ReflectUtil {
   public static <T> Class<T> getBoxing(@NonNull Class<T> primitive) {
     return (Class<T>) ReflectUtil.boxing.get(primitive);
   }
+
+  @NonNull
+  public static <O, T extends Exception> O nonNull(O o, T exception) throws T {
+    if (o == null) throw exception;
+    return o;
+  }
 }

@@ -1,8 +1,5 @@
 package com.github.chevyself.reflect;
 
-import java.util.Optional;
-import lombok.NonNull;
-
 /**
  * Wraps an element.
  *
@@ -19,17 +16,6 @@ public interface Wrapper<T> {
    */
   static <T> Wrapper<T> wrap(T object) {
     return new AbstractWrapper<>(object);
-  }
-
-  /**
-   * Get the wrapped object.
-   *
-   * @deprecated use {@link #getWrapped()}
-   * @return a {@link Optional} containing the nullable wrapped object
-   */
-  @NonNull
-  default Optional<T> get() {
-    throw new UnsupportedOperationException("Deprecated");
   }
 
   /**

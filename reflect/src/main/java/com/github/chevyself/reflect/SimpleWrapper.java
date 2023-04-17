@@ -1,6 +1,5 @@
 package com.github.chevyself.reflect;
 
-import java.util.Optional;
 import java.util.StringJoiner;
 import lombok.NonNull;
 
@@ -26,11 +25,6 @@ public abstract class SimpleWrapper<T> implements Wrapper<T> {
   @Override
   public T getWrapped() {
     return reference;
-  }
-
-  @Override
-  public @NonNull Optional<T> get() {
-    return Optional.ofNullable(this.reference);
   }
 
   @Override

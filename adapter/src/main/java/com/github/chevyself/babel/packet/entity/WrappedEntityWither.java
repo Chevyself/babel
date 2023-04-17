@@ -55,7 +55,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
   public static WrappedEntityWither construct(@NonNull WrappedWorldServer server)
       throws PacketHandlingException {
     try {
-      return new WrappedEntityWither(CONSTRUCTOR.invoke(server.get().orElse(null)));
+      return new WrappedEntityWither(CONSTRUCTOR.invoke(server.getWrapped()));
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not create EntityEnderDragon", e);
     }

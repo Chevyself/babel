@@ -15,6 +15,7 @@ import com.github.chevyself.babel.packet.entity.WrappedEntityLiving;
 import com.github.chevyself.babel.packet.entity.WrappedEntityWither;
 import com.github.chevyself.babel.packet.world.WrappedCraftWorld;
 import com.github.chevyself.babel.packet.world.WrappedWorldServer;
+import com.github.chevyself.reflect.util.ReflectUtil;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -80,7 +81,9 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     dataWatcher.a(18, 0);
     dataWatcher.a(19, 0);
     dataWatcher.a(20, 881);
-    return dataWatcher.get().orElseThrow(NullPointerException::new);
+    return ReflectUtil.nonNull(
+        dataWatcher.getWrapped(),
+        new PacketHandlingException("DataWatcher was not created successfully"));
   }
 
   @NonNull
@@ -130,10 +133,8 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
         Packet packet =
             PacketType.Play.ClientBound.ENTITY_TELEPORT.create(
                 new Class[] {WrappedEntity.CLAZZ.getClazz()},
-                wither
-                    .get()
-                    .orElseThrow(
-                        () -> new PacketHandlingException("Wither is no longer reachable")));
+                ReflectUtil.nonNull(
+                    wither, new PacketHandlingException("Wither is no longer reachable")));
         packet.send(player);
       } catch (PacketHandlingException e) {
         Debugger.getInstance().handle(Level.SEVERE, "Failed to send teleport packet");
@@ -190,11 +191,8 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
       Packet packet =
           PacketType.Play.ClientBound.SPAWN_ENTITY_LIVING.create(
               new Class[] {WrappedEntityLiving.CLAZZ.getClazz()},
-              wither
-                  .get()
-                  .orElseThrow(
-                      () ->
-                          new PacketHandlingException("Wither could not be created successfully")));
+              ReflectUtil.nonNull(
+                  wither, new PacketHandlingException("Wither could not be created successfully")));
       packet.send(player);
     } catch (PacketHandlingException e) {
       Debugger.getInstance().handle(Level.SEVERE, "Failed to create boss bar for player", e);
