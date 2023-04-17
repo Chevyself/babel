@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.github.chevyself.reflect.Wrapper;
 import lombok.NonNull;
 
 /** Static utilities for java reflection. */
@@ -107,8 +109,13 @@ public final class ReflectUtil {
   }
 
   @NonNull
-  public static <O, T extends Exception> O nonNull(O o, T exception) throws T {
+  public static <O, T extends Exception> O nonNull(O o, @NonNull T exception) throws T {
     if (o == null) throw exception;
     return o;
+  }
+
+  @NonNull
+  public static <O, T extends Exception> O nonNullWrapped(@NonNull Wrapper<O> wrapper, @NonNull T exception) throws T {
+    return nonNull(wrapper.getWrapped(), exception);
   }
 }

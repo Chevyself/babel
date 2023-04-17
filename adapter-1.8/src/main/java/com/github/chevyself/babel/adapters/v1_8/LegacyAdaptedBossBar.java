@@ -81,8 +81,8 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     dataWatcher.a(18, 0);
     dataWatcher.a(19, 0);
     dataWatcher.a(20, 881);
-    return ReflectUtil.nonNull(
-        dataWatcher.getWrapped(),
+    return ReflectUtil.nonNullWrapped(
+        dataWatcher,
         new PacketHandlingException("DataWatcher was not created successfully"));
   }
 
@@ -132,8 +132,8 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
         wither.setLocation(location.getX(), location.getY(), location.getZ(), 0, 0);
         Packet packet =
             PacketType.Play.ClientBound.ENTITY_TELEPORT.create(
-                new Class[] {WrappedEntity.CLAZZ.getClazz()},
-                ReflectUtil.nonNull(
+                    new Class[] {WrappedEntity.CLAZZ.getClazz()},
+                ReflectUtil.nonNullWrapped(
                     wither, new PacketHandlingException("Wither is no longer reachable")));
         packet.send(player);
       } catch (PacketHandlingException e) {
@@ -161,7 +161,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                   Debugger.getInstance().handle(Level.SEVERE, "Failed to destroy wither entity", e);
                 }
               });
-      wither.set(null);
+      wither.setWrapped(null);
     }
   }
 
@@ -191,7 +191,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
       Packet packet =
           PacketType.Play.ClientBound.SPAWN_ENTITY_LIVING.create(
               new Class[] {WrappedEntityLiving.CLAZZ.getClazz()},
-              ReflectUtil.nonNull(
+              ReflectUtil.nonNullWrapped(
                   wither, new PacketHandlingException("Wither could not be created successfully")));
       packet.send(player);
     } catch (PacketHandlingException e) {
