@@ -75,9 +75,7 @@ public final class LocalizedReference implements Text {
     if (!formatters.isEmpty()) localized.format(formatters);
     if (!linePlaceholders.isEmpty())
       localized.placeholders(linePlaceholders.toArray(new Placeholder[0]));
-    return localized
-            .setSample(this.sample)
-            .setHasPlaceholders(this.hasPlaceholders);
+    return localized.setSample(this.sample).setHasPlaceholders(this.hasPlaceholders);
   }
 
   /**

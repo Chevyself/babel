@@ -4,6 +4,7 @@ import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import com.github.chevyself.babel.packet.properties.WrappedProperty;
+import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.AbstractWrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedField;
@@ -16,8 +17,8 @@ import lombok.NonNull;
 public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
 
   @NonNull
-  private static final WrappedClass<?> ENTITY_PLAYER =
-      WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".EntityPlayer");
+  public static final WrappedClass<?> ENTITY_PLAYER =
+      Versions.wrapNmsClassByName("server.level", "EntityPlayer");
 
   @NonNull
   private static final WrappedMethod<?> GET_PROFILE = ENTITY_PLAYER.getMethod("getProfile");
@@ -26,9 +27,15 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
   private static final WrappedMethod<?> GET_PLAYER_LIST_NAME =
       ENTITY_PLAYER.getMethod("getPlayerListName");
 
-  @NonNull
-  private static final WrappedField<?> PLAYER_CONNECTION =
-      WrappedEntityPlayer.ENTITY_PLAYER.getDeclaredField("playerConnection");
+  @NonNull private static final WrappedField<?> PLAYER_CONNECTION;
+
+  static {
+    if (Versions.BUKKIT < 16) {
+      PLAYER_CONNECTION = WrappedEntityPlayer.ENTITY_PLAYER.getDeclaredField("playerConnection");
+    } else {
+      PLAYER_CONNECTION = WrappedEntityPlayer.ENTITY_PLAYER.getDeclaredField("b");
+    }
+  }
 
   @NonNull
   private static final WrappedField<?> PLAYER_INTERACT_MANAGER =

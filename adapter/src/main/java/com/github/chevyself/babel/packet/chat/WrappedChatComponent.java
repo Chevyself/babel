@@ -1,6 +1,6 @@
 package com.github.chevyself.babel.packet.chat;
 
-import com.github.chevyself.babel.packet.Packet;
+import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.AbstractWrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.google.gson.Gson;
@@ -15,7 +15,7 @@ public final class WrappedChatComponent extends AbstractWrapper<Object> {
 
   @NonNull
   public static final WrappedClass<?> CLAZZ =
-      WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".IChatBaseComponent");
+      Versions.wrapNmsClassByName("network.chat", "IChatBaseComponent");
 
   /**
    * Create the wrapper.
@@ -56,8 +56,7 @@ public final class WrappedChatComponent extends AbstractWrapper<Object> {
 
     @NonNull
     private static final WrappedClass<?> CHAT_SERIALIZER =
-        WrappedClass.forName(
-            "net.minecraft.server." + Packet.NMS + ".IChatBaseComponent$ChatSerializer");
+        Versions.wrapNmsClassByName("network.chat", "IChatBaseComponent$ChatSerializer");
 
     @NonNull @Getter private static final Gson gson = Serializer.getChatSerializer();
 

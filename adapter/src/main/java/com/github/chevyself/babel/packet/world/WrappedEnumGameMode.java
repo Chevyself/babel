@@ -1,6 +1,6 @@
 package com.github.chevyself.babel.packet.world;
 
-import com.github.chevyself.babel.packet.Packet;
+import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
@@ -15,9 +15,15 @@ public enum WrappedEnumGameMode implements Wrapper<Object> {
   ADVENTURE(GameMode.ADVENTURE),
   SPECTATOR(GameMode.SPECTATOR);
 
-  @NonNull
-  public static final WrappedClass<?> CLAZZ =
-      WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".WorldSettings$EnumGamemode");
+  @NonNull public static final WrappedClass<?> CLAZZ;
+
+  static {
+    if (Versions.BUKKIT >= 10) {
+      CLAZZ = Versions.wrapNmsClassByName("world.level", "EnumGamemode");
+    } else {
+      CLAZZ = Versions.wrapNmsClassByName("WorldSettings$EnumGamemode");
+    }
+  }
 
   public static final WrappedMethod<?> VALUE_OF = CLAZZ.getMethod("valueOf", String.class);
   @NonNull @Getter private final GameMode bukkit;

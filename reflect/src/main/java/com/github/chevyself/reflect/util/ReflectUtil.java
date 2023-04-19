@@ -1,18 +1,22 @@
 package com.github.chevyself.reflect.util;
 
+import com.github.chevyself.reflect.Wrapper;
+import com.github.chevyself.reflect.wrappers.WrappedClass;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.github.chevyself.reflect.Wrapper;
 import lombok.NonNull;
 
 /** Static utilities for java reflection. */
 public final class ReflectUtil {
 
   public static final Map<Class<?>, Class<?>> boxing = new HashMap<>();
+
+  private static final Map<Class<?>, Object> defValues = new HashMap<>();
 
   static {
     ReflectUtil.boxing.put(boolean.class, Boolean.class);
@@ -23,6 +27,16 @@ public final class ReflectUtil {
     ReflectUtil.boxing.put(long.class, Long.class);
     ReflectUtil.boxing.put(float.class, Float.class);
     ReflectUtil.boxing.put(double.class, Double.class);
+
+    ReflectUtil.defValues.put(boolean.class, false);
+    ReflectUtil.defValues.put(byte.class, (byte) 0);
+    ReflectUtil.defValues.put(short.class, (short) 0);
+    ReflectUtil.defValues.put(char.class, (char) 0);
+    ReflectUtil.defValues.put(int.class, 0);
+    ReflectUtil.defValues.put(long.class, 0L);
+    ReflectUtil.defValues.put(float.class, 0F);
+    ReflectUtil.defValues.put(double.class, 0D);
+    ReflectUtil.defValues.put(Collection.class, new ArrayList<>());
   }
 
   /**
@@ -93,6 +107,15 @@ public final class ReflectUtil {
     return true;
   }
 
+  public static boolean compareExactParameters(Class<?>[] paramTypes, Class<?>[] params) {
+    if (paramTypes == null || params == null) return true;
+    if (paramTypes.length != params.length) return false;
+    for (int i = 0; i < paramTypes.length; i++) {
+      if (!params[i].equals(paramTypes[i])) return false;
+    }
+    return true;
+  }
+
   /**
    * Get the class that boxes a primitive class.
    *
@@ -115,7 +138,26 @@ public final class ReflectUtil {
   }
 
   @NonNull
-  public static <O, T extends Exception> O nonNullWrapped(@NonNull Wrapper<O> wrapper, @NonNull T exception) throws T {
+  public static <O, T extends Exception> O nonNullWrapped(
+      @NonNull Wrapper<O> wrapper, @NonNull T exception) throws T {
     return nonNull(wrapper.getWrapped(), exception);
+  }
+
+  public static Object getDefaultValue(@NonNull Class<?> parameterType) {
+    return defValues.get(parameterType);
+  }
+
+  @NonNull
+  public static Class<?> getArrayClass(@NonNull WrappedClass<?> wrapper) {
+    Class<?> clazz = wrapper.getClazz();
+    if (clazz == null) {
+      throw new IllegalArgumentException("Cannot get array class from null");
+    } else {
+      try {
+        return Class.forName("[L" + clazz.getCanonicalName() + ";");
+      } catch (ClassNotFoundException e) {
+        throw new IllegalArgumentException("Cannot get array class from " + clazz);
+      }
+    }
   }
 }

@@ -8,6 +8,7 @@ import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.PacketType;
 import com.github.chevyself.babel.packet.entity.player.WrappedCraftPlayer;
+import com.github.chevyself.babel.packet.entity.player.WrappedEntityPlayer;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfo;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfoAction;
 import com.github.chevyself.reflect.modifiers.CollectionModifier;
@@ -135,9 +136,15 @@ public class PlayerTabView implements TabView {
     Optional<Player> optional = this.getViewer();
     if (optional.isPresent()) {
       Player player = optional.get();
-      Packet packet = PacketType.Play.ClientBound.PLAYER_INFO.create();
+      Packet packet =
+          PacketType.Play.ClientBound.PLAYER_INFO.create(
+              new Class[] {
+                WrappedPlayerInfoAction.CLAZZ.getClazz(),
+                WrappedEntityPlayer.ENTITY_PLAYER.getArrayClazz()
+              },
+              WrappedPlayerInfoAction.ADD_PLAYER.getWrapped(),
+              WrappedEntityPlayer.createArray(0));
       List<WrappedPlayerInfo> info = this.populate(packet, player);
-      packet.setField(0, WrappedPlayerInfoAction.ADD_PLAYER);
       packet.setField(1, CollectionModifier.addWrappers(info));
       packet.send(player);
     } else {

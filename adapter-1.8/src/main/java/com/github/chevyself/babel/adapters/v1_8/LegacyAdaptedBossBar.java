@@ -82,8 +82,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     dataWatcher.a(19, 0);
     dataWatcher.a(20, 881);
     return ReflectUtil.nonNullWrapped(
-        dataWatcher,
-        new PacketHandlingException("DataWatcher was not created successfully"));
+        dataWatcher, new PacketHandlingException("DataWatcher was not created successfully"));
   }
 
   @NonNull
@@ -132,7 +131,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
         wither.setLocation(location.getX(), location.getY(), location.getZ(), 0, 0);
         Packet packet =
             PacketType.Play.ClientBound.ENTITY_TELEPORT.create(
-                    new Class[] {WrappedEntity.CLAZZ.getClazz()},
+                new Class[] {WrappedEntity.CLAZZ.getClazz()},
                 ReflectUtil.nonNullWrapped(
                     wither, new PacketHandlingException("Wither is no longer reachable")));
         packet.send(player);

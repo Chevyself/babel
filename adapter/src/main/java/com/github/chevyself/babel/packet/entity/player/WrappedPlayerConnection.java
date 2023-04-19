@@ -2,6 +2,7 @@ package com.github.chevyself.babel.packet.entity.player;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
+import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.AbstractWrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
@@ -13,11 +14,20 @@ public class WrappedPlayerConnection extends AbstractWrapper<Object> {
 
   @NonNull
   private static final WrappedClass<?> ENTITY_PLAYER =
-      WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".PlayerConnection");
+      Versions.wrapNmsClassByName("server.network", "PlayerConnection");
 
-  @NonNull
-  private static final WrappedMethod<?> SEND_PACKET =
-      WrappedPlayerConnection.ENTITY_PLAYER.getMethod("sendPacket", Packet.PACKET_CLASS.getClazz());
+  @NonNull private static final WrappedMethod<?> SEND_PACKET;
+
+  static {
+    if (Versions.BUKKIT < 18) {
+      SEND_PACKET =
+          WrappedPlayerConnection.ENTITY_PLAYER.getMethod(
+              "sendPacket", Packet.PACKET_CLASS.getClazz());
+    } else {
+      SEND_PACKET =
+          WrappedPlayerConnection.ENTITY_PLAYER.getExactMethod("a", Packet.PACKET_CLASS.getClazz());
+    }
+  }
 
   /**
    * Create the wrapper.

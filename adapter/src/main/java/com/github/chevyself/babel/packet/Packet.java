@@ -2,6 +2,7 @@ package com.github.chevyself.babel.packet;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.entity.player.WrappedCraftPlayer;
+import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.modifiers.Modifier;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
@@ -27,7 +28,7 @@ public final class Packet extends ReflectWrapper {
   /** The class of the packet. */
   @NonNull
   public static final WrappedClass<?> PACKET_CLASS =
-      WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".Packet");
+      Versions.wrapNmsClassByName("network.protocol", "Packet");
 
   @NonNull @Getter private final PacketType type;
   @NonNull @Getter private final WrappedClass<?> clazz;
@@ -67,7 +68,7 @@ public final class Packet extends ReflectWrapper {
         WrappedConstructor<?> constructor = clazz.getConstructor(params);
         handle = constructor.invoke(objects);
       } else {
-        handle = clazz.getConstructor().invoke();
+        handle = clazz.newInstance();
       }
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke constructor for packet", e);
@@ -97,7 +98,7 @@ public final class Packet extends ReflectWrapper {
           throw new PacketHandlingException("Could not find constructor for packet");
         }
       } else {
-        handle = clazz.getConstructor().invoke();
+        handle = clazz.newInstance();
       }
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke constructor for packet", e);

@@ -1,7 +1,7 @@
 package com.github.chevyself.babel.api.dependencies.viaversion;
 
 import com.github.chevyself.babel.api.channels.PlayerChannel;
-import com.github.chevyself.babel.api.util.Versions;
+import com.github.chevyself.babel.util.Versions;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.Getter;

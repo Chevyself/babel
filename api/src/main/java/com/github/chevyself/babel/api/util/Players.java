@@ -1,6 +1,5 @@
 package com.github.chevyself.babel.api.util;
 
-import com.github.chevyself.babel.adapters.*;
 import com.github.chevyself.babel.adapters.BossBarAdapter;
 import com.github.chevyself.babel.adapters.ObjectiveAdapter;
 import com.github.chevyself.babel.adapters.PlayerLocaleAdapter;
@@ -16,6 +15,7 @@ import com.github.chevyself.babel.adapters.v1_11.LegacyPlayerTabListAdapter;
 import com.github.chevyself.babel.adapters.v1_11.LegacyPlayerTitleAdapter;
 import com.github.chevyself.babel.adapters.v1_12.LegacyObjectiveAdapter;
 import com.github.chevyself.babel.adapters.v1_8.LegacyBossBarAdapter;
+import com.github.chevyself.babel.util.Versions;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 

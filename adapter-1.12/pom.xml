@@ -7,18 +7,18 @@
     <parent>
         <groupId>com.github.chevyself.babel</groupId>
         <artifactId>babel</artifactId>
-        <version>1.0.0-ALPHA-6</version>
+        <version>1.0.0-ALPHA</version>
     </parent>
 
     <artifactId>adapter-1.12</artifactId>
-    <version>1.0.0-ALPHA-6</version>
+    <version>1.0.0-ALPHA</version>
 
     <dependencies>
         <!-- Adapters core -->
         <dependency>
             <groupId>com.github.chevyself.babel</groupId>
             <artifactId>adapter</artifactId>
-            <version>1.0.0-ALPHA-6</version>
+            <version>1.0.0-ALPHA</version>
         </dependency>
         <!-- Spigot -->
         <dependency>

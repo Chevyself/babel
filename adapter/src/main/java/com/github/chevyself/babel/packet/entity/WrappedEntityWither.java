@@ -1,9 +1,9 @@
 package com.github.chevyself.babel.packet.entity;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
-import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.world.WrappedWorld;
 import com.github.chevyself.babel.packet.world.WrappedWorldServer;
+import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedConstructor;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
@@ -13,8 +13,7 @@ import lombok.NonNull;
 public class WrappedEntityWither extends WrappedEntityLiving {
 
   @NonNull
-  private static final WrappedClass<?> ENTITY_WITHER =
-      WrappedClass.forName("net.minecraft.server." + Packet.NMS + ".EntityWither");
+  private static final WrappedClass<?> ENTITY_WITHER = Versions.wrapNmsClassByName("EntityWither");
 
   @NonNull
   private static final WrappedConstructor<?> CONSTRUCTOR =

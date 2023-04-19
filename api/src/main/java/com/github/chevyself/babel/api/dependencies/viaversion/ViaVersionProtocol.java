@@ -2,7 +2,7 @@ package com.github.chevyself.babel.api.dependencies.viaversion;
 
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.channels.PlayerChannel;
-import com.github.chevyself.babel.api.util.Versions;
+import com.github.chevyself.babel.util.Versions;
 import com.viaversion.viaversion.api.Via;
 import java.util.HashMap;
 import java.util.HashSet;

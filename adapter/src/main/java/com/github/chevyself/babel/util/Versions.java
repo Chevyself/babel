@@ -1,5 +1,7 @@
-package com.github.chevyself.babel.api.util;
+package com.github.chevyself.babel.util;
 
+import com.github.chevyself.babel.packet.Packet;
+import com.github.chevyself.reflect.wrappers.WrappedClass;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
@@ -69,6 +71,32 @@ public final class Versions {
         .filter(player -> player.getBukkit() == Versions.BUKKIT)
         .findFirst()
         .orElseThrow(NullPointerException::new);
+  }
+
+  @NonNull
+  public static String getCanonicalName(@NonNull String className) {
+    return getCanonicalName(null, className);
+  }
+
+  @NonNull
+  public static String getCanonicalName(String addedPackage, @NonNull String className) {
+    if (Versions.BUKKIT >= 17) {
+      return "net.minecraft."
+          + (addedPackage == null ? "network.protocol.game." : (addedPackage + "."))
+          + className;
+    } else {
+      return "net.minecraft.server." + Packet.NMS + "." + addedPackage + "." + className;
+    }
+  }
+
+  @NonNull
+  public static WrappedClass<?> wrapNmsClassByName(@NonNull String name) {
+    return wrapNmsClassByName(null, name);
+  }
+
+  @NonNull
+  public static WrappedClass<?> wrapNmsClassByName(String addedPackage, @NonNull String name) {
+    return WrappedClass.forName(getCanonicalName(addedPackage, name));
   }
 
   /**

@@ -1,6 +1,7 @@
 package com.github.chevyself.babel.packet;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
+import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import lombok.NonNull;
@@ -45,7 +46,7 @@ public final class PacketType {
    */
   @NonNull
   public String getCanonicalName() {
-    return "net.minecraft.server." + Packet.NMS + "." + name;
+    return Versions.getCanonicalName(this.name);
   }
 
   /**
@@ -82,10 +83,9 @@ public final class PacketType {
    * @param objects the objects to pass to the constructor
    * @return the new packet
    * @throws PacketHandlingException if the constructor of the packet could not be invoked
-   * @deprecated use {@link #create(Object...)} instead
    */
   @Deprecated
-  public @NonNull Packet create(@NonNull Class<?>[] params, @NonNull Object... objects)
+  public @NonNull Packet create(@NonNull Class<?>[] params, Object... objects)
       throws PacketHandlingException {
     return Packet.forType(this, params, objects);
   }

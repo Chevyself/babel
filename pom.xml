@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.chevyself.babel</groupId>
   <artifactId>babel</artifactId>
-  <version>1.0.0-ALPHA-6</version>
+  <version>1.0.0-ALPHA</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -32,6 +32,30 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <!-- Build number plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <urlScm>scm:git:git@github.com:chevyself/chat.git</urlScm>
+          <format>{0}-{1}</format>
+          <items>
+            <item>${project.version}</item>
+            <item>buildNumber</item>
+          </items>
+          <doCheck>false</doCheck>
+          <doUpdate>false</doUpdate>
+        </configuration>
       </plugin>
     </plugins>
   </build>

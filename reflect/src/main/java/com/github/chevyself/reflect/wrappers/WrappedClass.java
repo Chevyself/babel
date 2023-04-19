@@ -3,6 +3,7 @@ package com.github.chevyself.reflect.wrappers;
 import com.github.chevyself.reflect.util.ReflectUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -272,9 +273,18 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
       Class<?> returnType, @NonNull String name, Method method, Class<?>[] params) {
     if (method.getName().equals(name)) {
       Class<?>[] paramTypes = method.getParameterTypes();
-      Class<?> methodReturnType = method.getReturnType();
       return ReflectUtil.compareParameters(paramTypes, params)
           && (returnType == null || returnType.isAssignableFrom(method.getReturnType()));
+    }
+    return false;
+  }
+
+  private boolean compareExactMethods(
+      Class<?> returnType, @NonNull String name, Method method, Class<?>[] params) {
+    if (method.getName().equals(name)) {
+      Class<?>[] paramTypes = method.getParameterTypes();
+      return ReflectUtil.compareExactParameters(paramTypes, params)
+          && (returnType == null || returnType.equals(method.getReturnType()));
     }
     return false;
   }
@@ -377,7 +387,6 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    *
    * @return the wrapped class
    */
-  @NonNull
   public Class<O> getClazz() {
     return this.wrapped;
   }
@@ -400,5 +409,53 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
     return new StringJoiner(", ", WrappedClass.class.getSimpleName() + "[", "]")
         .add("clazz=" + wrapped)
         .toString();
+  }
+
+  public O newInstance()
+      throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    WrappedConstructor<O> emptyConstructor = this.getConstructor();
+    if (emptyConstructor.isPresent()) {
+      return emptyConstructor.invoke();
+    } else {
+      if (this.wrapped != null) {
+        for (Constructor<?> constructor : this.getWrapped().getConstructors()) {
+          Object[] params = new Object[constructor.getParameterCount()];
+          for (int i = 0; i < params.length; i++) {
+            params[i] = ReflectUtil.getDefaultValue(constructor.getParameterTypes()[i]);
+          }
+          //noinspection unchecked
+          return (O) constructor.newInstance(params);
+        }
+      }
+    }
+    return null;
+  }
+
+  @NonNull
+  public Class<?> getArrayClazz() {
+    return ReflectUtil.getArrayClass(this);
+  }
+
+  @NonNull
+  public WrappedClass<?> getArrayClazzWrapped() {
+    return WrappedClass.of(this.getArrayClazz());
+  }
+
+  @NonNull
+  public <T> WrappedMethod<T> getExactMethod(
+      Class<T> returnType, @NonNull String name, Class<?>... params) {
+    Method method = null;
+    for (Method referenceMethod : this.wrapped.getMethods()) {
+      if (this.compareExactMethods(returnType, name, referenceMethod, params)) {
+        method = referenceMethod;
+        break;
+      }
+    }
+    return WrappedMethod.of(method, returnType);
+  }
+
+  @NonNull
+  public <T> WrappedMethod<T> getExactMethod(@NonNull String name, Class<?>... params) {
+    return this.getExactMethod(null, name, params);
   }
 }
