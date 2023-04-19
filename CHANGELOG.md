@@ -17,4 +17,5 @@ Changelog
   - [X] Moved static utility methods to `TextUtility` class.
 - [X] Simplify boss-bars, instead of having two methods as `Channel#getBossBar` and `Channel#giveBossBar` now there is only one method `Channel#getBossBar` which returns one that can be displayed.
   - [X] Boss bars must be displayed using `AdaptedBossBar#display`
+- [X] Add support to `Packet`s which changed in Minecraft 1.17
 - Moved `Versions#getObjectiveAdapter` to `Players#getObjectiveAdapter`
