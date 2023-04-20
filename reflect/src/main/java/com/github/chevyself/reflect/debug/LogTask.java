@@ -4,9 +4,7 @@ import com.github.chevyself.reflect.debug.tasks.DebugTask;
 import lombok.Getter;
 import lombok.NonNull;
 
-/**
- * Represents a task that has messages to be logged.
- */
+/** Represents a task that has messages to be logged. */
 public class LogTask implements DebugTask {
 
   @Getter protected final int id;

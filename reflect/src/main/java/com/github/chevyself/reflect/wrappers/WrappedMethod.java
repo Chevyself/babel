@@ -13,8 +13,7 @@ import org.jetbrains.annotations.Nullable;
 /** This class wraps a {@link Method} to prepare. */
 public final class WrappedMethod<T> extends LangWrapper<Method> {
 
-  @Nullable
-  private final Class<T> returnType;
+  @Nullable private final Class<T> returnType;
 
   /**
    * Wrap a method.
@@ -81,7 +80,9 @@ public final class WrappedMethod<T> extends LangWrapper<Method> {
     if (invoke != null && returnType != null) {
       obj = returnType.cast(invoke);
     } else {
-      Debugger.getInstance().getLogger().severe("Unable to cast " + invoke + " to " + returnType + " in " + this.wrapped);
+      Debugger.getInstance()
+          .getLogger()
+          .severe("Unable to cast " + invoke + " to " + returnType + " in " + this.wrapped);
     }
     return obj;
   }

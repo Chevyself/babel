@@ -98,9 +98,12 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    * @throws IllegalAccessException if this Field object is enforcing Java language access control
    *     and the underlying field is either inaccessible or final.
    */
-  public boolean set(@Nullable Object object, @Nullable Object value) throws IllegalAccessException {
+  public boolean set(@Nullable Object object, @Nullable Object value)
+      throws IllegalAccessException {
     if (this.wrapped == null) {
-      Debugger.getInstance().getLogger().severe("Attempting to set the object: '" + object + "' in a null field");
+      Debugger.getInstance()
+          .getLogger()
+          .severe("Attempting to set the object: '" + object + "' in a null field");
       return false;
     }
     this.wrapped.set(object, value);
@@ -120,7 +123,9 @@ public final class WrappedField<O> extends LangWrapper<Field> {
   public boolean set(@Nullable Object object, @NonNull Modifier modifier)
       throws InvocationTargetException, IllegalAccessException {
     if (this.wrapped == null) {
-      Debugger.getInstance().getLogger().severe("Attempting to set the object in a null field, using the modifier: " + modifier);
+      Debugger.getInstance()
+          .getLogger()
+          .severe("Attempting to set the object in a null field, using the modifier: " + modifier);
       return false;
     }
     return modifier.modify(this, object);

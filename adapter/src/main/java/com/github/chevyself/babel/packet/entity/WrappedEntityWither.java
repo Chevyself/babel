@@ -37,7 +37,8 @@ public class WrappedEntityWither extends WrappedEntityLiving {
       WrappedEntityWither.ENTITY_WITHER.getMethod("setHealth", float.class);
 
   @NonNull
-  private static final WrappedMethod<Integer> GET_ID = WrappedEntityWither.ENTITY_WITHER.getMethod(int.class, "getId");
+  private static final WrappedMethod<Integer> GET_ID =
+      WrappedEntityWither.ENTITY_WITHER.getMethod(int.class, "getId");
 
   @NonNull
   private static final WrappedMethod<Float> GET_MAX_HEALTH =
