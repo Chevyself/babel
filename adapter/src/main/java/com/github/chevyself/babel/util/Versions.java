@@ -30,8 +30,7 @@ public final class Versions {
 
   public static final int MIN_BUKKIT = 8;
   public static final int MAX_BUKKIT = 19;
-  @NonNull
-  private static BukkitVersion BUKKIT_VERSION = Versions.checkBukkit();
+  @NonNull private static BukkitVersion BUKKIT_VERSION = Versions.checkBukkit();
 
   public static int BUKKIT = Versions.check();
 
@@ -129,7 +128,9 @@ public final class Versions {
 
     @Override
     public int compareTo(@NonNull Versions.BukkitVersion o) {
-      return this.major == o.major ? Integer.compare(this.minor, o.minor) : Integer.compare(this.major, o.major);
+      return this.major == o.major
+          ? Integer.compare(this.minor, o.minor)
+          : Integer.compare(this.major, o.major);
     }
 
     @Override

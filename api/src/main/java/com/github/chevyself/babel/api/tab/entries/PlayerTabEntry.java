@@ -81,7 +81,8 @@ public class PlayerTabEntry implements TabEntry {
               } catch (InvocationTargetException
                   | IllegalAccessException
                   | PacketHandlingException e) {
-                ErrorHandler.getInstance().handle(Level.SEVERE, "Could not get skin from player", e);
+                ErrorHandler.getInstance()
+                    .handle(Level.SEVERE, "Could not get skin from player", e);
                 return null;
               }
             })

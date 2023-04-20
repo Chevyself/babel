@@ -116,10 +116,8 @@ public class PlayerTabView implements TabView {
   }
 
   private Packet createPacket() throws PacketHandlingException {
-    return
-        PacketType.Play.ClientBound.PLAYER_INFO.create(
-            WrappedPlayerInfoAction.ADD_PLAYER.getWrapped(),
-            WrappedEntityPlayer.createArray(0));
+    return PacketType.Play.ClientBound.PLAYER_INFO.create(
+        WrappedPlayerInfoAction.ADD_PLAYER.getWrapped(), WrappedEntityPlayer.createArray(0));
   }
 
   /**

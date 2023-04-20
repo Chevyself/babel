@@ -11,9 +11,8 @@ public class LookUpTest {
 
   public static void main(String[] args) {
     Random random = new Random();
-    LookUp<Object, WrappedField<Object>> lookUp = LookUp.fieldOn(WrappedClass.of(Versions.class))
-        .since(8, "playerVersions")
-        .since(16, "c");
+    LookUp<Object, WrappedField<Object>> lookUp =
+        LookUp.fieldOn(WrappedClass.of(Versions.class)).since(8, "playerVersions").since(16, "c");
     Set<Integer> versions = new HashSet<>();
     while (versions.size() < 19 - 8) {
       // Random int from 8 to 19
@@ -23,5 +22,4 @@ public class LookUpTest {
       versions.add(version);
     }
   }
-
 }

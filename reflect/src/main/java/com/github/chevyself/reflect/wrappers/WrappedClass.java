@@ -190,7 +190,8 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
       return WrappedField.of(fieldType, null);
     }
     Field field = supplier.apply(this.wrapped);
-    if (field != null && fieldType != null
+    if (field != null
+        && fieldType != null
         && (exact
             ? !fieldType.equals(field.getType())
             : !fieldType.isAssignableFrom(field.getType()))) {

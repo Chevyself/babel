@@ -36,13 +36,14 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
   @NonNull
   private static final WrappedMethod<?> GET_PLAYER_LIST_NAME =
       LookUp.methodOn(WrappedEntityPlayer.ENTITY_PLAYER)
-              .since(8, "getPlayerListName")
-              .since(18, "J")
-              .since(19, 3, "K")
-              .since(19, 4, "J")
-                  .find();
+          .since(8, "getPlayerListName")
+          .since(18, "J")
+          .since(19, 3, "K")
+          .since(19, 4, "J")
+          .find();
 
-  @NonNull private static final WrappedField<?> PLAYER_CONNECTION =
+  @NonNull
+  private static final WrappedField<?> PLAYER_CONNECTION =
       LookUp.fieldOn(WrappedEntityPlayer.ENTITY_PLAYER)
           .since(8, "playerConnection")
           .since(16, "b")
@@ -104,7 +105,8 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
 
   @NonNull
   private WrappedPlayerInteractManager playerInteractManager() throws IllegalAccessException {
-    return new WrappedPlayerInteractManager(WrappedEntityPlayer.PLAYER_INTERACT_MANAGER.provide(this.wrapped));
+    return new WrappedPlayerInteractManager(
+        WrappedEntityPlayer.PLAYER_INTERACT_MANAGER.provide(this.wrapped));
   }
 
   @NonNull

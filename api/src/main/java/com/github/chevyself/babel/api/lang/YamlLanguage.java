@@ -86,12 +86,14 @@ public final class YamlLanguage implements Language {
               languages.add(YamlLanguage.load(resource, file));
             }
           } catch (LanguageParsingException e) {
-            ErrorHandler.getInstance().handle(Level.SEVERE, "Could not parse language in " + file, e);
+            ErrorHandler.getInstance()
+                .handle(Level.SEVERE, "Could not parse language in " + file, e);
           } catch (IOException e) {
             ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to create file in " + file, e);
           }
         } else {
-          ErrorHandler.getInstance().handle(Level.SEVERE, "Could not find resource " + resourcePath);
+          ErrorHandler.getInstance()
+              .handle(Level.SEVERE, "Could not find resource " + resourcePath);
         }
       }
       return languages;

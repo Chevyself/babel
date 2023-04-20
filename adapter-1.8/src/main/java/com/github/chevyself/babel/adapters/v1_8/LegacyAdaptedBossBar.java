@@ -157,7 +157,8 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                     packet.send(player);
                   }
                 } catch (PacketHandlingException e) {
-                  ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to destroy wither entity", e);
+                  ErrorHandler.getInstance()
+                      .handle(Level.SEVERE, "Failed to destroy wither entity", e);
                 }
               });
       wither.setWrapped(null);

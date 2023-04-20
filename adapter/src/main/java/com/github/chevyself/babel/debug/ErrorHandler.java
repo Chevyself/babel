@@ -9,21 +9,21 @@ import lombok.NonNull;
 /**
  * This class is used to handle errors and debug messages.
  *
- * <p>A default instance is provided by {@link LoggerErrorHandler} which only prints the messages to the
- * console.
+ * <p>A default instance is provided by {@link LoggerErrorHandler} which only prints the messages to
+ * the console.
  */
 @Deprecated
-  public abstract class ErrorHandler {
+public abstract class ErrorHandler {
 
-    private static ErrorHandler instance;
+  private static ErrorHandler instance;
 
-    /**
-     * Get the instance of the debugger.
-     *
-     * @return the instance
-     * @throws NullPointerException if the instance has not been initialized
-     */
-    @NonNull
+  /**
+   * Get the instance of the debugger.
+   *
+   * @return the instance
+   * @throws NullPointerException if the instance has not been initialized
+   */
+  @NonNull
   public static ErrorHandler getInstance() {
     return Objects.requireNonNull(ErrorHandler.instance, "Error handler has not been initialized");
   }

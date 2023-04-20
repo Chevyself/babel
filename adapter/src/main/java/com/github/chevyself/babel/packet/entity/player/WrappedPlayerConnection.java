@@ -17,7 +17,8 @@ public class WrappedPlayerConnection extends AbstractWrapper<Object> {
   private static final WrappedClass<?> ENTITY_PLAYER =
       Versions.wrapNmsClassByName("server.network", "PlayerConnection");
 
-  @NonNull private static final WrappedMethod<?> SEND_PACKET =
+  @NonNull
+  private static final WrappedMethod<?> SEND_PACKET =
       LookUp.methodOn(WrappedPlayerConnection.ENTITY_PLAYER)
           .usingParams(Packet.PACKET_CLASS.getClazz())
           .findExact(true)
