@@ -91,6 +91,12 @@
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
     </dependency>
+    <!-- Jetbrains annotation -->
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>24.0.1</version>
+    </dependency>
   </dependencies>
 
   <properties>

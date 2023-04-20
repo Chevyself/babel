@@ -25,7 +25,8 @@ public class WrappedPlayerConnection extends AbstractWrapper<Object> {
               "sendPacket", Packet.PACKET_CLASS.getClazz());
     } else {
       SEND_PACKET =
-          WrappedPlayerConnection.ENTITY_PLAYER.getExactMethod("a", Packet.PACKET_CLASS.getClazz());
+          WrappedPlayerConnection.ENTITY_PLAYER.getMethod(
+              null, "a", true, Packet.PACKET_CLASS.getClazz());
     }
   }
 

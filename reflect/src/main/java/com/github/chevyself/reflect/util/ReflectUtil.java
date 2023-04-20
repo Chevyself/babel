@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /** Static utilities for java reflection. */
 public final class ReflectUtil {
@@ -96,24 +97,33 @@ public final class ReflectUtil {
    *
    * @param paramTypes the first array
    * @param params the second array
+   * @param exact if true it will check that the classes are the same, if false it will check that
+   *     the classes are assignable from each other
    * @return true if both arrays have the same elements
    */
-  public static boolean compareParameters(Class<?>[] paramTypes, Class<?>[] params) {
+  public static boolean compareParameters(
+      @NonNull Class<?>[] paramTypes, @NonNull Class<?>[] params, boolean exact) {
     if (paramTypes == null || params == null) return true;
     if (paramTypes.length != params.length) return false;
     for (int i = 0; i < paramTypes.length; i++) {
-      if (!params[i].isAssignableFrom(paramTypes[i])) return false;
+      if ((exact && params[i].equals(paramTypes[i]))
+          || (!exact && params[i].isAssignableFrom(paramTypes[i]))) return false;
     }
     return true;
   }
 
-  public static boolean compareExactParameters(Class<?>[] paramTypes, Class<?>[] params) {
-    if (paramTypes == null || params == null) return true;
-    if (paramTypes.length != params.length) return false;
-    for (int i = 0; i < paramTypes.length; i++) {
-      if (!params[i].equals(paramTypes[i])) return false;
-    }
-    return true;
+  /**
+   * Compare two arrays of {@link Class}. This will check that the classes are in the same indexes
+   *
+   * @deprecated this does not allow to check if the classes are assignable from each other, use
+   *     {@link #compareParameters(Class[], Class[], boolean)} instead
+   * @param paramTypes the first array
+   * @param params the second array
+   * @return true if both arrays have the same elements
+   */
+  @Deprecated
+  public static boolean compareParameters(Class<?>[] paramTypes, Class<?>[] params) {
+    return ReflectUtil.compareParameters(paramTypes, params, false);
   }
 
   /**
@@ -131,22 +141,60 @@ public final class ReflectUtil {
     return (Class<T>) ReflectUtil.boxing.get(primitive);
   }
 
+  /**
+   * Checks that an object is not null else throws an exception.
+   *
+   * @param o the object to check
+   * @param exception the exception to throw
+   * @return the object if it is not null
+   * @param <O> the type of the object
+   * @param <T> the type of the exception
+   * @throws T if the object is null
+   */
   @NonNull
   public static <O, T extends Exception> O nonNull(O o, @NonNull T exception) throws T {
     if (o == null) throw exception;
     return o;
   }
 
+  /**
+   * Checks that an object inside a wrapper is not null else throws an exception.
+   *
+   * @see #nonNull(Object, Exception)
+   * @param wrapper the wrapper to get the object from
+   * @param exception the exception to throw
+   * @return the object if it is not null
+   * @param <O> the type of the object
+   * @param <T> the type of the exception
+   * @throws T if the object is null
+   */
   @NonNull
   public static <O, T extends Exception> O nonNullWrapped(
       @NonNull Wrapper<O> wrapper, @NonNull T exception) throws T {
-    return nonNull(wrapper.getWrapped(), exception);
+    return ReflectUtil.nonNull(wrapper.getWrapped(), exception);
   }
 
+  /**
+   * Gets the default value of a class.
+   *
+   * <p>For example, for the class {@link Integer} the default value is 0
+   *
+   * <p>This values are inside of {@link ReflectUtil#defValues}
+   *
+   * @param parameterType the class to get the default value from
+   * @return the default value
+   */
+  @Nullable
   public static Object getDefaultValue(@NonNull Class<?> parameterType) {
-    return defValues.get(parameterType);
+    return ReflectUtil.defValues.get(parameterType);
   }
 
+  /**
+   * Get the array class of a wrapper.
+   *
+   * @param wrapper the wrapper to get the array class from
+   * @return the array class
+   */
   @NonNull
   public static Class<?> getArrayClass(@NonNull WrappedClass<?> wrapper) {
     Class<?> clazz = wrapper.getClazz();

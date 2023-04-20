@@ -6,13 +6,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.StringJoiner;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /** This class wraps a {@link Field} to set or get the declaration. */
 public final class WrappedField<O> extends LangWrapper<Field> {
 
-  private final Class<O> fieldType;
+  @Nullable private final Class<O> fieldType;
 
-  private WrappedField(Field reference, Class<O> fieldType) {
+  private WrappedField(@Nullable Field reference, @Nullable Class<O> fieldType) {
     super(reference);
     this.fieldType = fieldType;
   }
@@ -28,9 +29,8 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    * @return the wrapper of the field
    */
   @NonNull
-  public static WrappedField<?> of(Field field) {
-    if (field != null) field.setAccessible(true);
-    return new WrappedField<>(field, null);
+  public static WrappedField<?> of(@Nullable Field field) {
+    return of(null, field);
   }
 
   /**
@@ -42,7 +42,7 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    * @return the wrapped field
    */
   @NonNull
-  public static <T> WrappedField<T> of(Class<T> fieldType, Field field) {
+  public static <T> WrappedField<T> of(@Nullable Class<T> fieldType, @Nullable Field field) {
     if (field != null) field.setAccessible(true);
     return new WrappedField<>(field, fieldType);
   }

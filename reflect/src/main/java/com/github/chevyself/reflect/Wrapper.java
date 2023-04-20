@@ -1,5 +1,8 @@
 package com.github.chevyself.reflect;
 
+import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Wraps an element.
  *
@@ -14,7 +17,8 @@ public interface Wrapper<T> {
    * @return the wrapped object
    * @param <T> the type of the wrapped object
    */
-  static <T> Wrapper<T> wrap(T object) {
+  @NonNull
+  static <T> Wrapper<@Nullable T> wrap(@Nullable T object) {
     return new AbstractWrapper<>(object);
   }
 
@@ -23,6 +27,7 @@ public interface Wrapper<T> {
    *
    * @return the wrapped object
    */
+  @Nullable
   T getWrapped();
 
   /**
@@ -32,16 +37,5 @@ public interface Wrapper<T> {
    */
   default boolean isPresent() {
     return this.getWrapped() != null;
-  }
-
-  /**
-   * Set the wrapped object.
-   *
-   * @deprecated Use {@link SetterWrapper}
-   * @param object the new wrapped object
-   * @return this same instance
-   */
-  default Wrapper<T> set(T object) {
-    throw new UnsupportedOperationException("Deprecated");
   }
 }

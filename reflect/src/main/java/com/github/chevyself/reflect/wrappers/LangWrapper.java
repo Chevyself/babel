@@ -3,7 +3,7 @@ package com.github.chevyself.reflect.wrappers;
 import com.github.chevyself.reflect.Wrapper;
 import java.util.Objects;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implementation of wrapper for classes located in the Java package 'java.lang.reflect'
@@ -12,16 +12,10 @@ import lombok.NonNull;
  */
 class LangWrapper<T> implements Wrapper<T> {
 
-  @Getter final T wrapped;
+  @Getter @Nullable final T wrapped;
 
-  LangWrapper(T wrapped) {
+  LangWrapper(@Nullable T wrapped) {
     this.wrapped = wrapped;
-  }
-
-  @Override
-  @Deprecated
-  public @NonNull LangWrapper<T> set(T object) {
-    throw new UnsupportedOperationException("References in LangWrappers are final");
   }
 
   @Override

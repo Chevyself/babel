@@ -3,6 +3,7 @@ package com.github.chevyself.reflect;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implementation for {@link SetterWrapper}. Create it using {@link Wrapper#wrap(Object)}
@@ -18,7 +19,7 @@ public class AbstractWrapper<T> implements SetterWrapper<T> {
    *
    * @param wrapped the object to be wrapped
    */
-  public AbstractWrapper(T wrapped) {
+  public AbstractWrapper(@Nullable T wrapped) {
     this.wrapped = wrapped;
   }
 

@@ -1,15 +1,20 @@
 package com.github.chevyself.reflect.wrappers;
 
+import com.github.chevyself.reflect.debug.Debugger;
+import com.github.chevyself.reflect.debug.LogTask;
 import com.github.chevyself.reflect.util.ReflectUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class wraps a {@link Class} to use its methods checking if those can be executed and
@@ -23,7 +28,7 @@ import lombok.NonNull;
  */
 public final class WrappedClass<O> extends LangWrapper<Class<O>> {
 
-  private WrappedClass(Class<O> clazz) {
+  private WrappedClass(@Nullable Class<O> clazz) {
     super(clazz);
   }
 
@@ -44,6 +49,7 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
     try {
       return new WrappedClass<>(Class.forName(name));
     } catch (ClassNotFoundException e) {
+      Debugger.getInstance().getLogger().severe("Could not find class " + name);
       return new WrappedClass<>();
     }
   }
@@ -56,10 +62,11 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    * @param <T> the type of the class object
    */
   @NonNull
-  public static <T> WrappedClass<T> of(Class<T> clazz) {
+  public static <T> WrappedClass<T> of(@NonNull Class<T> clazz) {
     return new WrappedClass<>(clazz);
   }
 
+  @NonNull
   private static List<WrappedField<?>> wrap(@NonNull Field... fields) {
     List<WrappedField<?>> wrappers = new ArrayList<>(fields.length);
     for (Field field : fields) {
@@ -68,12 +75,30 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
     return wrappers;
   }
 
+  @NonNull
   private static List<WrappedMethod<?>> wrap(@NonNull Method... methods) {
     List<WrappedMethod<?>> wrappers = new ArrayList<>(methods.length);
     for (Method method : methods) {
       wrappers.add(WrappedMethod.of(method));
     }
     return wrappers;
+  }
+
+  private static boolean compareMethod(
+      @Nullable Class<?> returnType,
+      @NonNull String name,
+      @NonNull Method method,
+      @NonNull Class<?>[] params,
+      boolean exact) {
+    if (method.getName().equals(name)) {
+      Class<?>[] paramTypes = method.getParameterTypes();
+      return ReflectUtil.compareParameters(paramTypes, params, exact)
+          && (returnType == null
+              || (exact
+                  ? returnType.equals(method.getReturnType())
+                  : returnType.isAssignableFrom(method.getReturnType())));
+    }
+    return false;
   }
 
   /**
@@ -83,14 +108,32 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    * @return a {@link WrappedConstructor} instance containing the constructor or empty if not found
    */
   @NonNull
-  public WrappedConstructor<O> getConstructor(Class<?>... params) {
+  public WrappedConstructor<O> getConstructor(@NonNull Class<?>... params) {
+    if (this.wrapped == null) {
+      Debugger.getInstance()
+          .getLogger()
+          .severe(
+              "Trying to get constructor in a null class with the params "
+                  + Arrays.toString(params));
+      return WrappedConstructor.of(null);
+    }
+    LogTask task =
+        Debugger.getInstance()
+            .logTask(
+                "Getting constructor for "
+                    + this.wrapped.getName()
+                    + " with params "
+                    + Arrays.toString(params));
     Constructor<O> constructor = null;
     for (Constructor<?> referenceConstructor : this.wrapped.getConstructors()) {
-      if (this.compare(referenceConstructor, params)) {
+      if (this.compare(referenceConstructor, params, false)) {
         //noinspection unchecked
         constructor = (Constructor<O>) referenceConstructor;
         break;
       }
+    }
+    if (constructor == null) {
+      task.end("Constructor not found");
     }
     return WrappedConstructor.of(constructor);
   }
@@ -103,13 +146,7 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    */
   @NonNull
   public WrappedField<?> getField(@NonNull String name) {
-    Field field = null;
-    try {
-      field = this.wrapped.getField(name);
-    } catch (NoSuchFieldException e) {
-      // Field not found
-    }
-    return WrappedField.of(field);
+    return this.getField(null, name, false);
   }
 
   /**
@@ -117,16 +154,47 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    *
    * @param fieldType the class of the object that the field contains
    * @param name the name to match the field with
+   * @param exact whether the field type should be exactly the same as the given type
    * @return a {@link WrappedField} instance containing the field or empty if not found
    * @param <T> the type of the object that the field contains
    */
   @NonNull
-  public <T> WrappedField<T> getField(@NonNull Class<T> fieldType, @NonNull String name) {
-    Field field = null;
-    try {
-      field = this.wrapped.getField(name);
-    } catch (NoSuchFieldException e) {
-      // Field not found
+  public <T> WrappedField<T> getField(
+      @Nullable Class<T> fieldType, @NonNull String name, boolean exact) {
+    return this.getField(
+        clazz -> {
+          try {
+            return clazz.getField(name);
+          } catch (NoSuchFieldException e) {
+            Debugger.getInstance()
+                .getLogger()
+                .severe("Could not find field " + name + " in class " + clazz.getName());
+            return null;
+          }
+        },
+        name,
+        fieldType,
+        exact);
+  }
+
+  @NonNull
+  private <T> WrappedField<T> getField(
+      @NonNull Function<Class<?>, Field> supplier,
+      @NonNull String name,
+      @Nullable Class<T> fieldType,
+      boolean exact) {
+    if (this.wrapped == null) {
+      Debugger.getInstance()
+          .getLogger()
+          .severe("Trying to get field in a null class with the name " + name);
+      return WrappedField.of(fieldType, null);
+    }
+    Field field = supplier.apply(this.wrapped);
+    if (fieldType != null
+        && (exact
+            ? !fieldType.equals(field.getType())
+            : !fieldType.isAssignableFrom(field.getType()))) {
+      field = null;
     }
     return WrappedField.of(fieldType, field);
   }
@@ -139,13 +207,7 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    */
   @NonNull
   public WrappedField<?> getDeclaredField(@NonNull String name) {
-    Field field = null;
-    try {
-      field = this.wrapped.getDeclaredField(name);
-    } catch (NoSuchFieldException e) {
-      // Field not found
-    }
-    return WrappedField.of(field);
+    return this.getDeclaredField(null, name, false);
   }
 
   /**
@@ -157,26 +219,90 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    * @param <T> the type of the object that the field contains
    */
   @NonNull
-  public <T> WrappedField<T> getDeclaredField(@NonNull Class<T> fieldType, @NonNull String name) {
-    Field field = null;
-    try {
-      field = this.wrapped.getDeclaredField(name);
-    } catch (NoSuchFieldException e) {
-      // Field not found
-    }
-    return WrappedField.of(fieldType, field);
+  public <T> WrappedField<T> getDeclaredField(@Nullable Class<T> fieldType, @NonNull String name) {
+    return this.getDeclaredField(fieldType, name, false);
   }
 
   /**
-   * Get a method matching the name and parameter types.
+   * Get a declared field matching the name.
    *
+   * @param fieldType the class of the object that the field contains
+   * @param name the name to match the field with
+   * @param exact whether the field type should be exactly the same as the given type
+   * @return a {@link WrappedField} instance containing the field or empty if not found
+   * @param <T> the type of the object that the field contains
+   */
+  @NonNull
+  public <T> WrappedField<T> getDeclaredField(
+      @Nullable Class<T> fieldType, @NonNull String name, boolean exact) {
+    return this.getField(
+        (clazz) -> {
+          try {
+            return clazz.getField(name);
+          } catch (NoSuchFieldException e) {
+            Debugger.getInstance()
+                .getLogger()
+                .severe("Could not find field " + name + " in class " + clazz.getName());
+            return null;
+          }
+        },
+        name,
+        fieldType,
+        exact);
+  }
+
+  @NonNull
+  private <T> WrappedMethod<T> getMethod(
+      @NonNull Function<@NonNull Class<?>, @NonNull Method[]> function,
+      @Nullable Class<T> returnType,
+      @NonNull String name,
+      boolean exact,
+      @NonNull Class<?>... params) {
+    if (this.wrapped == null) {
+      Debugger.getInstance()
+          .getLogger()
+          .severe(
+              "Trying to get method in a null class with the name "
+                  + name
+                  + " and params "
+                  + Arrays.toString(params));
+      return WrappedMethod.of(null, returnType);
+    }
+    for (Method referenceMethod : function.apply(this.wrapped)) {
+      if (WrappedClass.compareMethod(returnType, name, referenceMethod, params, exact)) {
+        return WrappedMethod.of(referenceMethod, returnType);
+      }
+    }
+    Debugger.getInstance()
+        .getLogger()
+        .severe(
+            "Could not find method "
+                + name
+                + " in class "
+                + this.wrapped.getName()
+                + " with params "
+                + Arrays.toString(params));
+    return WrappedMethod.of(null, returnType);
+  }
+
+  /**
+   * Get a method matching the name, parameter types and return type.
+   *
+   * @param returnType the return type to match the method with
    * @param name the name to match the method with
-   * @param params the parameters to match the method with
+   * @param exact whether the parameter types and return types should be exactly the same as the
+   *     given types
+   * @param params the parameters to math the method with
+   * @param <T> the type of return
    * @return a {@link WrappedMethod} instance containing the method or empty if not found
    */
   @NonNull
-  public WrappedMethod<?> getMethod(@NonNull String name, Class<?>... params) {
-    return this.getMethod(null, name, params);
+  public <T> WrappedMethod<T> getMethod(
+      @Nullable Class<T> returnType,
+      @NonNull String name,
+      boolean exact,
+      @NonNull Class<?>... params) {
+    return this.getMethod(Class::getMethods, returnType, name, exact, params);
   }
 
   /**
@@ -190,31 +316,45 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    */
   @NonNull
   public <T> WrappedMethod<T> getMethod(
-      Class<T> returnType, @NonNull String name, Class<?>... params) {
-    Method method = null;
-    for (Method referenceMethod : this.wrapped.getMethods()) {
-      if (this.compareMethods(returnType, name, referenceMethod, params)) {
-        method = referenceMethod;
-        break;
-      }
-    }
-    return WrappedMethod.of(method, returnType);
-  }
-
-  /**
-   * Get a method matching the name and parameter types.
-   *
-   * @param name the name to match the method with
-   * @param params the parameters to match the method with
-   * @return a {@link WrappedMethod} instance containing the method or empty if not found
-   */
-  @NonNull
-  public WrappedMethod<?> getDeclaredMethod(@NonNull String name, Class<?>... params) {
-    return this.getDeclaredMethod(null, name, params);
+      @Nullable Class<T> returnType, @NonNull String name, @NonNull Class<?>... params) {
+    return this.getMethod(returnType, name, false, params);
   }
 
   /**
    * Get a method matching the name, parameter types and return type.
+   *
+   * @param name the name to match the method with
+   * @param params the parameters to math the method with
+   * @param <T> the type of return
+   * @return a {@link WrappedMethod} instance containing the method or empty if not found
+   */
+  @NonNull
+  public <T> WrappedMethod<T> getMethod(@NonNull String name, @NonNull Class<?>... params) {
+    return this.getMethod(null, name, params);
+  }
+
+  /**
+   * Get a declared method matching the name, parameter types and return type.
+   *
+   * @param returnType the return type to match the method with
+   * @param name the name to match the method with
+   * @param exact whether the parameter types and return types should be exactly the same as the
+   *     given types
+   * @param params the parameters to math the method with
+   * @param <T> the type of return
+   * @return a {@link WrappedMethod} instance containing the method or empty if not found
+   */
+  @NonNull
+  public <T> WrappedMethod<T> getDeclaredMethod(
+      @Nullable Class<T> returnType,
+      @NonNull String name,
+      boolean exact,
+      @NonNull Class<?>... params) {
+    return this.getMethod(Class::getDeclaredMethods, returnType, name, exact, params);
+  }
+
+  /**
+   * Get a declared method matching the name, parameter types and return type.
    *
    * @param returnType the return type to match the method with
    * @param name the name to match the method with
@@ -224,15 +364,63 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    */
   @NonNull
   public <T> WrappedMethod<T> getDeclaredMethod(
-      Class<T> returnType, @NonNull String name, Class<?>... params) {
-    Method method = null;
-    for (Method referenceMethod : this.wrapped.getDeclaredMethods()) {
-      if (this.compareMethods(returnType, name, referenceMethod, params)) {
-        method = referenceMethod;
-        break;
+      @Nullable Class<T> returnType, @NonNull String name, @NonNull Class<?>... params) {
+    return this.getDeclaredMethod(returnType, name, false, params);
+  }
+
+  /**
+   * Get a declared method matching the name, parameter types and return type.
+   *
+   * @param name the name to match the method with
+   * @param params the parameters to math the method with
+   * @param <T> the type of return
+   * @return a {@link WrappedMethod} instance containing the method or empty if not found
+   */
+  @NonNull
+  public <T> WrappedMethod<T> getDeclaredMethod(@NonNull String name, @NonNull Class<?>... params) {
+    return this.getDeclaredMethod(null, name, params);
+  }
+
+  private boolean hasMethod(
+      @NonNull Function<@NonNull Class<?>, @NonNull Method[]> function,
+      @Nullable Class<?> returnType,
+      @NonNull String name,
+      boolean exact,
+      @NonNull Class<?>... params) {
+    if (this.wrapped == null) {
+      Debugger.getInstance()
+          .getLogger()
+          .severe(
+              "Trying to check for a method in a null class with the name "
+                  + name
+                  + " and params "
+                  + Arrays.toString(params));
+      return false;
+    }
+    for (Method referenceMethod : function.apply(this.wrapped)) {
+      if (WrappedClass.compareMethod(returnType, name, referenceMethod, params, exact)) {
+        return true;
       }
     }
-    return WrappedMethod.of(method, returnType);
+    return false;
+  }
+
+  /**
+   * Checks if a method with the given name and parameter types exists in the class.
+   *
+   * @param returnType the type that the method returns: null for void
+   * @param name the name of the method to find
+   * @param exact whether the parameter types and return types should be exactly the same as the
+   *     given types
+   * @param params the parameters of the method to find
+   * @return true if the method is found false otherwise
+   */
+  public boolean hasMethod(
+      @Nullable Class<?> returnType,
+      @NonNull String name,
+      boolean exact,
+      @NonNull Class<?>... params) {
+    return this.hasMethod(Class::getMethods, returnType, name, exact, params);
   }
 
   /**
@@ -243,48 +431,85 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    * @param params the parameters of the method to find
    * @return true if the method is found false otherwise
    */
-  public boolean hasMethod(Class<?> returnType, @NonNull String name, Class<?>... params) {
-    if (this.wrapped != null) {
-      for (Method method : this.wrapped.getMethods()) {
-        if (this.compareMethods(returnType, name, method, params)) return true;
-      }
-    }
-    return false;
+  public boolean hasMethod(
+      @Nullable Class<?> returnType, @NonNull String name, @NonNull Class<?>... params) {
+    return this.hasMethod(returnType, name, false, params);
   }
 
   /**
-   * Checks if a declared method with the given name and parameter types exists in the class.
+   * Checks if a method with the given name and parameter types exists in the class.
+   *
+   * @param name the name of the method to find
+   * @param exact whether the parameter types and return types should be exactly the same as the
+   *     given types
+   * @param params the parameters of the method to find
+   * @return true if the method is found false otherwise
+   */
+  public boolean hasMethod(@NonNull String name, @NonNull Class<?>... params) {
+    return this.hasMethod(null, name, params);
+  }
+
+  /**
+   * Checks if a method with the given name and parameter types exists in the class.
+   *
+   * @param returnType the type that the method returns: null for void
+   * @param name the name of the method to find
+   * @param exact whether the parameter types and return types should be exactly the same as the
+   *     given types
+   * @param params the parameters of the method to find
+   * @return true if the method is found false otherwise
+   */
+  public boolean hasDeclaredMethod(
+      @Nullable Class<?> returnType,
+      @NonNull String name,
+      boolean exact,
+      @NonNull Class<?>... params) {
+    return this.hasMethod(Class::getMethods, returnType, name, exact, params);
+  }
+
+  /**
+   * Checks if a method with the given name and parameter types exists in the class.
    *
    * @param returnType the type that the method returns: null for void
    * @param name the name of the method to find
    * @param params the parameters of the method to find
    * @return true if the method is found false otherwise
    */
-  public boolean hasDeclaredMethod(Class<?> returnType, @NonNull String name, Class<?>... params) {
-    if (this.wrapped != null) {
-      for (Method method : this.wrapped.getDeclaredMethods()) {
-        if (this.compareMethods(returnType, name, method, params)) return true;
-      }
-    }
-    return false;
+  public boolean hasDeclaredMethod(
+      @Nullable Class<?> returnType, @NonNull String name, @NonNull Class<?>... params) {
+    return this.hasMethod(returnType, name, false, params);
   }
 
-  private boolean compareMethods(
-      Class<?> returnType, @NonNull String name, Method method, Class<?>[] params) {
-    if (method.getName().equals(name)) {
-      Class<?>[] paramTypes = method.getParameterTypes();
-      return ReflectUtil.compareParameters(paramTypes, params)
-          && (returnType == null || returnType.isAssignableFrom(method.getReturnType()));
-    }
-    return false;
+  /**
+   * Checks if a method with the given name and parameter types exists in the class.
+   *
+   * @param name the name of the method to find
+   * @param exact whether the parameter types and return types should be exactly the same as the
+   *     given types
+   * @param params the parameters of the method to find
+   * @return true if the method is found false otherwise
+   */
+  public boolean hasDeclaredMethod(@NonNull String name, @NonNull Class<?>... params) {
+    return this.hasMethod(null, name, params);
   }
 
-  private boolean compareExactMethods(
-      Class<?> returnType, @NonNull String name, Method method, Class<?>[] params) {
-    if (method.getName().equals(name)) {
-      Class<?>[] paramTypes = method.getParameterTypes();
-      return ReflectUtil.compareExactParameters(paramTypes, params)
-          && (returnType == null || returnType.equals(method.getReturnType()));
+  private boolean hasField(
+      @NonNull Function<@NonNull Class<?>, @NonNull Field[]> function,
+      @Nullable Class<?> fieldType,
+      @NonNull String name,
+      boolean exact) {
+    if (this.wrapped == null) {
+      Debugger.getInstance()
+          .getLogger()
+          .severe("Trying to check for a field in a null class with the name " + name);
+      return false;
+    }
+    for (Field field : this.wrapped.getFields()) {
+      if (field.getName().equals(name)
+          && (fieldType == null
+              || (exact
+                  ? fieldType.equals(field.getType())
+                  : fieldType.isAssignableFrom(field.getType())))) return true;
     }
     return false;
   }
@@ -294,16 +519,11 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    *
    * @param fieldType the class of the object that the field contains
    * @param name the name of the field to find
+   * @param exact whether the field type should be exactly the same as the given type
    * @return true if the field is found false otherwise
    */
-  public boolean hasField(Class<?> fieldType, @NonNull String name) {
-    if (this.wrapped != null) {
-      for (Field field : this.wrapped.getFields()) {
-        if (field.getName().equals(name)
-            && (fieldType == null || fieldType.isAssignableFrom(field.getType()))) return true;
-      }
-    }
-    return false;
+  public boolean hasField(@Nullable Class<?> fieldType, @NonNull String name, boolean exact) {
+    return this.hasField(Class::getFields, fieldType, name, exact);
   }
 
   /**
@@ -311,16 +531,12 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    *
    * @param fieldType the class of the object that the field contains
    * @param name the name of the field to find
+   * @param exact whether the field type should be exactly the same as the given type
    * @return true if the field is found false otherwise
    */
-  public boolean hasDeclaredField(Class<?> fieldType, @NonNull String name) {
-    if (this.wrapped != null) {
-      for (Field field : this.wrapped.getDeclaredFields()) {
-        if (field.getName().equals(name)
-            && (fieldType == null || fieldType.isAssignableFrom(field.getType()))) return true;
-      }
-    }
-    return false;
+  public boolean hasDeclaredField(
+      @Nullable Class<?> fieldType, @NonNull String name, boolean exact) {
+    return this.hasField(Class::getDeclaredFields, fieldType, name, exact);
   }
 
   /**
@@ -330,11 +546,17 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    * @return true if the constructor is found false otherwise
    */
   public boolean hasConstructor(Class<?>... params) {
-    if (this.wrapped != null) {
-      for (Constructor<?> constructor : this.wrapped.getConstructors()) {
-        if (this.compare(constructor, params)) {
-          return true;
-        }
+    if (this.wrapped == null) {
+      Debugger.getInstance()
+          .getLogger()
+          .severe(
+              "Trying to check for a constructor in a null class with the parameters "
+                  + Arrays.toString(params));
+      return false;
+    }
+    for (Constructor<?> constructor : this.wrapped.getConstructors()) {
+      if (this.compare(constructor, params, false)) {
+        return true;
       }
     }
     return false;
@@ -346,10 +568,12 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    *
    * @param constructor the constructor to be compared
    * @param params the array to compare
+   * @param exact whether the parameter types should be exactly the same as the given types
    * @return true if the parameter types of the constructor matches the classes of the array
    */
-  private boolean compare(Constructor<?> constructor, Class<?>[] params) {
-    return ReflectUtil.compareParameters(constructor.getParameterTypes(), params);
+  private boolean compare(
+      @NonNull Constructor<?> constructor, @NonNull Class<?>[] params, boolean exact) {
+    return ReflectUtil.compareParameters(constructor.getParameterTypes(), params, exact);
   }
 
   /**
@@ -359,7 +583,10 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    */
   @NonNull
   public List<WrappedMethod<?>> getMethods() {
-    return wrapped == null ? new ArrayList<>() : wrap(this.wrapped.getMethods());
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Trying to get methods from a null class");
+    }
+    return wrapped == null ? new ArrayList<>() : WrappedClass.wrap(this.wrapped.getMethods());
   }
 
   /**
@@ -369,7 +596,10 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    */
   @NonNull
   public List<WrappedField<?>> getFields() {
-    return this.wrapped == null ? new ArrayList<>() : wrap(this.wrapped.getFields());
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Trying to get methods from a null class");
+    }
+    return this.wrapped == null ? new ArrayList<>() : WrappedClass.wrap(this.wrapped.getFields());
   }
 
   /**
@@ -379,7 +609,12 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
    */
   @NonNull
   public List<WrappedField<?>> getDeclaredFields() {
-    return this.wrapped == null ? new ArrayList<>() : wrap(this.wrapped.getDeclaredFields());
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Trying to get methods from a null class");
+    }
+    return this.wrapped == null
+        ? new ArrayList<>()
+        : WrappedClass.wrap(this.wrapped.getDeclaredFields());
   }
 
   /**
@@ -411,51 +646,49 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
         .toString();
   }
 
+  /**
+   * Create a new instance of the class.
+   *
+   * <p>This will first attempt to use the empty constructor. If that is not found it will attempt
+   * to use the first constructor it finds and populate it with default values.
+   *
+   * @return the list of constructors
+   * @throws IllegalAccessException if the constructor is not accessible
+   * @throws InstantiationException if the class cannot be instantiated
+   * @throws InvocationTargetException if the constructor throws an exception
+   */
+  @Nullable
   public O newInstance()
       throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Trying to create a new instance of a null class");
+      return null;
+    }
     WrappedConstructor<O> emptyConstructor = this.getConstructor();
     if (emptyConstructor.isPresent()) {
       return emptyConstructor.invoke();
     } else {
-      if (this.wrapped != null) {
-        for (Constructor<?> constructor : this.getWrapped().getConstructors()) {
-          Object[] params = new Object[constructor.getParameterCount()];
-          for (int i = 0; i < params.length; i++) {
-            params[i] = ReflectUtil.getDefaultValue(constructor.getParameterTypes()[i]);
-          }
-          //noinspection unchecked
-          return (O) constructor.newInstance(params);
+      for (Constructor<?> constructor : this.wrapped.getConstructors()) {
+        Object[] params = new Object[constructor.getParameterCount()];
+        for (int i = 0; i < params.length; i++) {
+          params[i] = ReflectUtil.getDefaultValue(constructor.getParameterTypes()[i]);
         }
+        //noinspection unchecked
+        return (O) constructor.newInstance(params);
       }
     }
     return null;
   }
 
+  /**
+   * Gets the wrapped class as an array class.
+   *
+   * @see ReflectUtil#getArrayClass(WrappedClass)
+   * @return the array class
+   * @throws IllegalArgumentException if the class is null
+   */
   @NonNull
   public Class<?> getArrayClazz() {
     return ReflectUtil.getArrayClass(this);
-  }
-
-  @NonNull
-  public WrappedClass<?> getArrayClazzWrapped() {
-    return WrappedClass.of(this.getArrayClazz());
-  }
-
-  @NonNull
-  public <T> WrappedMethod<T> getExactMethod(
-      Class<T> returnType, @NonNull String name, Class<?>... params) {
-    Method method = null;
-    for (Method referenceMethod : this.wrapped.getMethods()) {
-      if (this.compareExactMethods(returnType, name, referenceMethod, params)) {
-        method = referenceMethod;
-        break;
-      }
-    }
-    return WrappedMethod.of(method, returnType);
-  }
-
-  @NonNull
-  public <T> WrappedMethod<T> getExactMethod(@NonNull String name, Class<?>... params) {
-    return this.getExactMethod(null, name, params);
   }
 }
