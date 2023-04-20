@@ -3,7 +3,7 @@ package com.github.chevyself.babel.api.tab;
 import chevyself.github.commands.util.Pair;
 import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
 import com.github.chevyself.babel.api.tab.entries.TabEntry;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.PacketType;
@@ -68,7 +68,7 @@ public class PlayerTabView implements TabView {
               try {
                 return slot.playerInfoData(player, packet);
               } catch (PacketHandlingException e) {
-                Debugger.getInstance()
+                ErrorHandler.getInstance()
                     .handle(Level.SEVERE, "Could not get PlayerInfoData for slot " + slot);
                 return null;
               }
@@ -103,16 +103,23 @@ public class PlayerTabView implements TabView {
         .ifPresent(
             player -> {
               try {
-                Packet packet = PacketType.Play.ClientBound.PLAYER_INFO.create();
+                Packet packet = this.createPacket();
                 List<WrappedPlayerInfo> wrappers = this.collectSlotsPlayerInfo(player, packet);
                 packet.setField(0, WrappedPlayerInfoAction.REMOVE_PLAYER);
                 packet.setField(1, CollectionModifier.addWrappers(wrappers));
                 packet.send(player);
               } catch (PacketHandlingException e) {
-                Debugger.getInstance()
+                ErrorHandler.getInstance()
                     .handle(Level.SEVERE, "Could not clear tab view for " + player.getName());
               }
             });
+  }
+
+  private Packet createPacket() throws PacketHandlingException {
+    return
+        PacketType.Play.ClientBound.PLAYER_INFO.create(
+            WrappedPlayerInfoAction.ADD_PLAYER.getWrapped(),
+            WrappedEntityPlayer.createArray(0));
   }
 
   /**
@@ -127,7 +134,7 @@ public class PlayerTabView implements TabView {
   @NonNull
   private List<WrappedPlayerInfo> collectSlotsPlayerInfo(
       @NonNull Player player, @NonNull Packet packet) {
-    return collectSlotsPlayerInfo(slots, player, packet);
+    return PlayerTabView.collectSlotsPlayerInfo(slots, player, packet);
   }
 
   @Override
@@ -136,14 +143,7 @@ public class PlayerTabView implements TabView {
     Optional<Player> optional = this.getViewer();
     if (optional.isPresent()) {
       Player player = optional.get();
-      Packet packet =
-          PacketType.Play.ClientBound.PLAYER_INFO.create(
-              new Class[] {
-                WrappedPlayerInfoAction.CLAZZ.getClazz(),
-                WrappedEntityPlayer.ENTITY_PLAYER.getArrayClazz()
-              },
-              WrappedPlayerInfoAction.ADD_PLAYER.getWrapped(),
-              WrappedEntityPlayer.createArray(0));
+      Packet packet = this.createPacket();
       List<WrappedPlayerInfo> info = this.populate(packet, player);
       packet.setField(1, CollectionModifier.addWrappers(info));
       packet.send(player);
@@ -192,7 +192,7 @@ public class PlayerTabView implements TabView {
               } catch (PacketHandlingException
                   | InvocationTargetException
                   | IllegalAccessException e) {
-                Debugger.getInstance()
+                ErrorHandler.getInstance()
                     .handle(Level.SEVERE, "Could not get entity from CraftPlayer", e);
                 return null;
               }
@@ -204,7 +204,7 @@ public class PlayerTabView implements TabView {
   @Override
   public void set(@NonNull TabCoordinate coordinate, @NonNull TabEntry entry) {
     TabSlot slot = this.getSlot(coordinate);
-    this.set(slot, entry, updatesSkin(slot, entry));
+    this.set(slot, entry, this.updatesSkin(slot, entry));
   }
 
   /**
@@ -231,13 +231,19 @@ public class PlayerTabView implements TabView {
         .ifPresent(
             player -> {
               try {
-                Packet packet = PacketType.Play.ClientBound.PLAYER_INFO.create();
+                Packet packet = this.createPacket();
                 packet.setField(
                     1,
-                    CollectionModifier.addWrappers(collectSlotsPlayerInfo(slots, player, packet)));
+                    CollectionModifier.addWrappers(
+                        PlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
                 if (skin) {
                   packet.setField(0, WrappedPlayerInfoAction.REMOVE_PLAYER);
                   packet.send(player);
+                  packet = this.createPacket();
+                  packet.setField(
+                      1,
+                      CollectionModifier.addWrappers(
+                          PlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
                   packet.setField(0, WrappedPlayerInfoAction.ADD_PLAYER);
                   packet.send(player);
                 } else {
@@ -245,7 +251,7 @@ public class PlayerTabView implements TabView {
                   packet.send(player);
                 }
               } catch (PacketHandlingException e) {
-                Debugger.getInstance().handle(Level.SEVERE, "Could not update tab slot", e);
+                ErrorHandler.getInstance().handle(Level.SEVERE, "Could not update tab slot", e);
               }
             });
   }
@@ -262,13 +268,13 @@ public class PlayerTabView implements TabView {
 
   @Override
   public boolean add(@NonNull TabEntry entry) {
-    return add(Collections.singleton(entry));
+    return this.add(Collections.singleton(entry));
   }
 
   @Override
   public boolean add(@NonNull Collection<TabEntry> entries) {
     Map<TabSlot, TabEntry> toUpdate = new HashMap<>();
-    Pair<List<TabSlot>, List<TabEntry>> pair = getReplacements(entries);
+    Pair<List<TabSlot>, List<TabEntry>> pair = this.getReplacements(entries);
     List<TabSlot> canBeReplaced = pair.getA();
     List<TabEntry> allEntries = pair.getB();
     for (int i = 0; i < canBeReplaced.size(); i++) {
@@ -315,13 +321,13 @@ public class PlayerTabView implements TabView {
         toUpdate.put(tabSlot, tabEntry);
       }
     }
-    set(toUpdate);
+    this.set(toUpdate);
   }
 
   @NonNull
   private Pair<List<TabSlot>, List<TabEntry>> getReplacements(
       @NonNull Collection<TabEntry> entries) {
-    return getReplacements(entries, (slot, entry) -> slot.getEntry().canBeReplaced(entry));
+    return this.getReplacements(entries, (slot, entry) -> slot.getEntry().canBeReplaced(entry));
   }
 
   /**
@@ -356,7 +362,7 @@ public class PlayerTabView implements TabView {
     List<TabSlot> updateSkin = new ArrayList<>();
     toUpdate.forEach(
         (slot, entry) -> {
-          boolean skin = updatesSkin(slot, entry);
+          boolean skin = this.updatesSkin(slot, entry);
           slot.setEntry(entry);
           if (skin) {
             updateSkin.add(slot);
@@ -364,8 +370,8 @@ public class PlayerTabView implements TabView {
             update.add(slot);
           }
         });
-    update(update, false);
-    update(updateSkin, true);
+    this.update(update, false);
+    this.update(updateSkin, true);
   }
 
   /**

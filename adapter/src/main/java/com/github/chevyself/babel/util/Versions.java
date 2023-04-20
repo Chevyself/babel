@@ -30,22 +30,32 @@ public final class Versions {
 
   public static final int MIN_BUKKIT = 8;
   public static final int MAX_BUKKIT = 19;
+  @NonNull
+  private static BukkitVersion BUKKIT_VERSION = Versions.checkBukkit();
+
   public static int BUKKIT = Versions.check();
+
+  @NonNull
+  private static BukkitVersion checkBukkit() {
+    String versionString = Bukkit.getBukkitVersion();
+    // Bukkit version is x.x.x-Rx Then we must split from '-' first
+    String[] parts = versionString.split("-");
+    // Now we can get the numbers
+    String[] numbers = parts[0].split("\\.");
+    // 0 is ignored because its always 1
+    int major = Integer.parseInt(numbers[1]);
+    int minor = numbers.length > 2 ? Integer.parseInt(numbers[2]) : 0;
+    return new BukkitVersion(major, minor);
+  }
 
   /**
    * Checks what's the current server's Bukkit version.
    *
    * @return the Bukkit version
    */
+  @Deprecated
   public static int check() {
-    String bukkitVersion = Bukkit.getBukkitVersion();
-    for (int i = Versions.MIN_BUKKIT; i <= Versions.MAX_BUKKIT; i++) {
-      if (bukkitVersion.contains("1." + i)) {
-        Versions.BUKKIT = i;
-        return i;
-      }
-    }
-    return -1;
+    return Versions.BUKKIT_VERSION.getMajor();
   }
 
   /**
@@ -75,7 +85,7 @@ public final class Versions {
 
   @NonNull
   public static String getCanonicalName(@NonNull String className) {
-    return getCanonicalName(null, className);
+    return Versions.getCanonicalName(null, className);
   }
 
   @NonNull
@@ -91,12 +101,41 @@ public final class Versions {
 
   @NonNull
   public static WrappedClass<?> wrapNmsClassByName(@NonNull String name) {
-    return wrapNmsClassByName(null, name);
+    return Versions.wrapNmsClassByName(null, name);
   }
 
   @NonNull
   public static WrappedClass<?> wrapNmsClassByName(String addedPackage, @NonNull String name) {
-    return WrappedClass.forName(getCanonicalName(addedPackage, name));
+    return WrappedClass.forName(Versions.getCanonicalName(addedPackage, name));
+  }
+
+  public static BukkitVersion getBukkit() {
+    return BUKKIT_VERSION;
+  }
+
+  public static class BukkitVersion implements Comparable<BukkitVersion> {
+
+    @Getter private final int major;
+    @Getter private final int minor;
+
+    public BukkitVersion(int major, int minor) {
+      this.major = major;
+      this.minor = minor;
+    }
+
+    public boolean applies(@NonNull BukkitVersion other) {
+      return this.major >= other.major && (this.major > other.major || (this.minor <= other.minor));
+    }
+
+    @Override
+    public int compareTo(@NonNull Versions.BukkitVersion o) {
+      return this.major == o.major ? Integer.compare(this.minor, o.minor) : Integer.compare(this.major, o.major);
+    }
+
+    @Override
+    public String toString() {
+      return "1." + major + "." + minor;
+    }
   }
 
   /**

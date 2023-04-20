@@ -1,6 +1,6 @@
 package com.github.chevyself.babel.packet.entity.player;
 
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.packet.PacketType;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
@@ -28,7 +28,7 @@ public enum WrappedPlayerInfoAction implements Wrapper<Object> {
     try {
       return VALUE_OF.invoke(null, this.name());
     } catch (InvocationTargetException | IllegalAccessException e) {
-      Debugger.getInstance().handle(Level.SEVERE, "Could not get player info action", e);
+      ErrorHandler.getInstance().handle(Level.SEVERE, "Could not get player info action", e);
       return Optional.empty();
     }
   }

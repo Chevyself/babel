@@ -12,7 +12,8 @@ import com.github.chevyself.babel.api.bossbar.WitherTask;
 import com.github.chevyself.babel.api.commands.ChannelProvider;
 import com.github.chevyself.babel.api.commands.ResultHandler;
 import com.github.chevyself.babel.api.lang.YamlLanguage;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
+import com.github.chevyself.babel.debug.ErrorHandler.LoggerErrorHandler;
 import com.github.chevyself.babel.util.Versions;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,7 +24,7 @@ public class ChatPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    Debugger errors = Debugger.setInstance(new Debugger.LoggerDebugger(this.getLogger()));
+    ErrorHandler errors = ErrorHandler.setInstance(new LoggerErrorHandler(this.getLogger()));
     // Load languages
     try {
       ResourceManager.getInstance()
@@ -51,7 +52,7 @@ public class ChatPlugin extends JavaPlugin {
   @Override
   public void onDisable() {
     ResourceManager.getInstance().unregister(this);
-    Debugger.setDefaultInstance();
+    ErrorHandler.setDefaultInstance();
     super.onDisable();
   }
 }

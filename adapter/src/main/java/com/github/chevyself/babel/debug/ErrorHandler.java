@@ -9,22 +9,23 @@ import lombok.NonNull;
 /**
  * This class is used to handle errors and debug messages.
  *
- * <p>A default instance is provided by {@link LoggerDebugger} which only prints the messages to the
+ * <p>A default instance is provided by {@link LoggerErrorHandler} which only prints the messages to the
  * console.
  */
-public abstract class Debugger {
+@Deprecated
+  public abstract class ErrorHandler {
 
-  private static Debugger instance;
+    private static ErrorHandler instance;
 
-  /**
-   * Get the instance of the debugger.
-   *
-   * @return the instance
-   * @throws NullPointerException if the instance has not been initialized
-   */
-  @NonNull
-  public static Debugger getInstance() {
-    return Objects.requireNonNull(Debugger.instance, "Error handler has not been initialized");
+    /**
+     * Get the instance of the debugger.
+     *
+     * @return the instance
+     * @throws NullPointerException if the instance has not been initialized
+     */
+    @NonNull
+  public static ErrorHandler getInstance() {
+    return Objects.requireNonNull(ErrorHandler.instance, "Error handler has not been initialized");
   }
 
   /**
@@ -34,18 +35,18 @@ public abstract class Debugger {
    * @return the instance
    */
   @NonNull
-  public static Debugger setInstance(@NonNull Debugger instance) {
-    Debugger.instance = instance;
-    return Debugger.instance;
+  public static ErrorHandler setInstance(@NonNull ErrorHandler instance) {
+    ErrorHandler.instance = instance;
+    return ErrorHandler.instance;
   }
 
   /**
    * Set the default instance of the debugger.
    *
-   * <p>This instance is {@link LoggerDebugger} which only prints the messages to the console.
+   * <p>This instance is {@link LoggerErrorHandler} which only prints the messages to the console.
    */
   public static void setDefaultInstance() {
-    Debugger.instance = new LoggerDebugger(Logger.getLogger("Babel"));
+    ErrorHandler.instance = new LoggerErrorHandler(Logger.getLogger("Babel"));
   }
 
   /**
@@ -63,11 +64,11 @@ public abstract class Debugger {
   @Deprecated
   public abstract void handle(@NonNull Level level, @NonNull String message);
 
-  public static class LoggerDebugger extends Debugger {
+  public static class LoggerErrorHandler extends ErrorHandler {
 
     @NonNull @Getter private final Logger logger;
 
-    public LoggerDebugger(@NonNull Logger logger) {
+    public LoggerErrorHandler(@NonNull Logger logger) {
       this.logger = logger;
     }
 

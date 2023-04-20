@@ -1,6 +1,7 @@
 package com.github.chevyself.babel.packet.entity.player;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
+import com.github.chevyself.babel.lookup.LookUp;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.AbstractWrapper;
@@ -16,19 +17,13 @@ public class WrappedPlayerConnection extends AbstractWrapper<Object> {
   private static final WrappedClass<?> ENTITY_PLAYER =
       Versions.wrapNmsClassByName("server.network", "PlayerConnection");
 
-  @NonNull private static final WrappedMethod<?> SEND_PACKET;
-
-  static {
-    if (Versions.BUKKIT < 18) {
-      SEND_PACKET =
-          WrappedPlayerConnection.ENTITY_PLAYER.getMethod(
-              "sendPacket", Packet.PACKET_CLASS.getClazz());
-    } else {
-      SEND_PACKET =
-          WrappedPlayerConnection.ENTITY_PLAYER.getMethod(
-              null, "a", true, Packet.PACKET_CLASS.getClazz());
-    }
-  }
+  @NonNull private static final WrappedMethod<?> SEND_PACKET =
+      LookUp.methodOn(WrappedPlayerConnection.ENTITY_PLAYER)
+          .usingParams(Packet.PACKET_CLASS.getClazz())
+          .findExact(true)
+          .since(8, "sendPacket")
+          .since(18, "a")
+          .find();
 
   /**
    * Create the wrapper.

@@ -13,7 +13,7 @@ import com.github.chevyself.babel.api.tab.PlayerTabView;
 import com.github.chevyself.babel.api.tab.TabSize;
 import com.github.chevyself.babel.api.tab.TabView;
 import com.github.chevyself.babel.api.util.Players;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
 import com.github.chevyself.babel.util.Versions;
@@ -173,7 +173,7 @@ public interface PlayerChannel extends Channel {
                   views.add(view);
                   return view;
                 } catch (PacketHandlingException e) {
-                  Debugger.getInstance()
+                  ErrorHandler.getInstance()
                       .handle(Level.SEVERE, "Could not initialize tab view for player " + player);
                   return new EmptyTabView();
                 }

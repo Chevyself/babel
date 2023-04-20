@@ -3,7 +3,7 @@ package com.github.chevyself.babel.api.lang;
 import chevyself.github.commands.bukkit.utils.Components;
 import chevyself.github.commands.util.Strings;
 import com.github.chevyself.babel.api.exceptions.LanguageParsingException;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -81,17 +81,17 @@ public final class YamlLanguage implements Language {
                 && (file.getParentFile().exists()
                     ? !file.createNewFile()
                     : !file.getParentFile().mkdirs() || !file.createNewFile())) {
-              Debugger.getInstance().handle(Level.SEVERE, "Could not create file " + file);
+              ErrorHandler.getInstance().handle(Level.SEVERE, "Could not create file " + file);
             } else {
               languages.add(YamlLanguage.load(resource, file));
             }
           } catch (LanguageParsingException e) {
-            Debugger.getInstance().handle(Level.SEVERE, "Could not parse language in " + file, e);
+            ErrorHandler.getInstance().handle(Level.SEVERE, "Could not parse language in " + file, e);
           } catch (IOException e) {
-            Debugger.getInstance().handle(Level.SEVERE, "Failed to create file in " + file, e);
+            ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to create file in " + file, e);
           }
         } else {
-          Debugger.getInstance().handle(Level.SEVERE, "Could not find resource " + resourcePath);
+          ErrorHandler.getInstance().handle(Level.SEVERE, "Could not find resource " + resourcePath);
         }
       }
       return languages;

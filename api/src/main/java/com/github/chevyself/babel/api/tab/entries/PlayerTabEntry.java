@@ -2,7 +2,7 @@ package com.github.chevyself.babel.api.tab.entries;
 
 import com.github.chevyself.babel.api.tab.TabSlot;
 import com.github.chevyself.babel.api.text.Text;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.entity.player.Skin;
 import com.github.chevyself.babel.packet.entity.player.WrappedCraftPlayer;
@@ -81,7 +81,7 @@ public class PlayerTabEntry implements TabEntry {
               } catch (InvocationTargetException
                   | IllegalAccessException
                   | PacketHandlingException e) {
-                Debugger.getInstance().handle(Level.SEVERE, "Could not get skin from player", e);
+                ErrorHandler.getInstance().handle(Level.SEVERE, "Could not get skin from player", e);
                 return null;
               }
             })

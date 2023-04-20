@@ -18,7 +18,7 @@ import com.github.chevyself.babel.api.tab.entries.CoordinateTabEntry;
 import com.github.chevyself.babel.api.tab.entries.PlayerTabEntry;
 import com.github.chevyself.babel.api.text.Plain;
 import com.github.chevyself.babel.api.text.Text;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import java.util.*;
 import java.util.logging.Level;
@@ -81,7 +81,7 @@ public class SampleCommands {
       view.initialize();
       views.put(player.getUniqueId(), view);
     } catch (PacketHandlingException e) {
-      Debugger.getInstance().handle(Level.SEVERE, "", e);
+      ErrorHandler.getInstance().handle(Level.SEVERE, "", e);
     }
   }
 

@@ -179,7 +179,7 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
 
   @NonNull
   private <T> WrappedField<T> getField(
-      @NonNull Function<Class<?>, Field> supplier,
+      @NonNull Function<@NonNull Class<?>, @Nullable Field> supplier,
       @NonNull String name,
       @Nullable Class<T> fieldType,
       boolean exact) {
@@ -190,7 +190,7 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
       return WrappedField.of(fieldType, null);
     }
     Field field = supplier.apply(this.wrapped);
-    if (fieldType != null
+    if (field != null && fieldType != null
         && (exact
             ? !fieldType.equals(field.getType())
             : !fieldType.isAssignableFrom(field.getType()))) {
@@ -238,7 +238,7 @@ public final class WrappedClass<O> extends LangWrapper<Class<O>> {
     return this.getField(
         (clazz) -> {
           try {
-            return clazz.getField(name);
+            return clazz.getDeclaredField(name);
           } catch (NoSuchFieldException e) {
             Debugger.getInstance()
                 .getLogger()

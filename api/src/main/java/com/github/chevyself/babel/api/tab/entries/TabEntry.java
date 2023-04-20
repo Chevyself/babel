@@ -54,7 +54,7 @@ public interface TabEntry extends Comparable<TabEntry> {
   @NonNull
   default WrappedGameProfile getGameProfile(@NonNull TabSlot slot) throws PacketHandlingException {
     try {
-      Skin skin = getSkin();
+      Skin skin = this.getSkin();
       WrappedGameProfile gameProfile =
           WrappedGameProfile.construct(slot.getUuid(), slot.asEntryName());
       if (skin != null) {

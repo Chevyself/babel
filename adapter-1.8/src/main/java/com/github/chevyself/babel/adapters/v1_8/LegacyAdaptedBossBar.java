@@ -3,7 +3,7 @@ package com.github.chevyself.babel.adapters.v1_8;
 import static com.github.chevyself.babel.adapters.v1_8.LegacyBossBarAdapter.getWitherLocation;
 
 import com.github.chevyself.babel.adapters.AdaptedBossBar;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.PacketType;
@@ -64,7 +64,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
               true);
       packet.send(player);
     } catch (PacketHandlingException e) {
-      Debugger.getInstance().handle(Level.SEVERE, "Failed to send metadata packet", e);
+      ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to send metadata packet", e);
     }
   }
 
@@ -136,7 +136,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                     wither, new PacketHandlingException("Wither is no longer reachable")));
         packet.send(player);
       } catch (PacketHandlingException e) {
-        Debugger.getInstance().handle(Level.SEVERE, "Failed to send teleport packet");
+        ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to send teleport packet");
       }
     } else {
       this.destroy();
@@ -157,7 +157,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                     packet.send(player);
                   }
                 } catch (PacketHandlingException e) {
-                  Debugger.getInstance().handle(Level.SEVERE, "Failed to destroy wither entity", e);
+                  ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to destroy wither entity", e);
                 }
               });
       wither.setWrapped(null);
@@ -194,7 +194,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
                   wither, new PacketHandlingException("Wither could not be created successfully")));
       packet.send(player);
     } catch (PacketHandlingException e) {
-      Debugger.getInstance().handle(Level.SEVERE, "Failed to create boss bar for player", e);
+      ErrorHandler.getInstance().handle(Level.SEVERE, "Failed to create boss bar for player", e);
       this.destroyed = true;
     }
   }

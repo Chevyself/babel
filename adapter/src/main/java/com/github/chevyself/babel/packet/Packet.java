@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /** Represents a Packet which can be sent to a player or may be sent by a player. */
 public final class Packet extends ReflectWrapper {
@@ -112,11 +113,14 @@ public final class Packet extends ReflectWrapper {
    * @param objects the objects to pass to the constructor
    * @return the parameters of the constructor
    */
-  private static Class<?>[] getConstructorParameters(Object... objects) {
+  @NonNull
+  private static Class<?>[] getConstructorParameters(@Nullable Object... objects) {
     List<Class<?>> classes = new ArrayList<>();
     for (Object object : objects) {
       if (object != null) {
         classes.add(object.getClass());
+      } else {
+        classes.add(null);
       }
     }
     return classes.toArray(new Class[0]);

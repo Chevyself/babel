@@ -1,6 +1,7 @@
 package com.github.chevyself.babel.packet.entity.player;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
+import com.github.chevyself.babel.lookup.LookUp;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import com.github.chevyself.babel.packet.properties.WrappedProperty;
@@ -21,29 +22,45 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
       Versions.wrapNmsClassByName("server.level", "EntityPlayer");
 
   @NonNull
-  private static final WrappedMethod<?> GET_PROFILE = ENTITY_PLAYER.getMethod("getProfile");
+  private static final WrappedMethod<?> GET_PROFILE =
+      LookUp.methodOn(WrappedEntityPlayer.ENTITY_PLAYER)
+          .since(8, "getProfile")
+          .since(18, "fp")
+          .since(18, 2, "fq")
+          .since(19, "fz")
+          .since(19, 1, "fy")
+          .since(19, 3, "fD")
+          .since(19, 4, "fI")
+          .find();
 
   @NonNull
   private static final WrappedMethod<?> GET_PLAYER_LIST_NAME =
-      ENTITY_PLAYER.getMethod("getPlayerListName");
+      LookUp.methodOn(WrappedEntityPlayer.ENTITY_PLAYER)
+              .since(8, "getPlayerListName")
+              .since(18, "J")
+              .since(19, 3, "K")
+              .since(19, 4, "J")
+                  .find();
 
-  @NonNull private static final WrappedField<?> PLAYER_CONNECTION;
-
-  static {
-    if (Versions.BUKKIT < 16) {
-      PLAYER_CONNECTION = WrappedEntityPlayer.ENTITY_PLAYER.getDeclaredField("playerConnection");
-    } else {
-      PLAYER_CONNECTION = WrappedEntityPlayer.ENTITY_PLAYER.getDeclaredField("b");
-    }
-  }
+  @NonNull private static final WrappedField<?> PLAYER_CONNECTION =
+      LookUp.fieldOn(WrappedEntityPlayer.ENTITY_PLAYER)
+          .since(8, "playerConnection")
+          .since(16, "b")
+          .find();
 
   @NonNull
   private static final WrappedField<?> PLAYER_INTERACT_MANAGER =
-      ENTITY_PLAYER.getDeclaredField("playerInteractManager");
+      LookUp.fieldOn(WrappedEntityPlayer.ENTITY_PLAYER)
+          .since(8, "playerInteractManager")
+          .since(17, "d")
+          .find();
 
   @NonNull
   private static final WrappedField<Integer> PING =
-      WrappedEntityPlayer.ENTITY_PLAYER.getDeclaredField(int.class, "ping");
+      LookUp.fieldOn(WrappedEntityPlayer.ENTITY_PLAYER, int.class)
+          .since(8, "ping")
+          .since(17, "e")
+          .find();
 
   /**
    * Create the wrapper.
@@ -55,7 +72,7 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
   }
 
   public static Object createArray(int size) {
-    return Array.newInstance(ENTITY_PLAYER.getClazz(), size);
+    return Array.newInstance(WrappedEntityPlayer.ENTITY_PLAYER.getClazz(), size);
   }
 
   /**
@@ -76,33 +93,33 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
 
   public WrappedPlayerInfo playerInfo(@NonNull Packet packet)
       throws InvocationTargetException, IllegalAccessException, PacketHandlingException {
-    int ping = (int) PING.provide(this.wrapped);
+    int ping = (int) WrappedEntityPlayer.PING.provide(this.wrapped);
     return WrappedPlayerInfo.construct(
         packet,
         this.getProfile(),
         ping,
         this.playerInteractManager().getGameMode(),
-        getPlayerListName());
+        this.getPlayerListName());
   }
 
   @NonNull
   private WrappedPlayerInteractManager playerInteractManager() throws IllegalAccessException {
-    return new WrappedPlayerInteractManager(PLAYER_INTERACT_MANAGER.provide(this.wrapped));
+    return new WrappedPlayerInteractManager(WrappedEntityPlayer.PLAYER_INTERACT_MANAGER.provide(this.wrapped));
   }
 
   @NonNull
   private WrappedChatComponent getPlayerListName()
       throws InvocationTargetException, IllegalAccessException {
-    return new WrappedChatComponent(GET_PLAYER_LIST_NAME.invoke(this.wrapped));
+    return new WrappedChatComponent(WrappedEntityPlayer.GET_PLAYER_LIST_NAME.invoke(this.wrapped));
   }
 
   @NonNull
   public WrappedGameProfile getProfile() throws InvocationTargetException, IllegalAccessException {
-    return new WrappedGameProfile(GET_PROFILE.invoke(this.wrapped));
+    return new WrappedGameProfile(WrappedEntityPlayer.GET_PROFILE.invoke(this.wrapped));
   }
 
   public Skin getSkin() throws InvocationTargetException, IllegalAccessException {
-    for (WrappedProperty property : getProfile().getProperties().get("textures")) {
+    for (WrappedProperty property : this.getProfile().getProperties().get("textures")) {
       if (property.getName().equals("textures")) {
         return new Skin(property.getValue(), property.getSignature());
       }

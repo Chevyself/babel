@@ -4,7 +4,7 @@ import com.github.chevyself.babel.api.ResourceManager;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.text.format.Formatter;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import java.util.*;
 import java.util.logging.Level;
 import lombok.Getter;
@@ -151,7 +151,7 @@ public final class LocalizedReference implements Text {
 
   @Override
   public @NonNull BaseComponent[] build() {
-    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
     return this.asLocalized().build();
   }
 
@@ -192,7 +192,7 @@ public final class LocalizedReference implements Text {
 
   @Override
   public @NonNull String getRaw() {
-    Debugger.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#getRaw");
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#getRaw");
     return this.asLocalized().getRaw();
   }
 

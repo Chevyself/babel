@@ -2,7 +2,7 @@ package com.github.chevyself.babel.adapters.v1_11;
 
 import chevyself.github.commands.bukkit.utils.Components;
 import com.github.chevyself.babel.adapters.PlayerTitleAdapter;
-import com.github.chevyself.babel.debug.Debugger;
+import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.PacketType;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
@@ -42,7 +42,7 @@ public final class LegacyPlayerTitleAdapter implements PlayerTitleAdapter {
           .setField(4, fadeOut)
           .send(player);
     } catch (PacketHandlingException e) {
-      Debugger.getInstance()
+      ErrorHandler.getInstance()
           .handle(Level.SEVERE, "Could not send title, subtitle and times packet", e);
     }
   }
