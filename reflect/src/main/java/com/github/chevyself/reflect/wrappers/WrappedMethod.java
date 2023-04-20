@@ -1,5 +1,6 @@
 package com.github.chevyself.reflect.wrappers;
 
+import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.reflect.util.ReflectUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -7,10 +8,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringJoiner;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /** This class wraps a {@link Method} to prepare. */
 public final class WrappedMethod<T> extends LangWrapper<Method> {
 
+  @Nullable
   private final Class<T> returnType;
 
   /**
@@ -19,7 +22,7 @@ public final class WrappedMethod<T> extends LangWrapper<Method> {
    * @param reference the method to be wrapped
    * @param returnType the return type of the method
    */
-  private WrappedMethod(Method reference, Class<T> returnType) {
+  private WrappedMethod(@Nullable Method reference, @Nullable Class<T> returnType) {
     super(reference);
     this.returnType = returnType;
   }
@@ -36,9 +39,8 @@ public final class WrappedMethod<T> extends LangWrapper<Method> {
    * @return the wrapper of the method
    */
   @NonNull
-  public static <T> WrappedMethod<T> of(Method method) {
-    if (method != null) method.setAccessible(true);
-    return new WrappedMethod<>(method, null);
+  public static <T> WrappedMethod<T> of(@Nullable Method method) {
+    return WrappedMethod.of(method, null);
   }
 
   /**
@@ -50,7 +52,7 @@ public final class WrappedMethod<T> extends LangWrapper<Method> {
    * @return the wrap of the method
    */
   @NonNull
-  public static <T> WrappedMethod<T> of(Method method, Class<T> returnType) {
+  public static <T> WrappedMethod<T> of(@Nullable Method method, @Nullable Class<T> returnType) {
     if (method != null) method.setAccessible(true);
     return new WrappedMethod<>(
         method,
@@ -71,14 +73,15 @@ public final class WrappedMethod<T> extends LangWrapper<Method> {
    *     and the underlying method is inaccessible.
    * @throws InvocationTargetException if the underlying method throws an exception.
    */
-  public T prepare(Object object, Object... params)
+  @Nullable
+  public T prepare(@Nullable Object object, @Nullable Object... params)
       throws InvocationTargetException, IllegalAccessException {
+    Object invoke = this.invoke(object, params);
     T obj = null;
-    if (this.wrapped != null) {
-      Object invoke = this.wrapped.invoke(object, params);
-      if (invoke != null && returnType != null) {
-        obj = returnType.cast(invoke);
-      }
+    if (invoke != null && returnType != null) {
+      obj = returnType.cast(invoke);
+    } else {
+      Debugger.getInstance().getLogger().severe("Unable to cast " + invoke + " to " + returnType + " in " + this.wrapped);
     }
     return obj;
   }
@@ -94,12 +97,14 @@ public final class WrappedMethod<T> extends LangWrapper<Method> {
    *     and the underlying method is inaccessible.
    * @throws InvocationTargetException if the underlying method throws an exception.
    */
-  public Object invoke(Object object, Object... params)
+  @Nullable
+  public Object invoke(@Nullable Object object, @Nullable Object... params)
       throws InvocationTargetException, IllegalAccessException {
-    if (this.wrapped != null) {
-      return this.wrapped.invoke(object, params);
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Attempting to prepare a null method.");
+      return null;
     }
-    return null;
+    return this.wrapped.invoke(object, params);
   }
 
   /**
@@ -110,15 +115,6 @@ public final class WrappedMethod<T> extends LangWrapper<Method> {
   @NonNull
   public Optional<Class<?>> getReturnType() {
     return Optional.ofNullable(this.returnType);
-  }
-
-  /**
-   * Get the wrapped method.
-   *
-   * @return the wrapped method instance
-   */
-  public Method getMethod() {
-    return this.wrapped;
   }
 
   @Override

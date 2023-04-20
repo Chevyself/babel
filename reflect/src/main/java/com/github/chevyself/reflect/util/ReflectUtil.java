@@ -152,7 +152,7 @@ public final class ReflectUtil {
    * @throws T if the object is null
    */
   @NonNull
-  public static <O, T extends Exception> O nonNull(O o, @NonNull T exception) throws T {
+  public static <O, T extends Exception> O nonNull(@Nullable O o, @NonNull T exception) throws T {
     if (o == null) throw exception;
     return o;
   }

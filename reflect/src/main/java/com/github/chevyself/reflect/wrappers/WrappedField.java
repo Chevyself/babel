@@ -1,5 +1,6 @@
 package com.github.chevyself.reflect.wrappers;
 
+import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.reflect.modifiers.Modifier;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +31,7 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    */
   @NonNull
   public static WrappedField<?> of(@Nullable Field field) {
-    return of(null, field);
+    return WrappedField.of(null, field);
   }
 
   /**
@@ -55,12 +56,13 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    * @throws IllegalAccessException if this Field object is enforcing Java language access control
    *     and the underlying field is inaccessible.
    */
-  public Object provide(Object instance) throws IllegalAccessException {
-    Object other = null;
-    if (this.wrapped != null) {
-      other = this.wrapped.get(instance);
+  @Nullable
+  public Object provide(@Nullable Object instance) throws IllegalAccessException {
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Attempting to get the object in a null field");
+      return null;
     }
-    return other;
+    return this.wrapped.get(instance);
   }
 
   /**
@@ -72,12 +74,19 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    * @throws IllegalAccessException if this Field object is enforcing Java language access control
    *     and the underlying field is either inaccessible or final.
    */
-  public O get(Object instance) throws IllegalAccessException {
-    O other = null;
-    if (this.wrapped != null && this.fieldType != null) {
-      other = this.fieldType.cast(this.provide(instance));
+  @Nullable
+  public O get(@Nullable Object instance) throws IllegalAccessException {
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Attempting to get the object in a null field");
+      return null;
     }
-    return other;
+    if (this.fieldType == null) {
+      Debugger.getInstance()
+          .getLogger()
+          .severe("Field has no type, cannot cast the object to the field type @ " + this.wrapped);
+      return null;
+    }
+    return this.fieldType.cast(this.provide(instance));
   }
 
   /**
@@ -89,14 +98,13 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    * @throws IllegalAccessException if this Field object is enforcing Java language access control
    *     and the underlying field is either inaccessible or final.
    */
-  @NonNull
-  public boolean set(Object object, Object value) throws IllegalAccessException {
-    boolean set = false;
-    if (this.wrapped != null) {
-      this.wrapped.set(object, value);
-      set = true;
+  public boolean set(@Nullable Object object, @Nullable Object value) throws IllegalAccessException {
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Attempting to set the object: '" + object + "' in a null field");
+      return false;
     }
-    return set;
+    this.wrapped.set(object, value);
+    return true;
   }
 
   /**
@@ -109,22 +117,13 @@ public final class WrappedField<O> extends LangWrapper<Field> {
    * @throws IllegalAccessException if this Field object is enforcing Java language access control
    *     and the underlying field is either inaccessible or final.
    */
-  public boolean set(Object object, @NonNull Modifier modifier)
+  public boolean set(@Nullable Object object, @NonNull Modifier modifier)
       throws InvocationTargetException, IllegalAccessException {
-    boolean set = false;
-    if (this.wrapped != null) {
-      set = modifier.modify(this, object);
+    if (this.wrapped == null) {
+      Debugger.getInstance().getLogger().severe("Attempting to set the object in a null field, using the modifier: " + modifier);
+      return false;
     }
-    return set;
-  }
-
-  /**
-   * Get the instance of wrapped {@link Field}.
-   *
-   * @return the wrapped field if present else null
-   */
-  public Field getField() {
-    return wrapped;
+    return modifier.modify(this, object);
   }
 
   @Override

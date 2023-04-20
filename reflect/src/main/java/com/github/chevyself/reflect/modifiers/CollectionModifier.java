@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /** This modifier allows to change collections values in fields. */
 public abstract class CollectionModifier implements Modifier {
@@ -67,7 +68,7 @@ public abstract class CollectionModifier implements Modifier {
    * @return the modifier to add the object
    */
   @NonNull
-  public static CollectionModifier add(Object obj) {
+  public static CollectionModifier add(@Nullable Object obj) {
     return CollectionModifier.add(-1, obj);
   }
 
@@ -102,12 +103,12 @@ public abstract class CollectionModifier implements Modifier {
    * @return the modifier to add the object in an index
    */
   @NonNull
-  public static CollectionModifier add(int index, Object obj) {
+  public static CollectionModifier add(int index, @Nullable Object obj) {
     return new Add(index, obj);
   }
 
   @Override
-  public boolean modify(@NonNull WrappedField<?> field, @NonNull Object reference)
+  public boolean modify(@NonNull WrappedField<?> field, @Nullable Object reference)
       throws IllegalAccessException, InvocationTargetException {
     Object raw = field.provide(reference);
     if (raw instanceof Collection) {
@@ -117,7 +118,7 @@ public abstract class CollectionModifier implements Modifier {
   }
 
   /**
-   * Modify a field.
+   * Modifies a field.
    *
    * @param field the field to be modified
    * @param reference the reference in which the field will be changed
@@ -128,7 +129,7 @@ public abstract class CollectionModifier implements Modifier {
    *     and the underlying field is either inaccessible or final.
    */
   public abstract boolean modify(
-      @NonNull WrappedField<?> field, @NonNull Object reference, @NonNull Collection<?> collection)
+      @NonNull WrappedField<?> field, @Nullable Object reference, @NonNull Collection<?> collection)
       throws IllegalAccessException, InvocationTargetException;
 
   private static class Add extends CollectionModifier {
@@ -144,14 +145,14 @@ public abstract class CollectionModifier implements Modifier {
     @Override
     public boolean modify(
         @NonNull WrappedField<?> field,
-        @NonNull Object reference,
+        @Nullable Object reference,
         @NonNull Collection<?> collection)
         throws IllegalAccessException, InvocationTargetException {
       if (index > -1 && collection instanceof List) {
         CollectionModifier.ADD_INDEX.invoke(collection, index, toAdd);
         return true;
       } else {
-        return CollectionModifier.ADD.prepare(collection, toAdd);
+        return Boolean.TRUE.equals(CollectionModifier.ADD.prepare(collection, toAdd));
       }
     }
   }
@@ -167,10 +168,10 @@ public abstract class CollectionModifier implements Modifier {
     @Override
     public boolean modify(
         @NonNull WrappedField<?> field,
-        @NonNull Object reference,
+        @Nullable Object reference,
         @NonNull Collection<?> collection)
         throws IllegalAccessException, InvocationTargetException {
-      return CollectionModifier.ADD_ALL.prepare(collection, this.collection);
+      return Boolean.TRUE.equals(CollectionModifier.ADD_ALL.prepare(collection, this.collection));
     }
   }
 }

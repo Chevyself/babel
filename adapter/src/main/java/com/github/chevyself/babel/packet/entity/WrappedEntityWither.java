@@ -17,35 +17,35 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   @NonNull
   private static final WrappedConstructor<?> CONSTRUCTOR =
-      ENTITY_WITHER.getConstructor(WrappedWorld.CLAZZ.getClazz());
+      WrappedEntityWither.ENTITY_WITHER.getConstructor(WrappedWorld.CLAZZ.getClazz());
 
   @NonNull
   private static final WrappedMethod<?> SET_LOCATION =
-      ENTITY_WITHER.getMethod(
+      WrappedEntityWither.ENTITY_WITHER.getMethod(
           "setLocation", double.class, double.class, double.class, float.class, float.class);
 
   @NonNull
   private static final WrappedMethod<?> SET_INVISIBLE =
-      ENTITY_WITHER.getMethod("setInvisible", boolean.class);
+      WrappedEntityWither.ENTITY_WITHER.getMethod("setInvisible", boolean.class);
 
   @NonNull
   private static final WrappedMethod<?> SET_CUSTOM_NAME =
-      ENTITY_WITHER.getMethod("setCustomName", String.class);
+      WrappedEntityWither.ENTITY_WITHER.getMethod("setCustomName", String.class);
 
   @NonNull
   private static final WrappedMethod<?> SET_HEALTH =
-      ENTITY_WITHER.getMethod("setHealth", float.class);
+      WrappedEntityWither.ENTITY_WITHER.getMethod("setHealth", float.class);
 
   @NonNull
-  private static final WrappedMethod<Integer> GET_ID = ENTITY_WITHER.getMethod(int.class, "getId");
+  private static final WrappedMethod<Integer> GET_ID = WrappedEntityWither.ENTITY_WITHER.getMethod(int.class, "getId");
 
   @NonNull
   private static final WrappedMethod<Float> GET_MAX_HEALTH =
-      ENTITY_WITHER.getMethod(float.class, "getMaxHealth");
+      WrappedEntityWither.ENTITY_WITHER.getMethod(float.class, "getMaxHealth");
 
   @NonNull
   private static final WrappedMethod<?> GET_DATA_WATCHER =
-      ENTITY_WITHER.getMethod("getDataWatcher");
+      WrappedEntityWither.ENTITY_WITHER.getMethod("getDataWatcher");
 
   WrappedEntityWither(Object reference) {
     super(reference);
@@ -54,7 +54,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
   public static WrappedEntityWither construct(@NonNull WrappedWorldServer server)
       throws PacketHandlingException {
     try {
-      return new WrappedEntityWither(CONSTRUCTOR.invoke(server.getWrapped()));
+      return new WrappedEntityWither(WrappedEntityWither.CONSTRUCTOR.invoke(server.getWrapped()));
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not create EntityEnderDragon", e);
     }
@@ -63,7 +63,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
   public void setLocation(double x, double y, double z, float yaw, float pitch)
       throws PacketHandlingException {
     try {
-      SET_LOCATION.invoke(this.wrapped, x, y, z, yaw, pitch);
+      WrappedEntityWither.SET_LOCATION.invoke(this.wrapped, x, y, z, yaw, pitch);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setLocation", e);
     }
@@ -71,7 +71,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public void setInvisible(boolean visible) throws PacketHandlingException {
     try {
-      SET_INVISIBLE.invoke(this.wrapped, visible);
+      WrappedEntityWither.SET_INVISIBLE.invoke(this.wrapped, visible);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setInvisible", e);
     }
@@ -79,7 +79,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public void setCustomName(String name) throws PacketHandlingException {
     try {
-      SET_CUSTOM_NAME.invoke(this.wrapped, name);
+      WrappedEntityWither.SET_CUSTOM_NAME.invoke(this.wrapped, name);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setCustomName", e);
     }
@@ -87,7 +87,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public float getMaxHealth() throws PacketHandlingException {
     try {
-      return GET_MAX_HEALTH.prepare(this.wrapped);
+      return WrappedEntityWither.GET_MAX_HEALTH.prepare(this.wrapped);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getMaxHealth");
     }
@@ -95,7 +95,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public void setHealth(float health) throws PacketHandlingException {
     try {
-      SET_HEALTH.invoke(this.wrapped, health);
+      WrappedEntityWither.SET_HEALTH.invoke(this.wrapped, health);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#setHealth");
     }
@@ -103,7 +103,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public int getId() throws PacketHandlingException {
     try {
-      return GET_ID.prepare(this.wrapped);
+      return WrappedEntityWither.GET_ID.prepare(this.wrapped);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getId");
     }
@@ -111,7 +111,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public Object getDataWatcher() throws PacketHandlingException {
     try {
-      return GET_DATA_WATCHER.invoke(this.wrapped);
+      return WrappedEntityWither.GET_DATA_WATCHER.invoke(this.wrapped);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getDataWatcher");
     }
@@ -119,7 +119,7 @@ public class WrappedEntityWither extends WrappedEntityLiving {
 
   public WrappedDataWatcher getWrappedDataWatcher() throws PacketHandlingException {
     try {
-      return new WrappedDataWatcher(GET_DATA_WATCHER.invoke(this.wrapped));
+      return new WrappedDataWatcher(WrappedEntityWither.GET_DATA_WATCHER.invoke(this.wrapped));
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not invoke Entity#getDataWatcher");
     }

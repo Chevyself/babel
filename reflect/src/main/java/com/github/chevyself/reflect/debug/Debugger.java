@@ -28,11 +28,21 @@ public final class Debugger {
     this.logger = logger;
   }
 
+  /**
+   * Get the instance of the debugger.
+   *
+   * @return the debugger
+   */
   @NonNull
   public static Debugger getInstance() {
-    return instance;
+    return Debugger.instance;
   }
 
+  /**
+   * Set the instance of the debugger.
+   *
+   * @param instance the new debugger
+   */
   public static void setInstance(@NonNull Debugger instance) {
     Debugger.instance = instance;
   }
