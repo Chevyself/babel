@@ -9,18 +9,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import lombok.NonNull;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+/** Factory for creating boss bars for 1.8 clients. */
 public class LegacyBossBarAdapter implements BossBarAdapter {
 
   @NonNull private final Set<LegacyAdaptedBossBar> bossBars = new HashSet<>();
-
-  @NonNull
-  static Location getWitherLocation(Location location) {
-    return location.add(location.getDirection().multiply(23));
-  }
 
   @Override
   public @NonNull AdaptedBossBar create(

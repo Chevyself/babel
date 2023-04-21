@@ -85,7 +85,6 @@ public final class PacketType {
    * @return the new packet
    * @throws PacketHandlingException if the constructor of the packet could not be invoked
    */
-  @Deprecated
   public @NonNull Packet create(@NonNull Class<?>[] params, Object... objects)
       throws PacketHandlingException {
     return Packet.forType(this, params, objects);

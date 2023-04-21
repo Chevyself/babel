@@ -128,14 +128,14 @@ public interface PlayerChannel extends Channel {
   @Override
   @NonNull
   default PlayerScoreboard getScoreboard() {
-    return scoreboards.stream()
+    return PlayerChannel.scoreboards.stream()
         .filter(scoreboard -> scoreboard.getOwner().equals(this.getUniqueId()))
         .findFirst()
         .orElseGet(
             () -> {
               PlayerScoreboard scoreboard =
                   PlayerScoreboard.create(this.getUniqueId(), new ArrayList<>());
-              scoreboards.add(scoreboard);
+              PlayerChannel.scoreboards.add(scoreboard);
               return scoreboard;
             });
   }
@@ -146,11 +146,11 @@ public interface PlayerChannel extends Channel {
     Optional<Player> optional = this.getPlayer();
     if (optional.isPresent()) {
       Player player = optional.get();
-      Optional<? extends AdaptedBossBar> bossBar = bossBarAdapter.getBossBar(player.getUniqueId());
+      Optional<? extends AdaptedBossBar> bossBar = PlayerChannel.bossBarAdapter.getBossBar(player.getUniqueId());
       if (bossBar.isPresent()) {
         return bossBar.get();
       } else {
-        return bossBarAdapter.create(player);
+        return PlayerChannel.bossBarAdapter.create(player);
       }
     } else {
       return new EmptyAdaptedBossBar(this.getUniqueId());
@@ -160,7 +160,7 @@ public interface PlayerChannel extends Channel {
   @Override
   default @NonNull TabView getTabView() {
     Optional<PlayerTabView> tabView =
-        views.stream().filter(view -> view.getUniqueId().equals(this.getUniqueId())).findFirst();
+        PlayerChannel.views.stream().filter(view -> view.getUniqueId().equals(this.getUniqueId())).findFirst();
     if (tabView.isPresent()) {
       return tabView.get();
     } else {
@@ -170,7 +170,7 @@ public interface PlayerChannel extends Channel {
                 try {
                   PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
                   view.initialize();
-                  views.add(view);
+                  PlayerChannel.views.add(view);
                   return view;
                 } catch (PacketHandlingException e) {
                   ErrorHandler.getInstance()
@@ -184,17 +184,17 @@ public interface PlayerChannel extends Channel {
 
   @Override
   default boolean hasBossBar() {
-    return bossBarAdapter.getBossBar(this.getUniqueId()).isPresent();
+    return PlayerChannel.bossBarAdapter.getBossBar(this.getUniqueId()).isPresent();
   }
 
   @Override
   default boolean hasTabView() {
-    return views.stream().anyMatch(view -> view.getUniqueId().equals(this.getUniqueId()));
+    return PlayerChannel.views.stream().anyMatch(view -> view.getUniqueId().equals(this.getUniqueId()));
   }
 
   @Override
   default boolean hasScoreboard() {
-    return scoreboards.stream()
+    return PlayerChannel.scoreboards.stream()
         .anyMatch(scoreboard -> scoreboard.getOwner().equals(this.getUniqueId()));
   }
 
