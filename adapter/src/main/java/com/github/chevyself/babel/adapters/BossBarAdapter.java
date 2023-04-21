@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An adapter to create boss bars. This is used to create boss bars that are adapted to the server
@@ -19,8 +20,8 @@ public interface BossBarAdapter {
       @NonNull Player player,
       @NonNull String title,
       float progress,
-      WrappedBarColor color,
-      WrappedBarStyle style);
+      @Nullable WrappedBarColor color,
+      @Nullable WrappedBarStyle style);
 
   @Deprecated
   @NonNull

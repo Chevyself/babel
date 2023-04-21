@@ -7,12 +7,11 @@ import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.PacketType;
-import com.github.chevyself.babel.packet.entity.player.WrappedCraftPlayer;
+import com.github.chevyself.babel.packet.craft.WrappedCraftPlayer;
 import com.github.chevyself.babel.packet.entity.player.WrappedEntityPlayer;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfo;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfoAction;
 import com.github.chevyself.reflect.modifiers.CollectionModifier;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
@@ -187,9 +186,7 @@ public class PlayerTabView implements TabView {
             craftPlayer -> {
               try {
                 return craftPlayer.getHandle().playerInfo(packet);
-              } catch (PacketHandlingException
-                  | InvocationTargetException
-                  | IllegalAccessException e) {
+              } catch (PacketHandlingException e) {
                 ErrorHandler.getInstance()
                     .handle(Level.SEVERE, "Could not get entity from CraftPlayer", e);
                 return null;

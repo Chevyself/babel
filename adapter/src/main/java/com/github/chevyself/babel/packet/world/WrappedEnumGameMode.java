@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.GameMode;
 
+/** Wrapper for the nms GameMode class. */
 public enum WrappedEnumGameMode implements Wrapper<Object> {
   SURVIVAL(GameMode.SURVIVAL),
   CREATIVE(GameMode.CREATIVE),
@@ -25,24 +26,39 @@ public enum WrappedEnumGameMode implements Wrapper<Object> {
     }
   }
 
-  public static final WrappedMethod<?> VALUE_OF = CLAZZ.getMethod("valueOf", String.class);
+  public static final WrappedMethod<?> VALUE_OF =
+      WrappedEnumGameMode.CLAZZ.getMethod("valueOf", String.class);
   @NonNull @Getter private final GameMode bukkit;
 
   WrappedEnumGameMode(@NonNull GameMode bukkit) {
     this.bukkit = bukkit;
   }
 
+  /**
+   * Get the gamemode from the bukkit enum.
+   *
+   * @param invoke the bukkit enum
+   * @return the gamemode
+   * @throws IllegalArgumentException if the gamemode could not be found
+   */
   @NonNull
   public static WrappedEnumGameMode valueOf(Object invoke) {
     if (invoke instanceof Enum) {
-      return valueOf(((Enum<?>) invoke).name());
+      return WrappedEnumGameMode.valueOf(((Enum<?>) invoke).name());
     }
     throw new IllegalArgumentException("Cannot get gamemode from " + invoke);
   }
 
+  /**
+   * Get the gamemode from the bukkit enum.
+   *
+   * @param gameMode the bukkit enum
+   * @return the gamemode
+   * @throws IllegalArgumentException if the gamemode could not be found
+   */
   @NonNull
   public static WrappedEnumGameMode valueOf(@NonNull GameMode gameMode) {
-    for (WrappedEnumGameMode mode : values()) {
+    for (WrappedEnumGameMode mode : WrappedEnumGameMode.values()) {
       if (mode.getBukkit().equals(gameMode)) {
         return mode;
       }
@@ -53,7 +69,7 @@ public enum WrappedEnumGameMode implements Wrapper<Object> {
   @Override
   public Object getWrapped() {
     try {
-      return VALUE_OF.invoke(null, this.name());
+      return WrappedEnumGameMode.VALUE_OF.invoke(null, this.name());
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new IllegalStateException("Could not get value of gamemode " + this, e);
     }

@@ -4,6 +4,7 @@ import com.github.chevyself.reflect.Wrapper;
 import lombok.NonNull;
 import org.bukkit.boss.BarColor;
 
+/** Wraps the {@link BarColor} enum. */
 public enum WrappedBarColor implements Wrapper<BarColor> {
   PINK(BarColor.PINK),
   BLUE(BarColor.BLUE),
@@ -19,6 +20,7 @@ public enum WrappedBarColor implements Wrapper<BarColor> {
   }
 
   @Override
+  @NonNull
   public BarColor getWrapped() {
     return this.wrapped;
   }

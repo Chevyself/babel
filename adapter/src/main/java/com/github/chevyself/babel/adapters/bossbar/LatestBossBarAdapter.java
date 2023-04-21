@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /** This is the latest implementation of {@link BossBarAdapter} that uses the latest Spigot API. */
 public class LatestBossBarAdapter implements BossBarAdapter {
@@ -20,9 +21,9 @@ public class LatestBossBarAdapter implements BossBarAdapter {
       @NonNull Player player,
       @NonNull String title,
       float progress,
-      WrappedBarColor color,
-      WrappedBarStyle style) {
-    LatestAdaptedBossBar bossBar = create(player).setTitle(title).setProgress(progress);
+      @Nullable WrappedBarColor color,
+      @Nullable WrappedBarStyle style) {
+    LatestAdaptedBossBar bossBar = this.create(player).setTitle(title).setProgress(progress);
     if (color != null) {
       bossBar.setColor(color);
     }

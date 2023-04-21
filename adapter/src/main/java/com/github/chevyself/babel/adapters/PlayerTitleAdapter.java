@@ -2,6 +2,7 @@ package com.github.chevyself.babel.adapters;
 
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /** An adapter to send titles to players in different server versions. */
 public interface PlayerTitleAdapter {
@@ -17,5 +18,10 @@ public interface PlayerTitleAdapter {
    * @param fadeOut the time to fade out
    */
   void sendTitle(
-      @NonNull Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut);
+      @NonNull Player player,
+      @Nullable String title,
+      @Nullable String subtitle,
+      int fadeIn,
+      int stay,
+      int fadeOut);
 }

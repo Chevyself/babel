@@ -16,3 +16,5 @@ User Interface utility for Bukkit
 * **api** Main module of the utility.
 * **sample** Deprecated. This contains sample code for a plugin, will be replaced with an actual plugin.
 
+> Please note that either `reflect`, `adapter` or any `adapter-{verssion}` should be accessed as if those were an API. These modules access NMS using reflection and are in constant change. The `api` module is the only one that is stable.
+

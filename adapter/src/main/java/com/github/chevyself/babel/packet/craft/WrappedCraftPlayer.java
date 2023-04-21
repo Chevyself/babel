@@ -1,7 +1,8 @@
-package com.github.chevyself.babel.packet.entity.player;
+package com.github.chevyself.babel.packet.craft;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
+import com.github.chevyself.babel.packet.entity.player.WrappedEntityPlayer;
 import com.github.chevyself.reflect.AbstractWrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;

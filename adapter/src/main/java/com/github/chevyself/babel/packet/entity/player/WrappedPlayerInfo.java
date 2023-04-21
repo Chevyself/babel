@@ -3,6 +3,7 @@ package com.github.chevyself.babel.packet.entity.player;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.PacketType;
+import com.github.chevyself.babel.packet.authlib.WrappedGameProfile;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import com.github.chevyself.babel.packet.entity.WrappedPublicKeyData;
 import com.github.chevyself.babel.packet.world.WrappedEnumGameMode;
@@ -13,6 +14,7 @@ import com.github.chevyself.reflect.wrappers.WrappedConstructor;
 import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 
+/** Wraps the 'PlayerInfoData' nms class. */
 public class WrappedPlayerInfo extends AbstractWrapper<Object> {
 
   @NonNull
@@ -20,12 +22,13 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
       WrappedClass.forName(
           PacketType.Play.ClientBound.PLAYER_INFO.getCanonicalName() + "$PlayerInfoData");
 
+  // TODO a better way to approach constructors
   @NonNull public static final WrappedConstructor<?> CONSTRUCTOR;
 
   static {
     if (Versions.BUKKIT < 17) {
       CONSTRUCTOR =
-          CLAZZ.getConstructor(
+          WrappedPlayerInfo.CLAZZ.getConstructor(
               PacketType.Play.ClientBound.PLAYER_INFO.wrap().getClazz(),
               WrappedGameProfile.CLAZZ.getClazz(),
               int.class,
@@ -33,7 +36,7 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
               WrappedChatComponent.CLAZZ.getClazz());
     } else if (Versions.BUKKIT >= 19) {
       CONSTRUCTOR =
-          CLAZZ.getConstructor(
+          WrappedPlayerInfo.CLAZZ.getConstructor(
               WrappedGameProfile.CLAZZ.getClazz(),
               int.class,
               WrappedEnumGameMode.CLAZZ.getClazz(),
@@ -41,7 +44,7 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
               WrappedPublicKeyData.CLAZZ.getClazz());
     } else {
       CONSTRUCTOR =
-          CLAZZ.getConstructor(
+          WrappedPlayerInfo.CLAZZ.getConstructor(
               WrappedGameProfile.CLAZZ.getClazz(),
               int.class,
               WrappedEnumGameMode.CLAZZ.getClazz(),
@@ -49,10 +52,26 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
     }
   }
 
+  /**
+   * Wraps a PlayerInfoData object.
+   *
+   * @param handle the object that must be a PlayerInfoData
+   */
   public WrappedPlayerInfo(Object handle) {
     super(handle);
   }
 
+  /**
+   * Creates a new PlayerInfoData object.
+   *
+   * @param packet the packet that contains the PlayerInfoData
+   * @param profile the profile of the player
+   * @param ping the ping of the player
+   * @param gamemode the gamemode of the player
+   * @param display the display name of the player
+   * @return the new PlayerInfoData object
+   * @throws PacketHandlingException if the object could not be created
+   */
   public static @NonNull WrappedPlayerInfo construct(
       @NonNull Packet packet,
       @NonNull WrappedGameProfile profile,
@@ -63,7 +82,7 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
     try {
       if (Versions.BUKKIT < 17) {
         return new WrappedPlayerInfo(
-            CONSTRUCTOR.invoke(
+            WrappedPlayerInfo.CONSTRUCTOR.invoke(
                 packet.getWrapped(),
                 profile.getWrapped(),
                 ping,
@@ -71,11 +90,11 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
                 display.getWrapped()));
       } else if (Versions.BUKKIT >= 19) {
         return new WrappedPlayerInfo(
-            CONSTRUCTOR.invoke(
+            WrappedPlayerInfo.CONSTRUCTOR.invoke(
                 profile.getWrapped(), ping, gamemode.getWrapped(), display.getWrapped(), null));
       } else {
         return new WrappedPlayerInfo(
-            CONSTRUCTOR.invoke(
+            WrappedPlayerInfo.CONSTRUCTOR.invoke(
                 profile.getWrapped(), ping, gamemode.getWrapped(), display.getWrapped()));
       }
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {

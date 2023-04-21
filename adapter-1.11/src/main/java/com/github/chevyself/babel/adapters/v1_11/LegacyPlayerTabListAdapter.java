@@ -9,11 +9,12 @@ import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import java.util.logging.Level;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public final class LegacyPlayerTabListAdapter implements PlayerTabListAdapter {
 
   @Override
-  public void setTabList(@NonNull Player player, String header, String bottom) {
+  public void setTabList(@NonNull Player player, @Nullable String header, @Nullable String bottom) {
     try {
       PacketType.Play.ClientBound.HEADER_FOOTER
           .create()

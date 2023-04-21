@@ -3,10 +3,12 @@ package com.github.chevyself.babel.packet.entity.player;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.lookup.LookUp;
 import com.github.chevyself.babel.packet.Packet;
+import com.github.chevyself.babel.packet.authlib.WrappedGameProfile;
+import com.github.chevyself.babel.packet.authlib.properties.WrappedProperty;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
-import com.github.chevyself.babel.packet.properties.WrappedProperty;
+import com.github.chevyself.babel.packet.entity.WrappedEntityLiving;
 import com.github.chevyself.babel.util.Versions;
-import com.github.chevyself.reflect.AbstractWrapper;
+import com.github.chevyself.reflect.util.ReflectUtil;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedField;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
@@ -15,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 
 /** Wraps the 'EntityPlayer' nms class. */
-public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
+public final class WrappedEntityPlayer extends WrappedEntityLiving {
 
   @NonNull
   public static final WrappedClass<?> ENTITY_PLAYER =
@@ -58,7 +60,7 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
 
   @NonNull
   private static final WrappedField<Integer> PING =
-      LookUp.fieldOn(WrappedEntityPlayer.ENTITY_PLAYER, int.class)
+      LookUp.fieldOn(WrappedEntityPlayer.ENTITY_PLAYER, Integer.class)
           .since(8, "ping")
           .since(17, "e")
           .find();
@@ -68,10 +70,16 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
    *
    * @param reference the reference of the wrapper
    */
-  WrappedEntityPlayer(Object reference) {
+  public WrappedEntityPlayer(Object reference) {
     super(reference);
   }
 
+  /**
+   * Create an array of entity players.
+   *
+   * @param size the size of the array
+   * @return the array
+   */
   public static Object createArray(int size) {
     return Array.newInstance(WrappedEntityPlayer.ENTITY_PLAYER.getClazz(), size);
   }
@@ -81,6 +89,7 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
    *
    * @return the wrapped player connection
    * @throws NullPointerException if the connection could not be provided
+   * @throws PacketHandlingException if the connection could not be provided
    */
   @NonNull
   public WrappedPlayerConnection playerConnection() throws PacketHandlingException {
@@ -92,35 +101,70 @@ public final class WrappedEntityPlayer extends AbstractWrapper<Object> {
     }
   }
 
-  public WrappedPlayerInfo playerInfo(@NonNull Packet packet)
-      throws InvocationTargetException, IllegalAccessException, PacketHandlingException {
-    int ping = (int) WrappedEntityPlayer.PING.provide(this.wrapped);
-    return WrappedPlayerInfo.construct(
-        packet,
-        this.getProfile(),
-        ping,
-        this.playerInteractManager().getGameMode(),
-        this.getPlayerListName());
+  /**
+   * Get this entity player as a player info.
+   *
+   * @param packet the packet to construct the player info with
+   * @return the player info
+   * @throws PacketHandlingException if the player info could not be constructed
+   */
+  @NonNull
+  public WrappedPlayerInfo playerInfo(@NonNull Packet packet) throws PacketHandlingException {
+    try {
+      int ping = ReflectUtil.safelyUnbox(WrappedEntityPlayer.PING.get(this.wrapped), 0);
+      return WrappedPlayerInfo.construct(
+          packet,
+          this.getProfile(),
+          ping,
+          this.playerInteractManager().getGameMode(),
+          this.getPlayerListName());
+    } catch (PacketHandlingException | IllegalAccessException e) {
+      throw new PacketHandlingException("Could not get the player info", e);
+    }
   }
 
   @NonNull
-  private WrappedPlayerInteractManager playerInteractManager() throws IllegalAccessException {
-    return new WrappedPlayerInteractManager(
-        WrappedEntityPlayer.PLAYER_INTERACT_MANAGER.provide(this.wrapped));
+  private WrappedPlayerInteractManager playerInteractManager() throws PacketHandlingException {
+    try {
+      return new WrappedPlayerInteractManager(
+          WrappedEntityPlayer.PLAYER_INTERACT_MANAGER.provide(this.wrapped));
+    } catch (IllegalAccessException e) {
+      throw new PacketHandlingException("Could not get the player interact manager", e);
+    }
   }
 
   @NonNull
-  private WrappedChatComponent getPlayerListName()
-      throws InvocationTargetException, IllegalAccessException {
-    return new WrappedChatComponent(WrappedEntityPlayer.GET_PLAYER_LIST_NAME.invoke(this.wrapped));
+  private WrappedChatComponent getPlayerListName() throws PacketHandlingException {
+    try {
+      return new WrappedChatComponent(
+          WrappedEntityPlayer.GET_PLAYER_LIST_NAME.invoke(this.wrapped));
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      throw new PacketHandlingException("Could not get the player list name", e);
+    }
   }
 
+  /**
+   * Get the game profile of this player.
+   *
+   * @return the game profile
+   * @throws PacketHandlingException if the game profile could not be provided
+   */
   @NonNull
-  public WrappedGameProfile getProfile() throws InvocationTargetException, IllegalAccessException {
-    return new WrappedGameProfile(WrappedEntityPlayer.GET_PROFILE.invoke(this.wrapped));
+  public WrappedGameProfile getProfile() throws PacketHandlingException {
+    try {
+      return new WrappedGameProfile(WrappedEntityPlayer.GET_PROFILE.invoke(this.wrapped));
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      throw new PacketHandlingException("Could not get the game profile", e);
+    }
   }
 
-  public Skin getSkin() throws InvocationTargetException, IllegalAccessException {
+  /**
+   * Get the skin of this player.
+   *
+   * @return the skin
+   * @throws PacketHandlingException if the skin could not be provided
+   */
+  public Skin getSkin() throws PacketHandlingException {
     for (WrappedProperty property : this.getProfile().getProperties().get("textures")) {
       if (property.getName().equals("textures")) {
         return new Skin(property.getValue(), property.getSignature());

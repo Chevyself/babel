@@ -12,10 +12,16 @@ public class EmptyAdaptedBossBar implements AdaptedBossBar {
 
   @NonNull @Getter private final UUID owner;
 
+  /**
+   * Create a new empty boss bar with the given owner.
+   *
+   * @param owner the owner of the boss bar
+   */
   public EmptyAdaptedBossBar(@NonNull UUID owner) {
     this.owner = owner;
   }
 
+  /** Create a new empty boss bar with a random owner. */
   public EmptyAdaptedBossBar() {
     this(UUID.randomUUID());
   }

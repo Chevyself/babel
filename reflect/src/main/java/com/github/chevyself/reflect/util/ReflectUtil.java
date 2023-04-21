@@ -210,4 +210,15 @@ public final class ReflectUtil {
       }
     }
   }
+
+  /**
+   * Safe unboxing of an {@link Integer}.
+   *
+   * @param integer the integer to unbox
+   * @param def the default value if the integer is null
+   * @return the unboxed integer or the default value if the integer is null
+   */
+  public static int safelyUnbox(Integer integer, int def) {
+    return integer == null ? def : integer;
+  }
 }

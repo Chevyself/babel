@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /**
- * Reperesents many {@link AdaptedBossBar} as one. This is useful when you want to display the same
+ * Represents many {@link AdaptedBossBar} as one. This is useful when you want to display the same
  * boss bar to many players
  */
 public class AdaptedBossBarTuple implements AdaptedBossBar {
@@ -19,10 +19,20 @@ public class AdaptedBossBarTuple implements AdaptedBossBar {
   @NonNull @Getter private final UUID owner = UUID.randomUUID();
   @NonNull private final Set<AdaptedBossBar> bossBars;
 
+  /**
+   * Create a new boss bar tuple with the given boss bars.
+   *
+   * @param bossBars the boss bars to use
+   */
   public AdaptedBossBarTuple(@NonNull Set<AdaptedBossBar> bossBars) {
     this.bossBars = bossBars;
   }
 
+  /**
+   * Create a new boss bar tuple with the given boss bars.
+   *
+   * @param bossBars the boss bars to use
+   */
   public AdaptedBossBarTuple(@NonNull Collection<AdaptedBossBar> bossBars) {
     this(new HashSet<>(bossBars));
   }

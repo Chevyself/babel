@@ -10,11 +10,17 @@ import com.github.chevyself.babel.packet.chat.WrappedTitleAction;
 import java.util.logging.Level;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public final class LegacyPlayerTitleAdapter implements PlayerTitleAdapter {
   @Override
   public void sendTitle(
-      @NonNull Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+      @NonNull Player player,
+      @Nullable String title,
+      @Nullable String subtitle,
+      int fadeIn,
+      int stay,
+      int fadeOut) {
     PacketType type = PacketType.Play.ClientBound.TITLE;
     try {
       if (title != null) {

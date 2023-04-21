@@ -11,6 +11,7 @@ import java.util.UUID;
 import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public class LegacyBossBarAdapter implements BossBarAdapter {
 
@@ -26,8 +27,8 @@ public class LegacyBossBarAdapter implements BossBarAdapter {
       @NonNull Player player,
       @NonNull String title,
       float progress,
-      WrappedBarColor color,
-      WrappedBarStyle style) {
+      @Nullable WrappedBarColor color,
+      @Nullable WrappedBarStyle style) {
     return this.create(player, title, progress);
   }
 

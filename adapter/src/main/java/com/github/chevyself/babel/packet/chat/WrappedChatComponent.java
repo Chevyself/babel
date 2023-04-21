@@ -5,6 +5,7 @@ import com.github.chevyself.reflect.AbstractWrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.google.gson.Gson;
 import java.lang.reflect.Type;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -29,6 +30,8 @@ public final class WrappedChatComponent extends AbstractWrapper<Object> {
   /**
    * Wrap components into a chat component.
    *
+   * <p>This gets the type of the component from the {@link #CLAZZ} field.
+   *
    * @param components the components to wrap
    * @return the wrapped components
    */
@@ -39,6 +42,8 @@ public final class WrappedChatComponent extends AbstractWrapper<Object> {
 
   /**
    * Wrap chat components from the given {@link Type} of chat component.
+   *
+   * <p>This will convert Spigots chat components (bugeecord-chat-api) to the NMS chat components.
    *
    * @param components the components to wrap
    * @param typeOfComponent the type of the chat component
@@ -63,7 +68,9 @@ public final class WrappedChatComponent extends AbstractWrapper<Object> {
     @NonNull
     private static Gson getChatSerializer() {
       try {
-        return Serializer.CHAT_SERIALIZER.getDeclaredField(Gson.class, "a").get(null);
+        return Objects.requireNonNull(
+            Serializer.CHAT_SERIALIZER.getDeclaredField(Gson.class, "a").get(null),
+            "Could not access Gson from IChatBaseComponent");
       } catch (IllegalAccessException e) {
         throw new IllegalStateException("Could not get Gson from field");
       }

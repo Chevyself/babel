@@ -3,6 +3,7 @@ package com.github.chevyself.babel.adapters;
 import lombok.NonNull;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This is an adapter to create objectives. This is used to create objectives that are adapted to
@@ -11,7 +12,7 @@ import org.bukkit.scoreboard.Scoreboard;
 public interface ObjectiveAdapter {
 
   /**
-   * Create an objective with the given parameters
+   * Create an objective with the given parameters.
    *
    * @param scoreboard the scoreboard to register the objective
    * @param name the name of the objective
@@ -25,5 +26,5 @@ public interface ObjectiveAdapter {
       @NonNull Scoreboard scoreboard,
       @NonNull String name,
       @NonNull String criteria,
-      String display);
+      @Nullable String display);
 }

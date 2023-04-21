@@ -6,7 +6,6 @@ import lombok.NonNull;
 import org.bukkit.SoundCategory;
 
 /** Class to wrap {@link SoundCategory} to not crash when older versions cannot use it. */
-// TODO change this to enum
 public enum WrappedSoundCategory implements Wrapper<SoundCategory> {
   MASTER(SoundCategory.MASTER),
   MUSIC(SoundCategory.MUSIC),

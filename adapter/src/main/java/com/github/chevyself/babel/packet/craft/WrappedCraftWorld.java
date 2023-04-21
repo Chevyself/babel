@@ -1,8 +1,9 @@
-package com.github.chevyself.babel.packet.world;
+package com.github.chevyself.babel.packet.craft;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.ReflectWrapper;
+import com.github.chevyself.babel.packet.world.WrappedWorldServer;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
 import java.lang.reflect.InvocationTargetException;

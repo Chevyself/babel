@@ -98,6 +98,7 @@ public final class PacketType {
 
       /** Sends titles and subtitles to the player. */
       @NonNull public static final PacketType TITLE = new PacketType("PacketPlayOutTitle");
+
       /** Sends a header and a footer to the player. */
       @NonNull
       public static final PacketType HEADER_FOOTER =
@@ -107,20 +108,20 @@ public final class PacketType {
       public static final PacketType SPAWN_ENTITY_LIVING =
           new PacketType("PacketPlayOutSpawnEntityLiving");
 
-      /** Destroys (de-spawns) an entity for the player */
+      /** Destroys (de-spawns) an entity for the player. */
       @NonNull
       public static final PacketType ENTITY_DESTROY = new PacketType("PacketPlayOutEntityDestroy");
 
-      /** Updates the metadata of an entity for the player */
+      /** Updates the metadata of an entity for the player. */
       @NonNull
       public static final PacketType ENTITY_METADATA =
           new PacketType("PacketPlayOutEntityMetadata");
 
-      /** Teleports an entity for the player */
+      /** Teleports an entity for the player. */
       @NonNull
       public static final PacketType ENTITY_TELEPORT =
           new PacketType("PacketPlayOutEntityTeleport");
-      /** Sends information about another player to the player */
+      /** Sends information about another player to the player. */
       @NonNull
       public static final PacketType PLAYER_INFO = new PacketType("PacketPlayOutPlayerInfo");
     }

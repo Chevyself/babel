@@ -39,6 +39,7 @@ public class WrappedPlayerConnection extends AbstractWrapper<Object> {
    * Send a packet to this client connection.
    *
    * @param packet the packet to be sent
+   * @throws PacketHandlingException if an error occurs while sending the packet
    */
   public void sendPacket(@NonNull Packet packet) throws PacketHandlingException {
     if (packet.isPresent()) {

@@ -4,6 +4,7 @@ import com.github.chevyself.babel.adapters.ObjectiveAdapter;
 import lombok.NonNull;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This is the latest objective adapter which will use the latest methods to create the objective.
@@ -14,7 +15,7 @@ public class LatestObjectiveAdapter implements ObjectiveAdapter {
       @NonNull Scoreboard scoreboard,
       @NonNull String name,
       @NonNull String criteria,
-      String display) {
+      @Nullable String display) {
     return scoreboard.registerNewObjective(
         name.length() > 16 ? name.substring(0, 15) : name,
         criteria,

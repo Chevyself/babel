@@ -55,7 +55,7 @@ public interface AdaptedBossBar {
   AdaptedBossBar setProgress(float progress);
 
   /**
-   * Set the color of the boss bar
+   * Set the color of the boss bar.
    *
    * @since 1.9
    * @param color the color of the boss bar
@@ -66,7 +66,7 @@ public interface AdaptedBossBar {
   AdaptedBossBar setColor(@NonNull WrappedBarColor color);
 
   /**
-   * Set the style of the boss bar
+   * Set the style of the boss bar.
    *
    * @since 1.9
    * @param style the style of the boss bar
@@ -85,7 +85,7 @@ public interface AdaptedBossBar {
   boolean isDestroyed();
 
   /**
-   * Checks if the boss bar is visible to the player
+   * Checks if the boss bar is visible to the player.
    *
    * @return true if the boss bar is visible
    */

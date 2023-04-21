@@ -1,6 +1,5 @@
 package com.github.chevyself.babel.lookup;
 
-
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.util.ReflectUtil;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
@@ -22,13 +21,13 @@ public abstract class LookUp<O, T> {
   @NonNull protected final WrappedClass<?> clazz;
   @Nullable protected final Class<O> type;
   protected boolean exact = false;
+  protected boolean declared = false;
   protected Class<?>[] params = new Class<?>[0];
 
   LookUp(@NonNull WrappedClass<?> clazz, @Nullable Class<O> type) {
     this.clazz = clazz;
     this.type = type;
   }
-
 
   /**
    * Look up for a field in the given class and type.
@@ -91,6 +90,18 @@ public abstract class LookUp<O, T> {
   @NonNull
   public LookUp<O, T> findExact(boolean exact) {
     this.exact = exact;
+    return this;
+  }
+
+  /**
+   * Set whether the field or method should be declared or not.
+   *
+   * @param declared the new declared value
+   * @return this instance
+   */
+  @NonNull
+  public LookUp<O, T> findDeclared(boolean declared) {
+    this.declared = declared;
     return this;
   }
 
@@ -172,5 +183,4 @@ public abstract class LookUp<O, T> {
    */
   @NonNull
   public abstract T find();
-
 }

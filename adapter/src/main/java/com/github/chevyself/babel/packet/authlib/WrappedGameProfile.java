@@ -1,6 +1,7 @@
-package com.github.chevyself.babel.packet.entity.player;
+package com.github.chevyself.babel.packet.authlib;
 
-import com.github.chevyself.babel.packet.properties.WrappedPropertyMap;
+import com.github.chevyself.babel.exceptions.PacketHandlingException;
+import com.github.chevyself.babel.packet.authlib.properties.WrappedPropertyMap;
 import com.github.chevyself.reflect.AbstractWrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedConstructor;
@@ -10,11 +11,13 @@ import java.util.UUID;
 import lombok.NonNull;
 
 public class WrappedGameProfile extends AbstractWrapper<Object> {
+
   public static final WrappedClass<?> CLAZZ =
       WrappedClass.forName("com.mojang.authlib.GameProfile");
   public static final WrappedConstructor<?> CONSTRUCTOR =
-      CLAZZ.getConstructor(UUID.class, String.class);
-  private static final WrappedMethod<?> GET_PROPERTIES = CLAZZ.getDeclaredMethod("getProperties");
+      WrappedGameProfile.CLAZZ.getConstructor(UUID.class, String.class);
+  private static final WrappedMethod<?> GET_PROPERTIES =
+      WrappedGameProfile.CLAZZ.getDeclaredMethod("getProperties");
 
   public WrappedGameProfile(Object wrapped) {
     super(wrapped);
@@ -23,11 +26,14 @@ public class WrappedGameProfile extends AbstractWrapper<Object> {
   @NonNull
   public static WrappedGameProfile construct(@NonNull UUID uuid, @NonNull String name)
       throws InvocationTargetException, InstantiationException, IllegalAccessException {
-    return new WrappedGameProfile(CONSTRUCTOR.invoke(uuid, name));
+    return new WrappedGameProfile(WrappedGameProfile.CONSTRUCTOR.invoke(uuid, name));
   }
 
-  public WrappedPropertyMap getProperties()
-      throws InvocationTargetException, IllegalAccessException {
-    return new WrappedPropertyMap(GET_PROPERTIES.invoke(this.wrapped));
+  public WrappedPropertyMap getProperties() throws PacketHandlingException {
+    try {
+      return new WrappedPropertyMap(WrappedGameProfile.GET_PROPERTIES.invoke(this.wrapped));
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      throw new PacketHandlingException("Could not get the properties from game profile", e);
+    }
   }
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.boss.BarStyle;
 
+/** Wraps the {@link BarStyle} enum. */
 public enum WrappedBarStyle implements Wrapper<BarStyle> {
   SOLID(BarStyle.SOLID),
   SEGMENTED_6(BarStyle.SEGMENTED_6),

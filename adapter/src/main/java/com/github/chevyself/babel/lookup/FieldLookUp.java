@@ -18,6 +18,10 @@ class FieldLookUp<O> extends LookUp<O, WrappedField<O>> {
 
   @Override
   public @NonNull WrappedField<O> find() {
-    return this.clazz.getField(this.type, this.getName(), this.exact);
+    if (this.declared) {
+      return this.clazz.getDeclaredField(this.type, this.getName(), this.exact);
+    } else {
+      return this.clazz.getField(this.type, this.getName(), this.exact);
+    }
   }
 }

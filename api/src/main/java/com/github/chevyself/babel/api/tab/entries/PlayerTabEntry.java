@@ -4,10 +4,9 @@ import com.github.chevyself.babel.api.tab.TabSlot;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
+import com.github.chevyself.babel.packet.craft.WrappedCraftPlayer;
 import com.github.chevyself.babel.packet.entity.player.Skin;
-import com.github.chevyself.babel.packet.entity.player.WrappedCraftPlayer;
 import com.github.chevyself.babel.packet.world.WrappedEnumGameMode;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -78,9 +77,7 @@ public class PlayerTabEntry implements TabEntry {
             player -> {
               try {
                 return WrappedCraftPlayer.of(player).getHandle().getSkin();
-              } catch (InvocationTargetException
-                  | IllegalAccessException
-                  | PacketHandlingException e) {
+              } catch (PacketHandlingException e) {
                 ErrorHandler.getInstance()
                     .handle(Level.SEVERE, "Could not get skin from player", e);
                 return null;

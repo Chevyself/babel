@@ -1,7 +1,6 @@
 package com.github.chevyself.babel.lookup;
 
 import com.github.chevyself.reflect.wrappers.WrappedClass;
-import com.github.chevyself.reflect.wrappers.WrappedField;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +18,10 @@ class MethodLookUp<O> extends LookUp<O, WrappedMethod<O>> {
 
   @Override
   public @NonNull WrappedMethod<O> find() {
-    return this.clazz.getMethod(this.type, this.getName(), this.exact, this.params);
+    if (this.declared) {
+      return this.clazz.getDeclaredMethod(this.type, this.getName(), this.exact, this.params);
+    } else {
+      return this.clazz.getMethod(this.type, this.getName(), this.exact, this.params);
+    }
   }
 }

@@ -1,7 +1,7 @@
 package com.github.chevyself.babel.packet;
 
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
-import com.github.chevyself.babel.packet.entity.player.WrappedCraftPlayer;
+import com.github.chevyself.babel.packet.craft.WrappedCraftPlayer;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.modifiers.Modifier;
