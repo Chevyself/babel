@@ -1,12 +1,5 @@
 package com.github.chevyself.babel;
 
-import chevyself.github.commands.bukkit.CommandManager;
-import chevyself.github.commands.bukkit.context.CommandContext;
-import chevyself.github.commands.bukkit.messages.BukkitMessagesProvider;
-import chevyself.github.commands.bukkit.messages.MessagesProvider;
-import chevyself.github.commands.bukkit.middleware.PermissionMiddleware;
-import chevyself.github.commands.bukkit.providers.registry.BukkitProvidersRegistry;
-import chevyself.github.commands.providers.registry.ProvidersRegistry;
 import com.github.chevyself.babel.api.ResourceManager;
 import com.github.chevyself.babel.api.bossbar.WitherTask;
 import com.github.chevyself.babel.api.commands.ChannelProvider;
@@ -15,6 +8,13 @@ import com.github.chevyself.babel.api.lang.YamlLanguage;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.debug.ErrorHandler.LoggerErrorHandler;
 import com.github.chevyself.babel.util.Versions;
+import com.github.chevyself.starbox.bukkit.CommandManager;
+import com.github.chevyself.starbox.bukkit.context.CommandContext;
+import com.github.chevyself.starbox.bukkit.messages.BukkitMessagesProvider;
+import com.github.chevyself.starbox.bukkit.messages.MessagesProvider;
+import com.github.chevyself.starbox.bukkit.middleware.PermissionMiddleware;
+import com.github.chevyself.starbox.bukkit.providers.registry.BukkitProvidersRegistry;
+import com.github.chevyself.starbox.providers.registry.ProvidersRegistry;
 import java.io.IOException;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;

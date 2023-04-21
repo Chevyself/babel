@@ -1,6 +1,5 @@
 package com.github.chevyself.babel.api.channels;
 
-import chevyself.github.commands.bukkit.utils.BukkitUtils;
 import com.github.chevyself.babel.adapters.AdaptedBossBar;
 import com.github.chevyself.babel.adapters.bossbar.EmptyAdaptedBossBar;
 import com.github.chevyself.babel.api.ResourceManager;
@@ -9,6 +8,7 @@ import com.github.chevyself.babel.api.scoreboard.EmptyScoreboard;
 import com.github.chevyself.babel.api.tab.EmptyTabView;
 import com.github.chevyself.babel.api.tab.TabView;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
+import com.github.chevyself.starbox.bukkit.utils.BukkitUtils;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;

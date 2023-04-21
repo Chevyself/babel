@@ -1,9 +1,9 @@
 package com.github.chevyself.babel;
 
-import chevyself.github.commands.bukkit.context.CommandContext;
-import chevyself.github.commands.bukkit.providers.type.BukkitArgumentProvider;
-import chevyself.github.commands.exceptions.ArgumentProviderException;
 import com.github.chevyself.babel.api.text.Text;
+import com.github.chevyself.starbox.bukkit.context.CommandContext;
+import com.github.chevyself.starbox.bukkit.providers.type.BukkitArgumentProvider;
+import com.github.chevyself.starbox.exceptions.ArgumentProviderException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;

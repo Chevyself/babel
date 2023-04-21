@@ -1,9 +1,9 @@
 package com.github.chevyself.babel.api.lang;
 
-import chevyself.github.commands.bukkit.utils.Components;
-import chevyself.github.commands.util.Strings;
 import com.github.chevyself.babel.api.exceptions.LanguageParsingException;
 import com.github.chevyself.babel.debug.ErrorHandler;
+import com.github.chevyself.starbox.bukkit.utils.Components;
+import com.github.chevyself.starbox.util.Strings;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;

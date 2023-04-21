@@ -1,6 +1,5 @@
 package com.github.chevyself.babel.api.channels;
 
-import chevyself.github.commands.bukkit.utils.BukkitUtils;
 import com.github.chevyself.babel.adapters.AdaptedBossBar;
 import com.github.chevyself.babel.adapters.BossBarAdapter;
 import com.github.chevyself.babel.adapters.PlayerTabListAdapter;
@@ -17,6 +16,7 @@ import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
 import com.github.chevyself.babel.util.Versions;
+import com.github.chevyself.starbox.bukkit.utils.BukkitUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;

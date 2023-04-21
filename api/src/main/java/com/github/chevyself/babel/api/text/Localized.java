@@ -1,8 +1,8 @@
 package com.github.chevyself.babel.api.text;
 
-import chevyself.github.commands.util.Strings;
 import com.github.chevyself.babel.api.ResourceManager;
 import com.github.chevyself.babel.api.text.format.Formatter;
+import com.github.chevyself.starbox.util.Strings;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

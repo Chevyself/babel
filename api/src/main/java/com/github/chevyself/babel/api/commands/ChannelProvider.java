@@ -1,8 +1,8 @@
 package com.github.chevyself.babel.api.commands;
 
-import chevyself.github.commands.bukkit.context.CommandContext;
-import chevyself.github.commands.bukkit.providers.type.BukkitExtraArgumentProvider;
 import com.github.chevyself.babel.api.channels.Channel;
+import com.github.chevyself.starbox.bukkit.context.CommandContext;
+import com.github.chevyself.starbox.bukkit.providers.type.BukkitExtraArgumentProvider;
 import lombok.NonNull;
 
 public final class ChannelProvider implements BukkitExtraArgumentProvider<Channel> {

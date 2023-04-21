@@ -1,6 +1,5 @@
 package com.github.chevyself.babel.api.tab;
 
-import chevyself.github.commands.util.Pair;
 import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
 import com.github.chevyself.babel.api.tab.entries.TabEntry;
 import com.github.chevyself.babel.debug.ErrorHandler;
@@ -12,6 +11,7 @@ import com.github.chevyself.babel.packet.entity.player.WrappedEntityPlayer;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfo;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfoAction;
 import com.github.chevyself.reflect.modifiers.CollectionModifier;
+import com.github.chevyself.starbox.util.Pair;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;

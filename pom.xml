@@ -76,12 +76,7 @@
   <dependencies>
     <!-- Commands -->
     <dependency>
-      <groupId>me.googas.starbox-commands</groupId>
-      <artifactId>core</artifactId>
-      <version>${commands.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.googas.starbox-commands</groupId>
+      <groupId>com.github.Chevyself.starbox-commands</groupId>
       <artifactId>bukkit</artifactId>
       <version>${commands.version}</version>
     </dependency>
@@ -100,7 +95,7 @@
   </dependencies>
 
   <properties>
-    <commands.version>1.0.0-PRE-5</commands.version>
+    <commands.version>1.0.0-ALPHA-1</commands.version>
     <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
     <lombok.version>1.18.26</lombok.version>
     <maven.compiler.source>8</maven.compiler.source>

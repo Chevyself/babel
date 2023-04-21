@@ -1,9 +1,5 @@
 package com.github.chevyself.babel.api.text;
 
-import chevyself.github.commands.bukkit.result.BukkitResult;
-import chevyself.github.commands.bukkit.utils.BukkitUtils;
-import chevyself.github.commands.bukkit.utils.Components;
-import chevyself.github.commands.exceptions.ArgumentProviderException;
 import com.github.chevyself.babel.api.ResourceManager;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.channels.ConsoleChannel;
@@ -12,6 +8,10 @@ import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.placeholders.PlaceholderManager;
 import com.github.chevyself.babel.api.text.format.Formatter;
 import com.github.chevyself.babel.api.text.format.SampleFormatter;
+import com.github.chevyself.starbox.bukkit.result.BukkitResult;
+import com.github.chevyself.starbox.bukkit.utils.BukkitUtils;
+import com.github.chevyself.starbox.bukkit.utils.Components;
+import com.github.chevyself.starbox.exceptions.ArgumentProviderException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;

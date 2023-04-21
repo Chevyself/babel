@@ -1,11 +1,11 @@
 package com.github.chevyself.babel.adapters.v1_11;
 
-import chevyself.github.commands.bukkit.utils.Components;
 import com.github.chevyself.babel.adapters.PlayerTabListAdapter;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.PacketType;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
+import com.github.chevyself.starbox.bukkit.utils.Components;
 import java.util.logging.Level;
 import lombok.NonNull;
 import org.bukkit.entity.Player;

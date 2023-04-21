@@ -1,11 +1,11 @@
 package com.github.chevyself.babel.api.scoreboard;
 
-import chevyself.github.commands.bukkit.utils.BukkitUtils;
-import chevyself.github.commands.util.Strings;
 import com.github.chevyself.babel.adapters.ObjectiveAdapter;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.channels.PlayerChannel;
 import com.github.chevyself.babel.api.util.Players;
+import com.github.chevyself.starbox.bukkit.utils.BukkitUtils;
+import com.github.chevyself.starbox.util.Strings;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,12 +1,5 @@
 package com.github.chevyself.babel;
 
-import chevyself.github.commands.annotations.Free;
-import chevyself.github.commands.annotations.Parent;
-import chevyself.github.commands.annotations.Required;
-import chevyself.github.commands.arguments.ArgumentBehaviour;
-import chevyself.github.commands.bukkit.annotations.Command;
-import chevyself.github.commands.bukkit.context.CommandContext;
-import chevyself.github.commands.bukkit.result.BukkitResult;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.scoreboard.ScoreboardLine;
@@ -20,6 +13,13 @@ import com.github.chevyself.babel.api.text.Plain;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
+import com.github.chevyself.starbox.annotations.Free;
+import com.github.chevyself.starbox.annotations.Parent;
+import com.github.chevyself.starbox.annotations.Required;
+import com.github.chevyself.starbox.arguments.ArgumentBehaviour;
+import com.github.chevyself.starbox.bukkit.annotations.Command;
+import com.github.chevyself.starbox.bukkit.context.CommandContext;
+import com.github.chevyself.starbox.bukkit.result.BukkitResult;
 import java.util.*;
 import java.util.logging.Level;
 import lombok.NonNull;
