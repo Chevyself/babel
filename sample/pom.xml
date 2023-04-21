@@ -30,9 +30,8 @@
                   <include>com.github.chevyself.babel:adapter-1.11</include>
                   <include>com.github.chevyself.babel:adapter-1.8</include>
                   <include>com.github.chevyself.babel:reflect</include>
-                  <include>me.googas.starbox-commands:bukkit</include>
-                  <include>me.googas.starbox-commands:core</include>
-                  <include>me.googas:reflect</include>
+                  <include>com.github.chevyself.starbox-commands:bukkit</include>
+                  <include>com.github.chevyself.starbox-commands:core</include>
                 </includes>
               </artifactSet>
               <createDependencyReducedPom>false</createDependencyReducedPom>
