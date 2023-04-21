@@ -49,7 +49,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
         this.callMetadataPacket(bukkit.get());
       }
     } else {
-      destroy();
+      this.destroy();
     }
     return this;
   }
@@ -60,7 +60,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
           PacketType.Play.ClientBound.ENTITY_METADATA.create(
               new Class[] {int.class, WrappedDataWatcher.CLAZZ.getClazz(), boolean.class},
               wither.getId(),
-              getDataWatcher(),
+              this.getDataWatcher(),
               true);
       packet.send(player);
     } catch (PacketHandlingException e) {
@@ -98,7 +98,7 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
           this.callMetadataPacket(bukkit.get());
         }
       } else {
-        destroy();
+        this.destroy();
       }
     }
     return this;

@@ -19,7 +19,7 @@ public class LegacyBossBarAdapter implements BossBarAdapter {
 
   @NonNull
   static Location getWitherLocation(Location location) {
-    return location.add(location.getDirection().multiply(36));
+    return location.add(location.getDirection().multiply(23));
   }
 
   @Override
