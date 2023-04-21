@@ -10,7 +10,6 @@ import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import com.github.chevyself.babel.packet.entity.player.Skin;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfo;
 import com.github.chevyself.babel.packet.world.WrappedEnumGameMode;
-import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 
@@ -53,17 +52,13 @@ public interface TabEntry extends Comparable<TabEntry> {
    */
   @NonNull
   default WrappedGameProfile getGameProfile(@NonNull TabSlot slot) throws PacketHandlingException {
-    try {
-      Skin skin = this.getSkin();
-      WrappedGameProfile gameProfile =
-          WrappedGameProfile.construct(slot.getUuid(), slot.asEntryName());
-      if (skin != null) {
-        gameProfile.getProperties().put("textures", skin.asProperty());
-      }
-      return gameProfile;
-    } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-      throw new PacketHandlingException("Could not construct WrappedGameProfile", e);
+    Skin skin = this.getSkin();
+    WrappedGameProfile gameProfile =
+        WrappedGameProfile.construct(slot.getUuid(), slot.asEntryName());
+    if (skin != null) {
+      gameProfile.getProperties().put("textures", skin.asProperty());
     }
+    return gameProfile;
   }
 
   /**
