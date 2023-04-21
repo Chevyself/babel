@@ -13,8 +13,8 @@ public abstract class ReflectWrapper extends AbstractWrapper<Object> {
    */
   public ReflectWrapper(Object wrapped, boolean check) {
     super(wrapped);
-    if (check && !instanceOf(wrapped)) {
-      throw new ClassCastException(wrapped + " is not instance of " + getReflectClass());
+    if (check && !this.instanceOf(wrapped)) {
+      throw new ClassCastException(wrapped + " is not instance of " + this.getReflectClass());
     }
   }
 
@@ -33,30 +33,30 @@ public abstract class ReflectWrapper extends AbstractWrapper<Object> {
   }
 
   /**
-   * Get the class that is being wrapped
+   * Get the class that is being wrapped.
    *
    * @return the class
    */
   public abstract Class<?> getReflectClass();
 
-  /** @param wrapped the new wrapped object */
   @Override
   public void setWrapped(Object wrapped) {
-    if (instanceOf(wrapped)) {
+    if (this.instanceOf(wrapped)) {
       this.wrapped = wrapped;
     } else {
-      throw new ClassCastException(wrapped + " is not instance of " + getReflectClass());
+      throw new ClassCastException(wrapped + " is not instance of " + this.getReflectClass());
     }
   }
 
   /**
-   * Check if the object is instance of {@link #getReflectClass()}
+   * Check if the object is instance of {@link #getReflectClass()}.
    *
    * @param object the object to check
    * @return true if the object is instance of {@link #getReflectClass()}
    */
   private boolean instanceOf(Object object) {
     return object == null
-        || (getReflectClass() == null || getReflectClass().isAssignableFrom(object.getClass()));
+        || (this.getReflectClass() == null
+            || this.getReflectClass().isAssignableFrom(object.getClass()));
   }
 }

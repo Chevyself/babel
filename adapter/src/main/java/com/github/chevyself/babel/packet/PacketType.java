@@ -32,6 +32,7 @@ public final class PacketType {
    * Create a new packet with this type.
    *
    * @return the new packet
+   * @throws PacketHandlingException if the constructor of the packet could not be invoked
    */
   @NonNull
   public Packet create() throws PacketHandlingException {

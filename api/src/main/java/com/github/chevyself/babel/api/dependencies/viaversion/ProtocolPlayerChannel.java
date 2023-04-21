@@ -14,7 +14,7 @@ import lombok.Setter;
 public class ProtocolPlayerChannel implements PlayerChannel {
 
   @NonNull private final UUID uniqueId;
-  @NonNull @Getter @Setter private Versions.Player version;
+  @NonNull @Getter @Setter private Versions.PlayerVersion version;
 
   /**
    * Start the channel.

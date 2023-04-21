@@ -64,6 +64,7 @@ public abstract class ErrorHandler {
   @Deprecated
   public abstract void handle(@NonNull Level level, @NonNull String message);
 
+  @Deprecated
   public static class LoggerErrorHandler extends ErrorHandler {
 
     @NonNull @Getter private final Logger logger;

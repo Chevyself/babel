@@ -149,6 +149,7 @@ public final class Packet extends ReflectWrapper {
    * @param index the index of the field
    * @param modifier to modify the value of the field
    * @return this same instance
+   * @throws PacketHandlingException if the field could not be set
    */
   @NonNull
   public Packet setField(int index, @NonNull Modifier modifier) throws PacketHandlingException {
@@ -166,6 +167,7 @@ public final class Packet extends ReflectWrapper {
    * @param index the index of the field
    * @param object the object to set in the field
    * @return this same instance
+   * @throws PacketHandlingException if the field could not be set
    */
   @NonNull
   public Packet setField(int index, Object object) throws PacketHandlingException {
@@ -181,6 +183,7 @@ public final class Packet extends ReflectWrapper {
    * Send this packet to a player.
    *
    * @param player the player to send this packet to
+   * @throws PacketHandlingException if the packet could not be sent
    */
   public void send(@NonNull Player player) throws PacketHandlingException {
     WrappedCraftPlayer.of(player).getHandle().playerConnection().sendPacket(this);
@@ -190,6 +193,7 @@ public final class Packet extends ReflectWrapper {
    * Send this packet to many players.
    *
    * @param players the collection of players to send this packet to
+   * @throws PacketHandlingException if the packet could not be sent
    */
   public void sendAll(@NonNull Collection<? extends Player> players)
       throws PacketHandlingException {
@@ -202,6 +206,7 @@ public final class Packet extends ReflectWrapper {
    * Send this packet to many players.
    *
    * @param players the array of players to send this packet to
+   * @throws PacketHandlingException if the packet could not be sent
    */
   public void sendAll(@NonNull Player... players) throws PacketHandlingException {
     this.sendAll(Arrays.asList(players));

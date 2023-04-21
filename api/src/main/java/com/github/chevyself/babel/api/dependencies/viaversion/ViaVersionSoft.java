@@ -60,7 +60,7 @@ public final class ViaVersionSoft {
    * @throws NullPointerException if the player is null
    */
   @NonNull
-  public static Versions.Player getVersion(@NonNull Player player) {
+  public static Versions.PlayerVersion getVersion(@NonNull Player player) {
     return getProtocol().getVersion(player);
   }
 

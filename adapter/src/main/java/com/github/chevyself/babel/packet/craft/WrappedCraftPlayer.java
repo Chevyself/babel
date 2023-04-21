@@ -49,6 +49,7 @@ public final class WrappedCraftPlayer extends AbstractWrapper<Object> {
    * Get the wrapped entity player of this craft player.
    *
    * @return the wrapped entity player
+   * @throws PacketHandlingException if the entity player could not be retrieved
    */
   @NonNull
   public WrappedEntityPlayer getHandle() throws PacketHandlingException {

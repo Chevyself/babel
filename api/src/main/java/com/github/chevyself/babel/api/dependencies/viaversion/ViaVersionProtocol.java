@@ -3,6 +3,7 @@ package com.github.chevyself.babel.api.dependencies.viaversion;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.channels.PlayerChannel;
 import com.github.chevyself.babel.util.Versions;
+import com.github.chevyself.babel.util.Versions.PlayerVersion;
 import com.viaversion.viaversion.api.Via;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +26,7 @@ import org.bukkit.plugin.Plugin;
  */
 public final class ViaVersionProtocol implements Listener {
 
-  @NonNull private final Map<UUID, Versions.Player> versions = new HashMap<>();
+  @NonNull private final Map<UUID, PlayerVersion> versions = new HashMap<>();
   @NonNull private final Set<ProtocolPlayerChannel> channels = new HashSet<>();
 
   /**
@@ -54,7 +55,7 @@ public final class ViaVersionProtocol implements Listener {
    * @return the version of the player
    */
   @NonNull
-  public Versions.Player getVersion(@NonNull Player player) {
+  public Versions.PlayerVersion getVersion(@NonNull Player player) {
     return versions.computeIfAbsent(
         player.getUniqueId(),
         uuid -> Versions.getVersion(Via.getAPI().getPlayerVersion(player.getUniqueId())));

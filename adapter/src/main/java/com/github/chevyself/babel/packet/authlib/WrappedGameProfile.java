@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 import lombok.NonNull;
 
+/** Wrapper for the GameProfile class. */
 public class WrappedGameProfile extends AbstractWrapper<Object> {
 
   public static final WrappedClass<?> CLAZZ =
@@ -19,16 +20,40 @@ public class WrappedGameProfile extends AbstractWrapper<Object> {
   private static final WrappedMethod<?> GET_PROPERTIES =
       WrappedGameProfile.CLAZZ.getDeclaredMethod("getProperties");
 
+  /**
+   * Creates a new wrapper for the GameProfile class.
+   *
+   * @param wrapped the object that must be a GameProfile
+   */
   public WrappedGameProfile(Object wrapped) {
     super(wrapped);
   }
 
+  /**
+   * Constructs a new GameProfile object and wraps it.
+   *
+   * @param uuid the uuid of the profile
+   * @param name the name of the profile
+   * @return the wrapped game profile
+   * @throws PacketHandlingException if the game profile could not be constructed
+   */
   @NonNull
   public static WrappedGameProfile construct(@NonNull UUID uuid, @NonNull String name)
-      throws InvocationTargetException, InstantiationException, IllegalAccessException {
-    return new WrappedGameProfile(WrappedGameProfile.CONSTRUCTOR.invoke(uuid, name));
+      throws PacketHandlingException {
+    try {
+      return new WrappedGameProfile(WrappedGameProfile.CONSTRUCTOR.invoke(uuid, name));
+    } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+      throw new PacketHandlingException("Could not construct game profile", e);
+    }
   }
 
+  /**
+   * Get the property map and wrap it.
+   *
+   * @return the wrapped property map
+   * @throws PacketHandlingException if the properties could not be retrieved
+   */
+  @NonNull
   public WrappedPropertyMap getProperties() throws PacketHandlingException {
     try {
       return new WrappedPropertyMap(WrappedGameProfile.GET_PROPERTIES.invoke(this.wrapped));

@@ -26,7 +26,7 @@ public class WrappedCraftWorld extends ReflectWrapper {
 
   @Override
   public Class<?> getReflectClass() {
-    return CRAFT_WORLD.getWrapped();
+    return WrappedCraftWorld.CRAFT_WORLD.getWrapped();
   }
 
   @NonNull
@@ -34,6 +34,12 @@ public class WrappedCraftWorld extends ReflectWrapper {
     return new WrappedCraftWorld(world);
   }
 
+  /**
+   * Get the world as a WrappedWorldServer.
+   *
+   * @return the world as a WrappedWorldServer
+   * @throws PacketHandlingException if the world could not be retrieved
+   */
   @NonNull
   public WrappedWorldServer getHandle() throws PacketHandlingException {
     try {

@@ -1,6 +1,5 @@
 import com.github.chevyself.babel.lookup.LookUp;
 import com.github.chevyself.babel.util.Versions;
-import com.github.chevyself.babel.util.Versions.BukkitVersion;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedField;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ public class LookUpTest {
     while (versions.size() < 19 - 8) {
       // Random int from 8 to 19
       int version = random.nextInt(19 - 8 + 1) + 8;
-      String name = lookUp.getName(new BukkitVersion(version, 0));
+      String name = lookUp.getName(new Versions.BukkitVersion(version, 0));
       System.out.println("Version " + version + " has field name " + name);
       versions.add(version);
     }
