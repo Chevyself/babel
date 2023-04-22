@@ -29,7 +29,7 @@ import org.bukkit.command.CommandSender;
  * <p>Text can either be plain, or a reference to localized text. Localized text is a key that can
  * be translated into different languages depending on the client's locale.
  *
- * <p>Plain and Localized lines are mutable, meaning that their contents can be modified using
+ * <p>Plain and Localized text are mutable, meaning that their contents can be modified using
  * methods such as {#setraw(String)} or any of the formatting methods.
  *
  * <p>However, they can also be safely copied using {@link #copy()}.

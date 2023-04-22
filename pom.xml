@@ -80,6 +80,11 @@
       <artifactId>bukkit</artifactId>
       <version>${commands.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.Chevyself.starbox-commands</groupId>
+      <artifactId>core</artifactId>
+      <version>${commands.version}</version>
+    </dependency>
     <!--  Annotations  -->
     <dependency>
       <groupId>org.projectlombok</groupId>
