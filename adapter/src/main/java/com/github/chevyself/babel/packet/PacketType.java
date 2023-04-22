@@ -5,6 +5,7 @@ import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class represents some kind of packet. Packet types can be found in <a
@@ -58,7 +59,7 @@ public final class PacketType {
    * @throws PacketHandlingException if the constructor of the packet could not be invoked
    */
   @NonNull
-  public Packet create(Object... objects) throws PacketHandlingException {
+  public Packet create(@Nullable Object... objects) throws PacketHandlingException {
     return Packet.forType(this, objects);
   }
 
@@ -81,11 +82,12 @@ public final class PacketType {
   /**
    * Create a new packet with this type and the given objects.
    *
+   * @param params the parameter types of the constructor
    * @param objects the objects to pass to the constructor
    * @return the new packet
    * @throws PacketHandlingException if the constructor of the packet could not be invoked
    */
-  public @NonNull Packet create(@NonNull Class<?>[] params, Object... objects)
+  public @NonNull Packet create(@NonNull Class<?>[] params, @Nullable Object... objects)
       throws PacketHandlingException {
     return Packet.forType(this, params, objects);
   }

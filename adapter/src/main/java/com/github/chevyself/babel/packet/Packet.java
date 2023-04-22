@@ -41,7 +41,8 @@ public final class Packet extends ReflectWrapper {
    * @param clazz the class of the type of the packet
    * @param reference the created reference of the packet
    */
-  private Packet(@NonNull PacketType type, @NonNull WrappedClass<?> clazz, Object reference) {
+  private Packet(
+      @NonNull PacketType type, @NonNull WrappedClass<?> clazz, @Nullable Object reference) {
     super(reference, false);
     this.type = type;
     this.clazz = clazz;
@@ -55,12 +56,9 @@ public final class Packet extends ReflectWrapper {
    * @param objects the objects to pass to the constructor
    * @return the packet
    * @throws PacketHandlingException if the constructor of the packet could not be invoked
-   * @deprecated use {@link #forType(PacketType, Object...)} instead. Such method gets the
-   *     parameters automatically.
    */
-  @Deprecated
   public static @NonNull Packet forType(
-      @NonNull PacketType type, @NonNull Class<?>[] params, Object... objects)
+      @NonNull PacketType type, @NonNull Class<?>[] params, @Nullable Object... objects)
       throws PacketHandlingException {
     WrappedClass<?> clazz = type.wrap();
     Object handle;
@@ -80,31 +78,16 @@ public final class Packet extends ReflectWrapper {
   /**
    * Create a packet.
    *
+   * <p>This will attempt to get the parameters of the constructor based on the objects to pass to
+   *
    * @param type the type of the packet
    * @param objects the objects to pass to the constructor
    * @return the packet
    * @throws PacketHandlingException if the constructor of the packet could not be invoked
    */
-  public static @NonNull Packet forType(@NonNull PacketType type, Object... objects)
+  public static @NonNull Packet forType(@NonNull PacketType type, @Nullable Object... objects)
       throws PacketHandlingException {
-    WrappedClass<?> clazz = type.wrap();
-    Object handle;
-    try {
-      if (objects.length > 0) {
-        WrappedConstructor<?> constructor =
-            clazz.getConstructor(Packet.getConstructorParameters(objects));
-        if (constructor.isPresent()) {
-          handle = constructor.invoke(objects);
-        } else {
-          throw new PacketHandlingException("Could not find constructor for packet");
-        }
-      } else {
-        handle = clazz.newInstance();
-      }
-    } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-      throw new PacketHandlingException("Could not invoke constructor for packet", e);
-    }
-    return new Packet(type, clazz, handle);
+    return Packet.forType(type, Packet.getConstructorParameters(objects), objects);
   }
 
   /**
@@ -138,6 +121,14 @@ public final class Packet extends ReflectWrapper {
     return this;
   }
 
+  /**
+   * Set the field of a packet.
+   *
+   * @param index the index of the field
+   * @param data the wrapped data to set in the field
+   * @return this same instance
+   * @throws PacketHandlingException if the field could not be set
+   */
   @NonNull
   public Packet setField(int index, @NonNull Wrapper<?> data) throws PacketHandlingException {
     return this.setField(index, data.getWrapped());

@@ -146,7 +146,8 @@ public interface PlayerChannel extends Channel {
     Optional<Player> optional = this.getPlayer();
     if (optional.isPresent()) {
       Player player = optional.get();
-      Optional<? extends AdaptedBossBar> bossBar = PlayerChannel.bossBarAdapter.getBossBar(player.getUniqueId());
+      Optional<? extends AdaptedBossBar> bossBar =
+          PlayerChannel.bossBarAdapter.getBossBar(player.getUniqueId());
       if (bossBar.isPresent()) {
         return bossBar.get();
       } else {
@@ -160,7 +161,9 @@ public interface PlayerChannel extends Channel {
   @Override
   default @NonNull TabView getTabView() {
     Optional<PlayerTabView> tabView =
-        PlayerChannel.views.stream().filter(view -> view.getUniqueId().equals(this.getUniqueId())).findFirst();
+        PlayerChannel.views.stream()
+            .filter(view -> view.getUniqueId().equals(this.getUniqueId()))
+            .findFirst();
     if (tabView.isPresent()) {
       return tabView.get();
     } else {
@@ -189,7 +192,8 @@ public interface PlayerChannel extends Channel {
 
   @Override
   default boolean hasTabView() {
-    return PlayerChannel.views.stream().anyMatch(view -> view.getUniqueId().equals(this.getUniqueId()));
+    return PlayerChannel.views.stream()
+        .anyMatch(view -> view.getUniqueId().equals(this.getUniqueId()));
   }
 
   @Override

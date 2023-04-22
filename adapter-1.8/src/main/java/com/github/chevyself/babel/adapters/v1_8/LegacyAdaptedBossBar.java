@@ -85,8 +85,10 @@ public class LegacyAdaptedBossBar implements AdaptedBossBar {
     try {
       Packet packet =
           PacketType.Play.ClientBound.ENTITY_METADATA.create(
-              new Class[]{int.class, WrappedDataWatcher.CLAZZ.getClazz(), boolean.class},
-              wither.getId(), this.getDataWatcher(), true);
+              new Class[] {int.class, WrappedDataWatcher.CLAZZ.getClazz(), boolean.class},
+              wither.getId(),
+              this.getDataWatcher(),
+              true);
       packet.send(player);
     } catch (PacketHandlingException e) {
       Debugger.getInstance().getLogger().log(Level.SEVERE, "Failed to send metadata packet", e);
