@@ -130,8 +130,11 @@ public final class Packet extends ReflectWrapper {
    * @throws PacketHandlingException if the field could not be set
    */
   @NonNull
-  public Packet setField(int index, @NonNull Wrapper<?> data) throws PacketHandlingException {
-    return this.setField(index, data.getWrapped());
+  public Packet setField(int index, @Nullable Wrapper<?> data) throws PacketHandlingException {
+    if (data != null) {
+      return this.setField(index, data.getWrapped());
+    }
+    return this;
   }
 
   /**

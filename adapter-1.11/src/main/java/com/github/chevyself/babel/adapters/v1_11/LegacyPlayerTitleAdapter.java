@@ -1,17 +1,18 @@
 package com.github.chevyself.babel.adapters.v1_11;
 
 import com.github.chevyself.babel.adapters.PlayerTitleAdapter;
-import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.PacketType;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import com.github.chevyself.babel.packet.chat.WrappedTitleAction;
+import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.starbox.bukkit.utils.Components;
 import java.util.logging.Level;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+/** This class is used to send titles to players on 1.11 or lower. */
 public final class LegacyPlayerTitleAdapter implements PlayerTitleAdapter {
   @Override
   public void sendTitle(
@@ -48,8 +49,9 @@ public final class LegacyPlayerTitleAdapter implements PlayerTitleAdapter {
           .setField(4, fadeOut)
           .send(player);
     } catch (PacketHandlingException e) {
-      ErrorHandler.getInstance()
-          .handle(Level.SEVERE, "Could not send title, subtitle and times packet", e);
+      Debugger.getInstance()
+          .getLogger()
+          .log(Level.SEVERE, "Could not send title, subtitle and times packet", e);
     }
   }
 }
