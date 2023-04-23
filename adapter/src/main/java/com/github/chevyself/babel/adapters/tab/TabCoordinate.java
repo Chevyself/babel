@@ -1,4 +1,4 @@
-package com.github.chevyself.babel.api.tab;
+package com.github.chevyself.babel.adapters.tab;
 
 import java.util.Objects;
 import lombok.Getter;

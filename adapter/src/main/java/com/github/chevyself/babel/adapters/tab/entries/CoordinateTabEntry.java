@@ -1,7 +1,7 @@
-package com.github.chevyself.babel.api.tab.entries;
+package com.github.chevyself.babel.adapters.tab.entries;
 
-import com.github.chevyself.babel.api.tab.TabCoordinate;
-import com.github.chevyself.babel.api.tab.TabSlot;
+import com.github.chevyself.babel.adapters.tab.TabCoordinate;
+import com.github.chevyself.babel.adapters.tab.TabSlot;
 import com.github.chevyself.babel.api.text.Text;
 import lombok.NonNull;
 

@@ -10,6 +10,7 @@
 
   <modules>
     <module>adapter</module>
+    <module>adapter-1.19.2</module>
     <module>adapter-1.12</module>
     <module>adapter-1.11</module>
     <module>adapter-1.8</module>
@@ -105,7 +106,8 @@
     <lombok.version>1.18.26</lombok.version>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <spigot-api.version-latest>1.18.2-R0.1-SNAPSHOT</spigot-api.version-latest>
+    <spigot-api.version-latest>1.19.4-R0.1-SNAPSHOT</spigot-api.version-latest>
+    <spigot-api.version-v19-2>1.19.2-R0.1-SNAPSHOT</spigot-api.version-v19-2>
     <spigot-api.version-v12>1.12.2-R0.1-SNAPSHOT</spigot-api.version-v12>
     <spigot-api.version-v11>1.11.2-R0.1-SNAPSHOT</spigot-api.version-v11>
     <spigot-api.version-v8>1.8.8-R0.1-SNAPSHOT</spigot-api.version-v8>

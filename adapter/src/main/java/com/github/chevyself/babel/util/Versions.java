@@ -36,7 +36,7 @@ public final class Versions {
   /**
    * Bukkit's major version.
    *
-   * @deprecated use {@link #getBukkitVersion()} instead.
+   * @deprecated use {@link #getBukkit()} instead.
    */
   @Deprecated public static final int BUKKIT = Versions.check();
 
@@ -212,6 +212,42 @@ public final class Versions {
     @Override
     public String toString() {
       return "1." + major + "." + minor;
+    }
+
+    public boolean isPrevious(int major, int minor) {
+      return this.isPrevious(new BukkitVersion(major, minor));
+    }
+
+    /**
+     * Checks if this version is previous to another.
+     *
+     * <p>For instance 1.10 is previous to 1.11 but 1.10 is not previous to 1.9
+     * <p>If both versions are equal, this will return false
+     *
+     * @param other the other version
+     * @return true if this version is previous to the other
+     */
+    public boolean isPrevious(@NonNull BukkitVersion other) {
+      return this.major < other.major || this.major == other.major
+          && this.minor < other.minor;
+    }
+
+    public boolean isNext(int major, int minor) {
+      return this.isNext(new BukkitVersion(major, minor));
+    }
+
+    /**
+     * Checks if this version is next to another.
+     *
+     * <p>For instance 1.10 is next to 1.9 but 1.10 is not next to 1.11
+     * <p>If both versions are equal, this will return false
+     *
+     * @param other the other version
+     * @return true if this version is next to the other
+     */
+    public boolean isNext(@NonNull BukkitVersion other) {
+      return this.major > other.major || this.major == other.major
+          && this.minor > other.minor;
     }
   }
 

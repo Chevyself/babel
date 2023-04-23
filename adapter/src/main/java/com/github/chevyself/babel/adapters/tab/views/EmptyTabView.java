@@ -1,6 +1,9 @@
-package com.github.chevyself.babel.api.tab;
+package com.github.chevyself.babel.adapters.tab.views;
 
-import com.github.chevyself.babel.api.tab.entries.TabEntry;
+import com.github.chevyself.babel.adapters.tab.TabCoordinate;
+import com.github.chevyself.babel.adapters.tab.TabEntry;
+import com.github.chevyself.babel.adapters.tab.TabSize;
+import com.github.chevyself.babel.adapters.tab.TabView;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import java.util.Collection;
 import java.util.function.Supplier;

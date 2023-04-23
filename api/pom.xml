@@ -44,6 +44,12 @@
         <!-- Adapters -->
         <dependency>
             <groupId>com.github.chevyself.babel</groupId>
+            <artifactId>adapter-1.19.2</artifactId>
+            <version>1.0.0-ALPHA</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.chevyself.babel</groupId>
             <artifactId>adapter-1.12</artifactId>
             <version>1.0.0-ALPHA</version>
             <scope>compile</scope>

@@ -1,6 +1,5 @@
-package com.github.chevyself.babel.api.tab;
+package com.github.chevyself.babel.adapters.tab;
 
-import com.github.chevyself.babel.api.tab.entries.TabEntry;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfo;

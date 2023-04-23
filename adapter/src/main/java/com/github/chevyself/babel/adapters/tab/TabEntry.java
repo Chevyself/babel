@@ -1,7 +1,6 @@
-package com.github.chevyself.babel.api.tab.entries;
+package com.github.chevyself.babel.adapters.tab;
 
 import com.github.chevyself.babel.api.channels.Channel;
-import com.github.chevyself.babel.api.tab.TabSlot;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;

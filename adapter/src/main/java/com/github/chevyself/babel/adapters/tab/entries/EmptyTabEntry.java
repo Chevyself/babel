@@ -1,6 +1,7 @@
-package com.github.chevyself.babel.api.tab.entries;
+package com.github.chevyself.babel.adapters.tab.entries;
 
-import com.github.chevyself.babel.api.tab.TabSlot;
+import com.github.chevyself.babel.adapters.tab.TabEntry;
+import com.github.chevyself.babel.adapters.tab.TabSlot;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.packet.entity.player.Skin;
 import com.github.chevyself.babel.packet.world.WrappedEnumGameMode;

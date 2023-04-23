@@ -1,7 +1,11 @@
-package com.github.chevyself.babel.api.tab;
+package com.github.chevyself.babel.adapters.tab.views;
 
-import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
-import com.github.chevyself.babel.api.tab.entries.TabEntry;
+import com.github.chevyself.babel.adapters.tab.TabCoordinate;
+import com.github.chevyself.babel.adapters.tab.TabEntry;
+import com.github.chevyself.babel.adapters.tab.TabSize;
+import com.github.chevyself.babel.adapters.tab.TabSlot;
+import com.github.chevyself.babel.adapters.tab.TabView;
+import com.github.chevyself.babel.adapters.tab.entries.EmptyTabEntry;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
@@ -29,7 +33,7 @@ import org.bukkit.entity.Player;
  * <p>This class is thread safe.
  */
 @Getter
-public class PlayerTabView implements TabView {
+public class PacketPlayerTabView implements TabView {
 
   @NonNull private final UUID viewer;
   @NonNull private final List<TabSlot> slots;
@@ -43,7 +47,7 @@ public class PlayerTabView implements TabView {
    * @param size the size of the tab view
    * @throws NullPointerException if the viewer or size is null
    */
-  public PlayerTabView(@NonNull UUID viewer, @NonNull TabSize size) {
+  public PacketPlayerTabView(@NonNull UUID viewer, @NonNull TabSize size) {
     this.viewer = viewer;
     this.slots = new ArrayList<>();
     this.size = size;
@@ -131,7 +135,7 @@ public class PlayerTabView implements TabView {
   @NonNull
   private List<WrappedPlayerInfo> collectSlotsPlayerInfo(
       @NonNull Player player, @NonNull Packet packet) {
-    return PlayerTabView.collectSlotsPlayerInfo(slots, player, packet);
+    return PacketPlayerTabView.collectSlotsPlayerInfo(slots, player, packet);
   }
 
   @Override
@@ -230,7 +234,7 @@ public class PlayerTabView implements TabView {
                 packet.setField(
                     1,
                     CollectionModifier.addWrappers(
-                        PlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
+                        PacketPlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
                 if (skin) {
                   packet.setField(0, WrappedPlayerInfoAction.REMOVE_PLAYER);
                   packet.send(player);
@@ -238,7 +242,7 @@ public class PlayerTabView implements TabView {
                   packet.setField(
                       1,
                       CollectionModifier.addWrappers(
-                          PlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
+                          PacketPlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
                   packet.setField(0, WrappedPlayerInfoAction.ADD_PLAYER);
                   packet.send(player);
                 } else {
