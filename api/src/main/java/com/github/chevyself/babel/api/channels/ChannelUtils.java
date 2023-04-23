@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.NonNull;
 
-/**
- * Utility class for channels.
- */
+/** Utility class for channels. */
 final class ChannelUtils {
 
   @NonNull public static final PlayerTabListAdapter tabListAdapter = Players.getTabListAdapter();
