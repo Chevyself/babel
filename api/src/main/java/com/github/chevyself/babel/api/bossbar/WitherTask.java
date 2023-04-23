@@ -7,6 +7,11 @@ import com.github.chevyself.babel.api.channels.PlayerChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+/**
+ * A task to teleport wither boss bars to players.
+ *
+ * <p>This task must be registered when the server version is 1.8.
+ */
 public class WitherTask implements Runnable {
 
   @Override

@@ -7,7 +7,6 @@ import com.github.chevyself.babel.api.tab.TabView;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,8 +23,6 @@ import org.bukkit.entity.Player;
  * boss bars. It can also edit the player's tab list or scoreboard.
  */
 public interface Channel {
-
-  @NonNull List<PlayerChannel> players = new ArrayList<>();
 
   /**
    * Get the channel of a {@link CommandSender}.
@@ -75,7 +72,7 @@ public interface Channel {
    */
   @NonNull
   static PlayerChannel of(@NonNull UUID uniqueId) {
-    return new ArrayList<>(Channel.players)
+    return new ArrayList<>(ChannelUtils.players)
         .stream()
             .filter(channel -> channel.getUniqueId().equals(uniqueId))
             .findFirst()
@@ -87,7 +84,7 @@ public interface Channel {
                   } else {
                     channel = () -> uniqueId;
                   }
-                  Channel.players.add(channel);
+                  ChannelUtils.players.add(channel);
                   return channel;
                 });
   }

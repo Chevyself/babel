@@ -1,9 +1,6 @@
 package com.github.chevyself.babel.api.channels;
 
 import com.github.chevyself.babel.adapters.AdaptedBossBar;
-import com.github.chevyself.babel.adapters.BossBarAdapter;
-import com.github.chevyself.babel.adapters.PlayerTabListAdapter;
-import com.github.chevyself.babel.adapters.PlayerTitleAdapter;
 import com.github.chevyself.babel.adapters.bossbar.EmptyAdaptedBossBar;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.scoreboard.PlayerScoreboard;
@@ -11,17 +8,14 @@ import com.github.chevyself.babel.api.tab.EmptyTabView;
 import com.github.chevyself.babel.api.tab.PlayerTabView;
 import com.github.chevyself.babel.api.tab.TabSize;
 import com.github.chevyself.babel.api.tab.TabView;
-import com.github.chevyself.babel.api.util.Players;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.starbox.bukkit.utils.BukkitUtils;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.NonNull;
@@ -34,14 +28,6 @@ import org.bukkit.entity.Player;
 
 /** A channel that is used to send data to a player. */
 public interface PlayerChannel extends Channel {
-
-  @NonNull PlayerTitleAdapter titleAdapter = Players.getTitleAdapter();
-  @NonNull PlayerTabListAdapter tabListAdapter = Players.getTabListAdapter();
-  @NonNull BossBarAdapter bossBarAdapter = Players.getBossBarAdapter();
-
-  @NonNull Set<PlayerScoreboard> scoreboards = new HashSet<>();
-
-  @NonNull Set<PlayerTabView> views = new HashSet<>();
 
   /**
    * Get the unique id of the player.
@@ -86,14 +72,14 @@ public interface PlayerChannel extends Channel {
     this.getPlayer()
         .ifPresent(
             player ->
-                PlayerChannel.titleAdapter.sendTitle(
+                ChannelUtils.titleAdapter.sendTitle(
                     player, title, subtitle, fadeIn, stay, fadeOut));
   }
 
   @Override
   default void setRawTabList(String header, String footer) {
     this.getPlayer()
-        .ifPresent(player -> PlayerChannel.tabListAdapter.setTabList(player, header, footer));
+        .ifPresent(player -> ChannelUtils.tabListAdapter.setTabList(player, header, footer));
   }
 
   @Override
@@ -128,14 +114,14 @@ public interface PlayerChannel extends Channel {
   @Override
   @NonNull
   default PlayerScoreboard getScoreboard() {
-    return PlayerChannel.scoreboards.stream()
+    return ChannelUtils.scoreboards.stream()
         .filter(scoreboard -> scoreboard.getOwner().equals(this.getUniqueId()))
         .findFirst()
         .orElseGet(
             () -> {
               PlayerScoreboard scoreboard =
                   PlayerScoreboard.create(this.getUniqueId(), new ArrayList<>());
-              PlayerChannel.scoreboards.add(scoreboard);
+              ChannelUtils.scoreboards.add(scoreboard);
               return scoreboard;
             });
   }
@@ -147,11 +133,11 @@ public interface PlayerChannel extends Channel {
     if (optional.isPresent()) {
       Player player = optional.get();
       Optional<? extends AdaptedBossBar> bossBar =
-          PlayerChannel.bossBarAdapter.getBossBar(player.getUniqueId());
+          ChannelUtils.bossBarAdapter.getBossBar(player.getUniqueId());
       if (bossBar.isPresent()) {
         return bossBar.get();
       } else {
-        return PlayerChannel.bossBarAdapter.create(player);
+        return ChannelUtils.bossBarAdapter.create(player);
       }
     } else {
       return new EmptyAdaptedBossBar(this.getUniqueId());
@@ -161,7 +147,7 @@ public interface PlayerChannel extends Channel {
   @Override
   default @NonNull TabView getTabView() {
     Optional<PlayerTabView> tabView =
-        PlayerChannel.views.stream()
+        ChannelUtils.views.stream()
             .filter(view -> view.getUniqueId().equals(this.getUniqueId()))
             .findFirst();
     if (tabView.isPresent()) {
@@ -173,7 +159,7 @@ public interface PlayerChannel extends Channel {
                 try {
                   PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
                   view.initialize();
-                  PlayerChannel.views.add(view);
+                  ChannelUtils.views.add(view);
                   return view;
                 } catch (PacketHandlingException e) {
                   ErrorHandler.getInstance()
@@ -187,18 +173,18 @@ public interface PlayerChannel extends Channel {
 
   @Override
   default boolean hasBossBar() {
-    return PlayerChannel.bossBarAdapter.getBossBar(this.getUniqueId()).isPresent();
+    return ChannelUtils.bossBarAdapter.getBossBar(this.getUniqueId()).isPresent();
   }
 
   @Override
   default boolean hasTabView() {
-    return PlayerChannel.views.stream()
+    return ChannelUtils.views.stream()
         .anyMatch(view -> view.getUniqueId().equals(this.getUniqueId()));
   }
 
   @Override
   default boolean hasScoreboard() {
-    return PlayerChannel.scoreboards.stream()
+    return ChannelUtils.scoreboards.stream()
         .anyMatch(scoreboard -> scoreboard.getOwner().equals(this.getUniqueId()));
   }
 

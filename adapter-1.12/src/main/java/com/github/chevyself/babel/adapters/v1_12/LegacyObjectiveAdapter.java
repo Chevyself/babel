@@ -6,9 +6,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * An adapter to create objectives in Minecraft 1.12 or previous versions.
- */
+/** An adapter to create objectives in Minecraft 1.12 or previous versions. */
 public class LegacyObjectiveAdapter implements ObjectiveAdapter {
   @Override
   public @NonNull Objective create(
