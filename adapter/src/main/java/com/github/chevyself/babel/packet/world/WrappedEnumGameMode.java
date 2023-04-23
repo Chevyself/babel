@@ -1,6 +1,6 @@
 package com.github.chevyself.babel.packet.world;
 
-import com.github.chevyself.babel.util.Versions;
+import com.github.chevyself.babel.lookup.LookUp;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
@@ -16,15 +16,13 @@ public enum WrappedEnumGameMode implements Wrapper<Object> {
   ADVENTURE(GameMode.ADVENTURE),
   SPECTATOR(GameMode.SPECTATOR);
 
-  @NonNull public static final WrappedClass<?> CLAZZ;
-
-  static {
-    if (Versions.BUKKIT >= 10) {
-      CLAZZ = Versions.wrapNmsClassByName("world.level", "EnumGamemode");
-    } else {
-      CLAZZ = Versions.wrapNmsClassByName("WorldSettings$EnumGamemode");
-    }
-  }
+  @NonNull
+  public static final WrappedClass<?> CLAZZ =
+      LookUp.forClass()
+          .atPackage("world.level")
+          .since(8, "WorldSetting$EnumGamemode")
+          .since(10, "EnumGamemode")
+          .find();
 
   public static final WrappedMethod<?> VALUE_OF =
       WrappedEnumGameMode.CLAZZ.getMethod("valueOf", String.class);

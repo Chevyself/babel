@@ -126,6 +126,13 @@ public final class PacketType {
       /** Sends information about another player to the player. */
       @NonNull
       public static final PacketType PLAYER_INFO = new PacketType("PacketPlayOutPlayerInfo");
+      /**
+       * Sends information about another player to the player.
+       *
+       * @since 1.19.3
+       */
+      public static final PacketType PLAYER_INFO_UPDATE =
+          new PacketType("ClientboundPlayerInfoUpdatePacket");
     }
   }
 }

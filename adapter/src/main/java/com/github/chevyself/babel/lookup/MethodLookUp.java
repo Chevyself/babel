@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <O> the type of the object to be returned to the method
  */
-class MethodLookUp<O> extends LookUp<O, WrappedMethod<O>> {
+class MethodLookUp<O> extends ReflectionLookUp<O, WrappedMethod<O>> {
 
   public MethodLookUp(WrappedClass<?> clazz, @Nullable Class<O> type) {
     super(clazz, type);

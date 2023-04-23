@@ -26,7 +26,8 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
   @NonNull public static final WrappedConstructor<?> CONSTRUCTOR;
 
   static {
-    if (Versions.BUKKIT < 17) {
+    int major = Versions.getBukkit().getMajor();
+    if (major < 17) {
       CONSTRUCTOR =
           WrappedPlayerInfo.CLAZZ.getConstructor(
               PacketType.Play.ClientBound.PLAYER_INFO.wrap().getClazz(),
@@ -34,7 +35,7 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
               int.class,
               WrappedEnumGameMode.CLAZZ.getClazz(),
               WrappedChatComponent.CLAZZ.getClazz());
-    } else if (Versions.BUKKIT >= 19) {
+    } else if (major >= 19) {
       CONSTRUCTOR =
           WrappedPlayerInfo.CLAZZ.getConstructor(
               WrappedGameProfile.CLAZZ.getClazz(),

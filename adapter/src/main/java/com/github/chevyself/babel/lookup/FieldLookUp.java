@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <O> the type of the object to be returned to the field
  */
-class FieldLookUp<O> extends LookUp<O, WrappedField<O>> {
+class FieldLookUp<O> extends ReflectionLookUp<O, WrappedField<O>> {
 
   public FieldLookUp(@NonNull WrappedClass<?> clazz, @Nullable Class<O> type) {
     super(clazz, null);
