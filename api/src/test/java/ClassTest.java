@@ -1,7 +1,7 @@
-import com.github.chevyself.babel.adapters.tab.TabCoordinate;
-import com.github.chevyself.babel.adapters.tab.TabSize;
-import com.github.chevyself.babel.adapters.tab.TabSlot;
-import com.github.chevyself.babel.adapters.tab.entries.EmptyTabEntry;
+import com.github.chevyself.babel.api.tab.TabCoordinate;
+import com.github.chevyself.babel.api.tab.TabSize;
+import com.github.chevyself.babel.api.tab.TabSlot;
+import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
 import java.util.*;
 import lombok.NonNull;
 

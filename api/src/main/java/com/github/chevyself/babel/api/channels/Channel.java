@@ -3,7 +3,7 @@ package com.github.chevyself.babel.api.channels;
 import com.github.chevyself.babel.adapters.AdaptedBossBar;
 import com.github.chevyself.babel.api.dependencies.viaversion.ViaVersionSoft;
 import com.github.chevyself.babel.api.scoreboard.ChannelScoreboard;
-import com.github.chevyself.babel.adapters.tab.TabView;
+import com.github.chevyself.babel.api.tab.TabView;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
 import java.util.ArrayList;

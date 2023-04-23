@@ -2,13 +2,12 @@ package com.github.chevyself.babel.api.channels;
 
 import com.github.chevyself.babel.adapters.AdaptedBossBar;
 import com.github.chevyself.babel.adapters.bossbar.EmptyAdaptedBossBar;
-import com.github.chevyself.babel.adapters.tab.views.PlayerTabView;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.scoreboard.PlayerScoreboard;
-import com.github.chevyself.babel.adapters.tab.views.EmptyTabView;
-import com.github.chevyself.babel.adapters.tab.views.PacketPlayerTabView;
-import com.github.chevyself.babel.adapters.tab.TabSize;
-import com.github.chevyself.babel.adapters.tab.TabView;
+import com.github.chevyself.babel.api.tab.EmptyTabView;
+import com.github.chevyself.babel.api.tab.PlayerTabView;
+import com.github.chevyself.babel.api.tab.TabSize;
+import com.github.chevyself.babel.api.tab.TabView;
 import com.github.chevyself.babel.debug.ErrorHandler;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
@@ -146,24 +145,19 @@ public interface PlayerChannel extends Channel {
   }
 
   @Override
-  default @NonNull PlayerTabView getTabView() {
-    return ChannelUtils.tabViewAdapter.getTabView(this.getUniqueId());
-    /*
-    Optional<PacketPlayerTabView> tabView =
+  default @NonNull TabView getTabView() {
+    Optional<PlayerTabView> tabView =
         ChannelUtils.views.stream()
             .filter(view -> view.getUniqueId().equals(this.getUniqueId()))
             .findFirst();
     if (tabView.isPresent()) {
       return tabView.get();
     } else {
-
       return this.getPlayer()
           .map(
               player -> {
-                ChannelUtils.tabViewAdapter
-
                 try {
-                  PacketPlayerTabView view = new PacketPlayerTabView(player.getUniqueId(), TabSize.FOUR);
+                  PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
                   view.initialize();
                   ChannelUtils.views.add(view);
                   return view;
@@ -174,8 +168,7 @@ public interface PlayerChannel extends Channel {
                 }
               })
           .orElseGet(EmptyTabView::new);
-
-     */
+    }
   }
 
   @Override

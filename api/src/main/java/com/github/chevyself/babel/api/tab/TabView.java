@@ -1,6 +1,7 @@
-package com.github.chevyself.babel.adapters.tab;
+package com.github.chevyself.babel.api.tab;
 
-import com.github.chevyself.babel.adapters.tab.entries.EmptyTabEntry;
+import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
+import com.github.chevyself.babel.api.tab.entries.TabEntry;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;

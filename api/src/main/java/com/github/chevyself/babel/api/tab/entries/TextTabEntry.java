@@ -1,4 +1,4 @@
-package com.github.chevyself.babel.adapters.tab.entries;
+package com.github.chevyself.babel.api.tab.entries;
 
 import com.github.chevyself.babel.api.text.Text;
 import java.util.Objects;

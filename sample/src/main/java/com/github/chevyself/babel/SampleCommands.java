@@ -3,12 +3,12 @@ package com.github.chevyself.babel;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.scoreboard.ScoreboardLine;
-import com.github.chevyself.babel.adapters.tab.views.PacketPlayerTabView;
-import com.github.chevyself.babel.adapters.tab.TabCoordinate;
-import com.github.chevyself.babel.adapters.tab.TabSize;
-import com.github.chevyself.babel.adapters.tab.TabView;
-import com.github.chevyself.babel.adapters.tab.entries.CoordinateTabEntry;
-import com.github.chevyself.babel.adapters.tab.entries.PlayerTabEntry;
+import com.github.chevyself.babel.api.tab.PlayerTabView;
+import com.github.chevyself.babel.api.tab.TabCoordinate;
+import com.github.chevyself.babel.api.tab.TabSize;
+import com.github.chevyself.babel.api.tab.TabView;
+import com.github.chevyself.babel.api.tab.entries.CoordinateTabEntry;
+import com.github.chevyself.babel.api.tab.entries.PlayerTabEntry;
 import com.github.chevyself.babel.api.text.Plain;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.debug.ErrorHandler;
@@ -77,7 +77,7 @@ public class SampleCommands {
   @Command(aliases = "ctab", description = "tests")
   public void ctab(Player player) {
     try {
-      PacketPlayerTabView view = new PacketPlayerTabView(player.getUniqueId(), TabSize.FOUR);
+      PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
       view.initialize();
       views.put(player.getUniqueId(), view);
     } catch (PacketHandlingException e) {

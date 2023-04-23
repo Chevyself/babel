@@ -1,6 +1,5 @@
-package com.github.chevyself.babel.adapters.tab.entries;
+package com.github.chevyself.babel.api.tab.entries;
 
-import com.github.chevyself.babel.adapters.tab.TabEntry;
 import lombok.NonNull;
 
 /** This is the same as a {@link EmptyTabEntry} but it cannot be replaced by any other entry. */

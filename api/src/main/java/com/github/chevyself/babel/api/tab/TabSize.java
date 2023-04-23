@@ -1,4 +1,4 @@
-package com.github.chevyself.babel.adapters.tab;
+package com.github.chevyself.babel.api.tab;
 
 import lombok.Getter;
 import lombok.NonNull;
