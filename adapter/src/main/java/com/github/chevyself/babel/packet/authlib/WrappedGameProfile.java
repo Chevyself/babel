@@ -3,11 +3,13 @@ package com.github.chevyself.babel.packet.authlib;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.authlib.properties.WrappedPropertyMap;
 import com.github.chevyself.reflect.AbstractWrapper;
+import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedConstructor;
 import com.github.chevyself.reflect.wrappers.WrappedMethod;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
+import java.util.logging.Level;
 import lombok.NonNull;
 
 /** Wrapper for the GameProfile class. */
@@ -19,6 +21,9 @@ public class WrappedGameProfile extends AbstractWrapper<Object> {
       WrappedGameProfile.CLAZZ.getConstructor(UUID.class, String.class);
   private static final WrappedMethod<?> GET_PROPERTIES =
       WrappedGameProfile.CLAZZ.getDeclaredMethod("getProperties");
+
+  private static final WrappedMethod<UUID> GET_ID =
+      WrappedGameProfile.CLAZZ.getDeclaredMethod(UUID.class, "getId");
 
   /**
    * Creates a new wrapper for the GameProfile class.
@@ -60,5 +65,18 @@ public class WrappedGameProfile extends AbstractWrapper<Object> {
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not get the properties from game profile", e);
     }
+  }
+
+  @NonNull
+  public UUID getId() {
+    UUID uuid = UUID.randomUUID();
+    try {
+      uuid = WrappedGameProfile.GET_ID.prepare(this.wrapped);
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      Debugger.getInstance()
+          .getLogger()
+          .log(Level.SEVERE, "Could not get the id from game profile", e);
+    }
+    return uuid == null ? UUID.randomUUID() : uuid;
   }
 }

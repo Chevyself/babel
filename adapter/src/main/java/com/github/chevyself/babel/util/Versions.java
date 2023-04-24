@@ -213,6 +213,68 @@ public final class Versions {
     public String toString() {
       return "1." + major + "." + minor;
     }
+
+    /**
+     * Checks if this version is before another.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return true if this version is before the other
+     */
+    public boolean isBefore(int major, int minor) {
+      return this.isBefore(new BukkitVersion(major, minor));
+    }
+
+    /**
+     * Checks if this version is before another.
+     *
+     * @param major the major version
+     * @return true if this version is before the other
+     */
+    public boolean isBefore(int major) {
+      return this.isBefore(new BukkitVersion(major, 0));
+    }
+
+    /**
+     * Checks if this version is before another.
+     *
+     * @param other the other version
+     * @return true if this version is before the other
+     */
+    public boolean isBefore(@NonNull BukkitVersion other) {
+      return this.major < other.major || this.major == other.major && this.minor < other.minor;
+    }
+
+    /**
+     * Checks if this version is after another.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return true if this version is after the other
+     */
+    public boolean isAfter(int major, int minor) {
+      return this.isAfter(new BukkitVersion(major, minor));
+    }
+
+    /**
+     * Checks if this version is after another.
+     *
+     * @param major the major version
+     * @return true if this version is after the other
+     */
+    public boolean isAfter(int major) {
+      return this.isAfter(new BukkitVersion(major, 0));
+    }
+
+    /**
+     * Checks if this version is after another.
+     *
+     * @param other the other version
+     * @return true if this version is after the other
+     */
+    public boolean isAfter(@NonNull BukkitVersion other) {
+      return this.major > other.major || this.major == other.major && this.minor > other.minor;
+    }
   }
 
   /**

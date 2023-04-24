@@ -15,6 +15,7 @@ import com.github.chevyself.reflect.wrappers.WrappedMethod;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /** Wraps the 'EntityPlayer' nms class. */
 public final class WrappedEntityPlayer extends WrappedEntityLiving {
@@ -109,7 +110,7 @@ public final class WrappedEntityPlayer extends WrappedEntityLiving {
    * @throws PacketHandlingException if the player info could not be constructed
    */
   @NonNull
-  public WrappedPlayerInfo playerInfo(@NonNull Packet packet) throws PacketHandlingException {
+  public WrappedPlayerInfo playerInfo(@Nullable Packet packet) throws PacketHandlingException {
     try {
       int ping = ReflectUtil.safelyUnbox(WrappedEntityPlayer.PING.get(this.wrapped), 0);
       return WrappedPlayerInfo.construct(

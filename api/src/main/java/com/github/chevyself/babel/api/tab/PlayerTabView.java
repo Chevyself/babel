@@ -1,16 +1,12 @@
 package com.github.chevyself.babel.api.tab;
 
+import com.github.chevyself.babel.adapters.PlayerTabViewAdapter;
+import com.github.chevyself.babel.adapters.tab.PlayerInfoAdapter;
 import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
 import com.github.chevyself.babel.api.tab.entries.TabEntry;
-import com.github.chevyself.babel.debug.ErrorHandler;
+import com.github.chevyself.babel.api.util.Players;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
-import com.github.chevyself.babel.packet.Packet;
-import com.github.chevyself.babel.packet.PacketType;
-import com.github.chevyself.babel.packet.craft.WrappedCraftPlayer;
-import com.github.chevyself.babel.packet.entity.player.WrappedEntityPlayer;
-import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfo;
-import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfoAction;
-import com.github.chevyself.reflect.modifiers.CollectionModifier;
+import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.starbox.util.Pair;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -30,53 +27,39 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-/**
- * This class represents a tab view for a player. This is the implementation of {@link TabView} for
- * players, and it does send the packets to change the client.
- *
- * <p>This class is thread safe.
- */
-@Getter
 public class PlayerTabView implements TabView {
+  @NonNull private static final PlayerTabViewAdapter adapter = Players.getTabViewAdapter();
 
-  @NonNull private final UUID viewer;
+  @NonNull @Getter private final UUID uniqueId;
+  @NonNull @Getter private final TabSize size;
   @NonNull private final List<TabSlot> slots;
-  @NonNull private final TabSize size;
-  private boolean destroyed;
+  @Getter private boolean destroyed;
 
-  /**
-   * Create the tab view.
-   *
-   * @param viewer the uuid of the viewer of the tab view
-   * @param size the size of the tab view
-   * @throws NullPointerException if the viewer or size is null
-   */
-  public PlayerTabView(@NonNull UUID viewer, @NonNull TabSize size) {
-    this.viewer = viewer;
-    this.slots = new ArrayList<>();
+  public PlayerTabView(@NonNull UUID uniqueId, @NonNull TabSize size) {
+    this.uniqueId = uniqueId;
     this.size = size;
-    this.destroyed = false;
+    this.slots = new ArrayList<>();
   }
 
   /**
-   * Converts the slots into a list of {@link WrappedPlayerInfo} to send to the client.
+   * Converts the slots into a list of {@link PlayerInfoAdapter} to send to the client.
    *
    * @param slots the slots to convert
    * @param player the player that will view the entries
-   * @param packet the packet that will send the player info
    * @return the list of player info
    * @throws NullPointerException if any argument is null
    */
-  private static List<WrappedPlayerInfo> collectSlotsPlayerInfo(
-      @NonNull Collection<TabSlot> slots, @NonNull Player player, @NonNull Packet packet) {
+  private static List<PlayerInfoAdapter> collectSlotsAdapters(
+      @NonNull Collection<TabSlot> slots, @NonNull Player player) {
     return slots.stream()
         .map(
             slot -> {
               try {
-                return slot.playerInfoData(player, packet);
+                return slot.toAdapter(player);
               } catch (PacketHandlingException e) {
-                ErrorHandler.getInstance()
-                    .handle(Level.SEVERE, "Could not get PlayerInfoData for slot " + slot);
+                Debugger.getInstance()
+                    .getLogger()
+                    .log(Level.SEVERE, "Failed to create adapter for slot", e);
                 return null;
               }
             })
@@ -84,124 +67,17 @@ public class PlayerTabView implements TabView {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Get the unique id of the viewer.
-   *
-   * @return the unique id of the viewer
-   */
-  @NonNull
-  public UUID getUniqueId() {
-    return viewer;
-  }
-
-  /**
-   * Get the viewers' entity. This means the actual instance of the player.
-   *
-   * @return the entity wrapped in an optional
-   */
   @NonNull
   public Optional<Player> getViewer() {
-    return Optional.ofNullable(Bukkit.getPlayer(this.viewer));
+    return Optional.ofNullable(Bukkit.getPlayer(this.uniqueId));
   }
 
   @Override
   public void clear() {
-    this.getViewer()
-        .ifPresent(
-            player -> {
-              try {
-                Packet packet = this.createPacket();
-                List<WrappedPlayerInfo> wrappers = this.collectSlotsPlayerInfo(player, packet);
-                packet.setField(0, WrappedPlayerInfoAction.REMOVE_PLAYER);
-                packet.setField(1, CollectionModifier.addWrappers(wrappers));
-                packet.send(player);
-              } catch (PacketHandlingException e) {
-                ErrorHandler.getInstance()
-                    .handle(Level.SEVERE, "Could not clear tab view for " + player.getName());
-              }
-            });
-  }
-
-  private Packet createPacket() throws PacketHandlingException {
-    return PacketType.Play.ClientBound.PLAYER_INFO.create(
-        WrappedPlayerInfoAction.ADD_PLAYER.getWrapped(), WrappedEntityPlayer.createArray(0));
-  }
-
-  /**
-   * Converts the slots into a list of {@link WrappedPlayerInfo} to send to the client.
-   *
-   * @see #collectSlotsPlayerInfo(Collection, Player, Packet)
-   * @param player the player that will view the entries
-   * @param packet the packet that will send the player info
-   * @return the list of player info
-   * @throws NullPointerException if any argument is null
-   */
-  @NonNull
-  private List<WrappedPlayerInfo> collectSlotsPlayerInfo(
-      @NonNull Player player, @NonNull Packet packet) {
-    return PlayerTabView.collectSlotsPlayerInfo(slots, player, packet);
-  }
-
-  @Override
-  public void initialize() throws PacketHandlingException {
-    if (destroyed || !slots.isEmpty()) return;
-    Optional<Player> optional = this.getViewer();
-    if (optional.isPresent()) {
-      Player player = optional.get();
-      Packet packet = this.createPacket();
-      List<WrappedPlayerInfo> info = this.populate(packet, player);
-      packet.setField(1, CollectionModifier.addWrappers(info));
-      packet.send(player);
-    } else {
-      destroyed = true;
-    }
-  }
-
-  /**
-   * Fills the slots with empty entries.
-   *
-   * @param packet the packet that will send the player info
-   * @param player the player that will view the entries
-   * @return the list of player info from the slots
-   * @throws PacketHandlingException if the packet could not be handled
-   */
-  @NonNull
-  private List<WrappedPlayerInfo> populate(@NonNull Packet packet, @NonNull Player player)
-      throws PacketHandlingException {
-    List<WrappedPlayerInfo> info = new ArrayList<>();
-    for (TabCoordinate coordinate : size) {
-      TabSlot slot = new TabSlot(coordinate, new EmptyTabEntry());
-      info.add(slot.playerInfoData(player, packet));
-      this.slots.add(slot);
-    }
-    Collections.sort(this.slots);
-    return info;
-  }
-
-  /**
-   * Get the online players as {@link WrappedPlayerInfo}. This is used to send the information of
-   * actual players to the client.
-   *
-   * @deprecated This may no longer be needed as it is safer to push the players out of the tab list
-   * @param packet the packet that will send the player info
-   * @return the wrapped player info
-   * @throws NullPointerException if the packet is null
-   */
-  private @NonNull List<WrappedPlayerInfo> getPlayers(@NonNull Packet packet) {
-    return Bukkit.getOnlinePlayers().stream()
-        .map(WrappedCraftPlayer::of)
-        .map(
-            craftPlayer -> {
-              try {
-                return craftPlayer.getHandle().playerInfo(packet);
-              } catch (PacketHandlingException e) {
-                ErrorHandler.getInstance()
-                    .handle(Level.SEVERE, "Could not get entity from CraftPlayer", e);
-                return null;
-              }
-            })
-        .filter(Objects::nonNull)
-        .collect(Collectors.toList());
+    this.checkForViewer(
+        viewer -> {
+          PlayerTabView.adapter.clear(viewer, this.collectSlotsAdapters(viewer));
+        });
   }
 
   @Override
@@ -210,68 +86,18 @@ public class PlayerTabView implements TabView {
     this.set(slot, entry, this.updatesSkin(slot, entry));
   }
 
-  /**
-   * Set the entry of a slot.
-   *
-   * @param slot the slot to set
-   * @param entry the entry to set
-   * @param skin whether the skin of the slot should be updated
-   * @throws NullPointerException if slot or entry is null
-   */
-  public void set(@NonNull TabSlot slot, @NonNull TabEntry entry, boolean skin) {
-    slot.setEntry(entry);
-    this.update(Collections.singleton(slot), skin);
-  }
-
-  /**
-   * Update the slots view in the client.
-   *
-   * @param slots the slots to update
-   * @param skin whether the skin of the slots should be updated
-   */
-  private void update(@NonNull Collection<TabSlot> slots, boolean skin) {
-    this.getViewer()
-        .ifPresent(
-            player -> {
-              try {
-                Packet packet = this.createPacket();
-                packet.setField(
-                    1,
-                    CollectionModifier.addWrappers(
-                        PlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
-                if (skin) {
-                  packet.setField(0, WrappedPlayerInfoAction.REMOVE_PLAYER);
-                  packet.send(player);
-                  packet = this.createPacket();
-                  packet.setField(
-                      1,
-                      CollectionModifier.addWrappers(
-                          PlayerTabView.collectSlotsPlayerInfo(slots, player, packet)));
-                  packet.setField(0, WrappedPlayerInfoAction.ADD_PLAYER);
-                  packet.send(player);
-                } else {
-                  packet.setField(0, WrappedPlayerInfoAction.UPDATE_DISPLAY_NAME);
-                  packet.send(player);
-                }
-              } catch (PacketHandlingException e) {
-                ErrorHandler.getInstance().handle(Level.SEVERE, "Could not update tab slot", e);
-              }
-            });
-  }
-
-  @NonNull
-  private TabSlot getSlot(@NonNull TabCoordinate coordinate) {
-    return this.slots.stream()
-        .filter(slot -> slot.getCoordinate().equals(coordinate))
-        .findFirst()
-        .orElseThrow(
-            () ->
-                new IndexOutOfBoundsException("Could not find slot with coordinate " + coordinate));
-  }
-
   @Override
-  public boolean add(@NonNull TabEntry entry) {
-    return this.add(Collections.singleton(entry));
+  public void initialize() {
+    this.checkForViewer(
+        viewer -> {
+          try {
+            PlayerTabView.adapter.initialize(viewer, this.populate(viewer));
+          } catch (PacketHandlingException e) {
+            Debugger.getInstance()
+                .getLogger()
+                .log(Level.SEVERE, "Could not initialize tab view", e);
+          }
+        });
   }
 
   @Override
@@ -313,18 +139,8 @@ public class PlayerTabView implements TabView {
   }
 
   @Override
-  public void sort() {
-    Map<TabSlot, TabEntry> toUpdate = new HashMap<>();
-    List<TabEntry> sortedEntries =
-        this.slots.stream().map(TabSlot::getEntry).sorted().collect(Collectors.toList());
-    for (int i = 0; i < slots.size(); i++) {
-      TabSlot tabSlot = slots.get(i);
-      TabEntry tabEntry = sortedEntries.get(i);
-      if (!tabSlot.getEntry().equals(tabEntry)) {
-        toUpdate.put(tabSlot, tabEntry);
-      }
-    }
-    this.set(toUpdate);
+  public boolean add(@NonNull TabEntry entry) {
+    return this.add(Collections.singletonList(entry));
   }
 
   @NonNull
@@ -378,6 +194,19 @@ public class PlayerTabView implements TabView {
   }
 
   /**
+   * Set the entry of a slot.
+   *
+   * @param slot the slot to set
+   * @param entry the entry to set
+   * @param skin whether the skin of the slot should be updated
+   * @throws NullPointerException if slot or entry is null
+   */
+  public void set(@NonNull TabSlot slot, @NonNull TabEntry entry, boolean skin) {
+    slot.setEntry(entry);
+    this.update(Collections.singleton(slot), skin);
+  }
+
+  /**
    * Checks whether the skin of the slot should be updated with a new entry.
    *
    * @param slot the slot to check
@@ -388,5 +217,77 @@ public class PlayerTabView implements TabView {
   private boolean updatesSkin(@NonNull TabSlot slot, @NonNull TabEntry entry) {
     return slot.getEntry().getSkin() == null && entry.getSkin() != null
         || !slot.getEntry().getSkin().equals(entry.getSkin());
+  }
+
+  /**
+   * Update the slots view in the client.
+   *
+   * @param slots the slots to update
+   * @param skin whether the skin of the slots should be updated
+   */
+  private void update(@NonNull Collection<TabSlot> slots, boolean skin) {
+    this.checkForViewer(
+        player -> {
+          PlayerTabView.adapter.update(
+              player, skin, PlayerTabView.collectSlotsAdapters(slots, player));
+        });
+  }
+
+  @NonNull
+  private TabSlot getSlot(TabCoordinate coordinate) {
+    return this.slots.stream()
+        .filter(slot -> slot.getCoordinate().equals(coordinate))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new IndexOutOfBoundsException("Could not find slot with coordinate " + coordinate));
+  }
+
+  @NonNull
+  private List<PlayerInfoAdapter> populate(@NonNull Player viewer) throws PacketHandlingException {
+    List<PlayerInfoAdapter> adapters = new ArrayList<>();
+    for (TabCoordinate coordinate : this.size) {
+      TabSlot slot = new TabSlot(coordinate, new EmptyTabEntry());
+      this.slots.add(slot);
+      adapters.add(slot.toAdapter(viewer));
+    }
+    return adapters;
+  }
+
+  private List<PlayerInfoAdapter> collectSlotsAdapters(@NonNull Player player) {
+    return PlayerTabView.collectSlotsAdapters(this.slots, player);
+  }
+
+  /**
+   * Checks that the viewer is still in the server, else it will destroy the tab view.
+   *
+   * @param consumer the consumer to accept the viewer in case it is present
+   */
+  protected void checkForViewer(@NonNull Consumer<@NonNull Player> consumer) {
+    Optional<Player> optional = this.getViewer();
+    if (optional.isPresent()) {
+      consumer.accept(optional.get());
+    } else {
+      this.destroy();
+    }
+  }
+
+  @Override
+  public void sort() {
+    Map<TabSlot, TabEntry> toUpdate = new HashMap<>();
+    List<TabEntry> sortedEntries =
+        this.slots.stream().map(TabSlot::getEntry).sorted().collect(Collectors.toList());
+    for (int i = 0; i < slots.size(); i++) {
+      TabSlot tabSlot = slots.get(i);
+      TabEntry tabEntry = sortedEntries.get(i);
+      if (!tabSlot.getEntry().equals(tabEntry)) {
+        toUpdate.put(tabSlot, tabEntry);
+      }
+    }
+    this.set(toUpdate);
+  }
+
+  private void destroy() {
+    this.destroyed = true;
   }
 }

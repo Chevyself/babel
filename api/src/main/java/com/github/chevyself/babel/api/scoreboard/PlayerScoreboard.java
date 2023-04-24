@@ -32,11 +32,11 @@ public class PlayerScoreboard implements ChannelScoreboard {
   @NonNull private static final ObjectiveAdapter objectiveAdapter = Players.getObjectiveAdapter();
 
   static {
-    characters.put(10, "a");
-    characters.put(11, "b");
-    characters.put(12, "c");
-    characters.put(13, "d");
-    characters.put(14, "e");
+    PlayerScoreboard.characters.put(10, "a");
+    PlayerScoreboard.characters.put(11, "b");
+    PlayerScoreboard.characters.put(12, "c");
+    PlayerScoreboard.characters.put(13, "d");
+    PlayerScoreboard.characters.put(14, "e");
   }
 
   @NonNull @Getter private final UUID owner;
@@ -62,13 +62,14 @@ public class PlayerScoreboard implements ChannelScoreboard {
     return new PlayerScoreboard(
         owner,
         scoreboard,
-        objectiveAdapter.create(scoreboard, owner.toString(), "dummy", null),
+        PlayerScoreboard.objectiveAdapter.create(scoreboard, owner.toString(), "dummy", null),
         layout);
   }
 
   @NonNull
   private static String getEntryName(int position) {
-    return BukkitUtils.format("&" + (position <= 9 ? position : characters.get(position)) + "&r");
+    return BukkitUtils.format(
+        "&" + (position <= 9 ? position : PlayerScoreboard.characters.get(position)) + "&r");
   }
 
   @NonNull
@@ -130,7 +131,7 @@ public class PlayerScoreboard implements ChannelScoreboard {
 
   @NonNull
   private Team newLine(@NonNull ScoreboardLine line) {
-    String entryName = getEntryName(line.getPosition());
+    String entryName = PlayerScoreboard.getEntryName(line.getPosition());
     Team team = this.getLineTeam(line.getPosition(), entryName);
     String current = team.getPrefix() + team.getSuffix();
     String build = line.build(this.getOfflinePlayer());

@@ -1,5 +1,6 @@
 package com.github.chevyself.babel.api.tab;
 
+import com.github.chevyself.babel.adapters.tab.PlayerInfoAdapter;
 import com.github.chevyself.babel.api.tab.entries.TabEntry;
 import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
@@ -8,6 +9,8 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a slot of the tab list. This is used to store the {@link TabEntry}.
@@ -31,7 +34,8 @@ public final class TabSlot implements Comparable<TabSlot> {
    * @throws PacketHandlingException if the packet could not be handled
    * @throws NullPointerException if the viewer or packet is null
    */
-  public WrappedPlayerInfo playerInfoData(@NonNull OfflinePlayer viewer, @NonNull Packet packet)
+  @Deprecated
+  public WrappedPlayerInfo playerInfoData(@NonNull OfflinePlayer viewer, @Nullable Packet packet)
       throws PacketHandlingException {
     return entry.playerInfoData(viewer, packet, this);
   }
@@ -64,5 +68,9 @@ public final class TabSlot implements Comparable<TabSlot> {
   @Override
   public int compareTo(@NonNull TabSlot o) {
     return this.getCoordinate().compareTo(o.getCoordinate());
+  }
+
+  public PlayerInfoAdapter toAdapter(@NonNull Player viewer) throws PacketHandlingException {
+    return entry.toAdapter(viewer, this);
   }
 }

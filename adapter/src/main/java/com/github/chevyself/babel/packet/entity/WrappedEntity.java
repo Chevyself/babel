@@ -63,7 +63,13 @@ public class WrappedEntity extends AbstractWrapper<Object> {
    */
   @NonNull
   private static final WrappedMethod<?> SET_CUSTOM_NAME =
-      WrappedEntity.CLAZZ.getDeclaredMethod("setCustomName", String.class);
+      LookUp.methodOn(CLAZZ)
+          .findDeclared(true)
+          .usingParams(String.class)
+          .since(8, "setCustomName")
+          .since(18, "a")
+          .since(19, "b")
+          .find();
 
   /**
    * Wrap an entity.

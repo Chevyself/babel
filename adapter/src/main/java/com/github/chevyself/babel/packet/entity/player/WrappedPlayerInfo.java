@@ -1,6 +1,5 @@
 package com.github.chevyself.babel.packet.entity.player;
 
-import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.Packet;
 import com.github.chevyself.babel.packet.PacketType;
 import com.github.chevyself.babel.packet.authlib.WrappedGameProfile;
@@ -9,10 +8,13 @@ import com.github.chevyself.babel.packet.entity.WrappedPublicKeyData;
 import com.github.chevyself.babel.packet.world.WrappedEnumGameMode;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.AbstractWrapper;
+import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedConstructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /** Wraps the 'PlayerInfoData' nms class. */
 public class WrappedPlayerInfo extends AbstractWrapper<Object> {
@@ -71,35 +73,35 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
    * @param gamemode the gamemode of the player
    * @param display the display name of the player
    * @return the new PlayerInfoData object
-   * @throws PacketHandlingException if the object could not be created
    */
   public static @NonNull WrappedPlayerInfo construct(
-      @NonNull Packet packet,
+      @Nullable Packet packet,
       @NonNull WrappedGameProfile profile,
       int ping,
       @NonNull WrappedEnumGameMode gamemode,
-      @NonNull WrappedChatComponent display)
-      throws PacketHandlingException {
+      @NonNull WrappedChatComponent display) {
+    Object toWrap = null;
     try {
       if (Versions.BUKKIT < 17) {
-        return new WrappedPlayerInfo(
+        toWrap =
             WrappedPlayerInfo.CONSTRUCTOR.invoke(
-                packet.getWrapped(),
+                packet != null ? packet.getWrapped() : null,
                 profile.getWrapped(),
                 ping,
                 gamemode.getWrapped(),
-                display.getWrapped()));
+                display.getWrapped());
       } else if (Versions.BUKKIT >= 19) {
-        return new WrappedPlayerInfo(
+        toWrap =
             WrappedPlayerInfo.CONSTRUCTOR.invoke(
-                profile.getWrapped(), ping, gamemode.getWrapped(), display.getWrapped(), null));
+                profile.getWrapped(), ping, gamemode.getWrapped(), display.getWrapped(), null);
       } else {
-        return new WrappedPlayerInfo(
+        toWrap =
             WrappedPlayerInfo.CONSTRUCTOR.invoke(
-                profile.getWrapped(), ping, gamemode.getWrapped(), display.getWrapped()));
+                profile.getWrapped(), ping, gamemode.getWrapped(), display.getWrapped());
       }
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-      throw new PacketHandlingException("Could not create PlayerInfo");
+      Debugger.getInstance().getLogger().log(Level.SEVERE, "Could not construct PlayerInfoData", e);
     }
+    return new WrappedPlayerInfo(toWrap);
   }
 }

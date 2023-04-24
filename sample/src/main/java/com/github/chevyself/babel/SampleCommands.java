@@ -3,16 +3,12 @@ package com.github.chevyself.babel;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.scoreboard.ScoreboardLine;
-import com.github.chevyself.babel.api.tab.PlayerTabView;
 import com.github.chevyself.babel.api.tab.TabCoordinate;
-import com.github.chevyself.babel.api.tab.TabSize;
 import com.github.chevyself.babel.api.tab.TabView;
 import com.github.chevyself.babel.api.tab.entries.CoordinateTabEntry;
 import com.github.chevyself.babel.api.tab.entries.PlayerTabEntry;
 import com.github.chevyself.babel.api.text.Plain;
 import com.github.chevyself.babel.api.text.Text;
-import com.github.chevyself.babel.debug.ErrorHandler;
-import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.starbox.annotations.Free;
 import com.github.chevyself.starbox.annotations.Parent;
 import com.github.chevyself.starbox.annotations.Required;
@@ -21,14 +17,10 @@ import com.github.chevyself.starbox.bukkit.annotations.Command;
 import com.github.chevyself.starbox.bukkit.context.CommandContext;
 import com.github.chevyself.starbox.bukkit.result.BukkitResult;
 import java.util.*;
-import java.util.logging.Level;
-import lombok.NonNull;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class SampleCommands {
-
-  @NonNull private final Map<UUID, TabView> views = new HashMap<>();
 
   @Command(aliases = "bossbar")
   public BukkitResult bossbar(
@@ -75,59 +67,46 @@ public class SampleCommands {
   }
 
   @Command(aliases = "ctab", description = "tests")
-  public void ctab(Player player) {
-    try {
-      PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
-      view.initialize();
-      views.put(player.getUniqueId(), view);
-    } catch (PacketHandlingException e) {
-      ErrorHandler.getInstance().handle(Level.SEVERE, "", e);
-    }
+  public void ctab(Channel channel) {
+    channel.getTabView().initialize();
   }
 
   @Command(aliases = "ctabclear", description = "tests")
-  public Plain ctabclear(Player player) {
-    TabView view = views.get(player.getUniqueId());
-    if (view == null) {
-      return Text.of("No view");
-    } else {
-      view.clear();
-      return Text.of("Done");
-    }
+  public Plain ctabclear(Channel channel) {
+    channel.getTabView().clear();
+    return Text.of("Done");
   }
 
   @Command(aliases = "ctabadd")
-  public Text ctabadd(Player player) {
-    TabView view = views.get(player.getUniqueId());
-    if (view == null) {
-      return Text.of("No view");
-    } else {
-      view.add(new PlayerTabEntry(player));
+  public Text ctabadd(Channel channel, Player player) {
+    if (channel.hasTabView()) {
+      channel.getTabView().add(new PlayerTabEntry(player));
       return Text.of("Done");
+    } else {
+      return Text.of("No view");
     }
   }
 
   @Command(aliases = "ctabremove")
-  public Text ctabremove(Player player) {
-    TabView view = views.get(player.getUniqueId());
-    if (view == null) {
-      return Text.of("No view");
-    } else {
-      view.remove(new PlayerTabEntry(player));
+  public Text ctabremove(Channel channel, Player player) {
+    if (channel.hasTabView()) {
+      channel.getTabView().remove(new PlayerTabEntry(player));
       return Text.of("Done");
+    } else {
+      return Text.of("No view");
     }
   }
 
   @Command(aliases = "ctabcoords")
-  public Text ctabcoords(Player player) {
-    TabView view = views.get(player.getUniqueId());
-    if (view == null) {
-      return Text.of("No view");
-    } else {
-      for (TabCoordinate coordinate : view.getSize()) {
-        view.set(coordinate, new CoordinateTabEntry());
+  public Text ctabcoords(Channel channel, Player player) {
+    if (channel.hasTabView()) {
+      TabView tabView = channel.getTabView();
+      for (TabCoordinate coordinate : tabView.getSize()) {
+        tabView.set(coordinate, new CoordinateTabEntry());
       }
       return Text.of("Done");
+    } else {
+      return Text.of("No view");
     }
   }
 

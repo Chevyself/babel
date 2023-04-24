@@ -2,8 +2,6 @@ package com.github.chevyself.babel.api.tab;
 
 import com.github.chevyself.babel.api.tab.entries.EmptyTabEntry;
 import com.github.chevyself.babel.api.tab.entries.TabEntry;
-import com.github.chevyself.babel.exceptions.PacketHandlingException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -18,17 +16,8 @@ public interface TabView {
   /** Remove all the entries from the tab list. */
   void clear();
 
-  /**
-   * Initialize the tab list. This will send the packets to the player to initialize the tab list.
-   *
-   * @throws PacketHandlingException if there was an error sending the packets
-   * @throws InvocationTargetException if there was an error invoking the constructor of the entry
-   * @throws InstantiationException if there was an error instantiating the entry
-   * @throws IllegalAccessException if there was an error accessing the constructor of the entry
-   */
-  void initialize()
-      throws PacketHandlingException, InvocationTargetException, InstantiationException,
-          IllegalAccessException;
+  /** Initialize the tab list. */
+  void initialize();
 
   /**
    * Set the entry at the given coordinate.

@@ -19,7 +19,7 @@ Changelog
   - [X] Boss bars must be displayed using `AdaptedBossBar#display`
 - [X] Add support to `Packet`s which changed in Minecraft 1.17
 - [X] Better `Reflect` debugging
-- [X] Support custom tab up to `1.19.2`
+- [X] Support custom tab up to `1.19.4`
 - [X] Start using `@Nullable` which is now being used in the `Reflect` and `Adapter` modules
 - [X] Added codestyle for IntelliJ
 - [X] Renamed `Versions.Player` to `Versions.PlayerVersion`

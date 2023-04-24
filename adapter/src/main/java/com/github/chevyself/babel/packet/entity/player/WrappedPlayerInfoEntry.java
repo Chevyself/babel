@@ -5,7 +5,6 @@ import com.github.chevyself.babel.packet.ReflectWrapper;
 import com.github.chevyself.babel.packet.authlib.WrappedGameProfile;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import com.github.chevyself.babel.packet.world.WrappedEnumGameMode;
-import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
 import com.github.chevyself.reflect.wrappers.WrappedConstructor;
@@ -23,7 +22,8 @@ public class WrappedPlayerInfoEntry extends ReflectWrapper {
 
   @NonNull
   private static final WrappedClass<?> CLAZZ =
-      Versions.wrapNmsClassByName(PacketType.Play.ClientBound.PLAYER_INFO_UPDATE + "$b");
+      WrappedClass.forName(
+          PacketType.Play.ClientBound.PLAYER_INFO_UPDATE.getCanonicalName() + "$b");
 
   private static final WrappedConstructor<?> CONSTRUCTOR =
       WrappedPlayerInfoEntry.CLAZZ.getConstructor(

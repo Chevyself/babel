@@ -4,6 +4,7 @@ import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.Wrapper;
 import com.github.chevyself.reflect.wrappers.WrappedClass;
+import lombok.Getter;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class PacketType {
 
-  @NonNull private final String name;
+  @NonNull @Getter private final String name;
 
   PacketType(@NonNull String name) {
     this.name = name;
@@ -133,6 +134,14 @@ public final class PacketType {
        */
       public static final PacketType PLAYER_INFO_UPDATE =
           new PacketType("ClientboundPlayerInfoUpdatePacket");
+
+      /**
+       * Sends the unique ids of the players to the player.
+       *
+       * @since 1.19.3
+       */
+      public static final PacketType PLAYER_INFO_REMOVE =
+          new PacketType("ClientboundPlayerInfoRemovePacket");
     }
   }
 }

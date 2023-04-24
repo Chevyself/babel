@@ -1,5 +1,6 @@
 package com.github.chevyself.babel.api.tab.entries;
 
+import com.github.chevyself.babel.adapters.tab.PlayerInfoAdapter;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.tab.TabSlot;
 import com.github.chevyself.babel.api.text.Text;
@@ -12,6 +13,8 @@ import com.github.chevyself.babel.packet.entity.player.WrappedPlayerInfo;
 import com.github.chevyself.babel.packet.world.WrappedEnumGameMode;
 import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An entry that can be displayed inside a slot of a tab list. It is used to display the name, ping,
@@ -30,9 +33,10 @@ public interface TabEntry extends Comparable<TabEntry> {
    * @return the modified packet
    * @throws PacketHandlingException if the packet could not be modified
    */
+  @Deprecated
   @NonNull
   default WrappedPlayerInfo playerInfoData(
-      @NonNull OfflinePlayer viewer, @NonNull Packet packet, @NonNull TabSlot slot)
+      @NonNull OfflinePlayer viewer, @Nullable Packet packet, @NonNull TabSlot slot)
       throws PacketHandlingException {
     return WrappedPlayerInfo.construct(
         packet,
@@ -105,4 +109,18 @@ public interface TabEntry extends Comparable<TabEntry> {
    * @return the priority of the entry
    */
   boolean canBeReplaced(@NonNull TabEntry entry);
+
+  @NonNull
+  default WrappedChatComponent getDisplay(@NonNull Player viewer, @NonNull TabSlot slot) {
+    return WrappedChatComponent.of(this.getDisplay(slot).build(Channel.of(viewer)));
+  }
+
+  default PlayerInfoAdapter toAdapter(@NonNull Player viewer, @NonNull TabSlot slot)
+      throws PacketHandlingException {
+    return new PlayerInfoAdapter(
+        this.getGameProfile(slot),
+        this.getPing(slot),
+        this.getGamemode(slot),
+        this.getDisplay(viewer, slot));
+  }
 }

@@ -4,12 +4,9 @@ import com.github.chevyself.babel.adapters.AdaptedBossBar;
 import com.github.chevyself.babel.adapters.bossbar.EmptyAdaptedBossBar;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.scoreboard.PlayerScoreboard;
-import com.github.chevyself.babel.api.tab.EmptyTabView;
 import com.github.chevyself.babel.api.tab.PlayerTabView;
 import com.github.chevyself.babel.api.tab.TabSize;
 import com.github.chevyself.babel.api.tab.TabView;
-import com.github.chevyself.babel.debug.ErrorHandler;
-import com.github.chevyself.babel.exceptions.PacketHandlingException;
 import com.github.chevyself.babel.packet.sound.WrappedSoundCategory;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.starbox.bukkit.utils.BukkitUtils;
@@ -17,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Level;
 import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
@@ -146,29 +142,15 @@ public interface PlayerChannel extends Channel {
 
   @Override
   default @NonNull TabView getTabView() {
-    Optional<PlayerTabView> tabView =
-        ChannelUtils.views.stream()
-            .filter(view -> view.getUniqueId().equals(this.getUniqueId()))
-            .findFirst();
-    if (tabView.isPresent()) {
-      return tabView.get();
-    } else {
-      return this.getPlayer()
-          .map(
-              player -> {
-                try {
-                  PlayerTabView view = new PlayerTabView(player.getUniqueId(), TabSize.FOUR);
-                  view.initialize();
-                  ChannelUtils.views.add(view);
-                  return view;
-                } catch (PacketHandlingException e) {
-                  ErrorHandler.getInstance()
-                      .handle(Level.SEVERE, "Could not initialize tab view for player " + player);
-                  return new EmptyTabView();
-                }
-              })
-          .orElseGet(EmptyTabView::new);
-    }
+    return ChannelUtils.views.stream()
+        .filter(view -> view.getUniqueId().equals(this.getUniqueId()))
+        .findFirst()
+        .orElseGet(
+            () -> {
+              PlayerTabView view = new PlayerTabView(this.getUniqueId(), TabSize.FOUR);
+              ChannelUtils.views.add(view);
+              return view;
+            });
   }
 
   @Override
