@@ -12,8 +12,8 @@ import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 
-/** A {@link Text} that references a language key to be built into {@link Localized}. */
-public final class LocalizedReference implements Text {
+/** A {@link Text} that references a language key to be built into {@link LocalizedText}. */
+public final class LocalizedTextReference implements Text {
 
   /** Objects formatters. */
   @NonNull private final List<Object> objects;
@@ -30,7 +30,7 @@ public final class LocalizedReference implements Text {
   @Getter private final boolean sample;
   private final boolean hasPlaceholders;
 
-  LocalizedReference(@NonNull String key) {
+  LocalizedTextReference(@NonNull String key) {
     this(
         new ArrayList<>(),
         new HashMap<>(),
@@ -42,7 +42,7 @@ public final class LocalizedReference implements Text {
         false);
   }
 
-  private LocalizedReference(
+  private LocalizedTextReference(
       @NonNull List<Object> objects,
       @NonNull Map<String, String> placeholders,
       @NonNull List<Formatter> formatters,
@@ -62,13 +62,13 @@ public final class LocalizedReference implements Text {
   }
 
   /**
-   * Get the {@link Localized} that this references to.
+   * Get the {@link LocalizedText} that this references to.
    *
    * @param locale the locale to get the raw message
-   * @return the {@link Localized}
+   * @return the {@link LocalizedText}
    */
-  public @NonNull Localized asLocalized(@NonNull Locale locale) {
-    Localized localized = Text.localized(locale, this.key);
+  public @NonNull LocalizedText asLocalized(@NonNull Locale locale) {
+    LocalizedText localized = Text.localized(locale, this.key);
     if (!extra.isEmpty()) localized.appendMany(this.extra);
     if (!objects.isEmpty()) localized.format(objects.toArray());
     if (!placeholders.isEmpty()) localized.format(placeholders);
@@ -79,31 +79,31 @@ public final class LocalizedReference implements Text {
   }
 
   /**
-   * Get the {@link Localized} that this references to.
+   * Get the {@link LocalizedText} that this references to.
    *
    * @param sender the sender to get the locale from
-   * @return the {@link Localized}
+   * @return the {@link LocalizedText}
    */
-  public @NonNull Localized asLocalized(@NonNull CommandSender sender) {
+  public @NonNull LocalizedText asLocalized(@NonNull CommandSender sender) {
     return this.asLocalized(Language.getLocale(sender));
   }
 
   /**
-   * Get the {@link Localized} that this references to.
+   * Get the {@link LocalizedText} that this references to.
    *
    * @param channel the channel to get the locale from
-   * @return the {@link Localized}
+   * @return the {@link LocalizedText}
    */
-  public @NonNull Localized asLocalized(@NonNull Channel channel) {
+  public @NonNull LocalizedText asLocalized(@NonNull Channel channel) {
     return this.asLocalized(channel.getLocale().orElse(ResourceManager.getBase()));
   }
 
   /**
-   * Raw use of {@link Localized}. This will warn the {@link java.util.logging.Logger} when used
+   * Raw use of {@link LocalizedText}. This will warn the {@link java.util.logging.Logger} when used
    *
-   * @return the {@link Localized}
+   * @return the {@link LocalizedText}
    */
-  public @NonNull Localized asLocalized() {
+  public @NonNull LocalizedText asLocalized() {
     return this.asLocalized(ResourceManager.getBase());
   }
 
@@ -123,12 +123,12 @@ public final class LocalizedReference implements Text {
   }
 
   @Override
-  public @NonNull LocalizedReference copy() {
+  public @NonNull LocalizedTextReference copy() {
     return this.copy(this.sample, this.hasPlaceholders);
   }
 
-  public @NonNull LocalizedReference copy(boolean sample, boolean hasPlaceholders) {
-    return new LocalizedReference(
+  public @NonNull LocalizedTextReference copy(boolean sample, boolean hasPlaceholders) {
+    return new LocalizedTextReference(
         new ArrayList<>(this.objects),
         new HashMap<>(this.placeholders),
         new ArrayList<>(this.formatters),
@@ -140,13 +140,13 @@ public final class LocalizedReference implements Text {
   }
 
   @Override
-  public @NonNull LocalizedReference appendMany(@NonNull Collection<Text> extra) {
-    return (LocalizedReference) Text.super.appendMany(extra);
+  public @NonNull LocalizedTextReference appendMany(@NonNull Collection<Text> extra) {
+    return (LocalizedTextReference) Text.super.appendMany(extra);
   }
 
   @Override
-  public @NonNull LocalizedReference appendMany(@NonNull Text... texts) {
-    return (LocalizedReference) Text.super.appendMany(texts);
+  public @NonNull LocalizedTextReference appendMany(@NonNull Text... texts) {
+    return (LocalizedTextReference) Text.super.appendMany(texts);
   }
 
   @Override
@@ -166,26 +166,26 @@ public final class LocalizedReference implements Text {
   }
 
   @Override
-  public @NonNull LocalizedReference format(@NonNull Object... objects) {
+  public @NonNull LocalizedTextReference format(@NonNull Object... objects) {
     this.objects.addAll(Arrays.asList(objects));
     this.extra.forEach(text -> text.format(objects));
     return this;
   }
 
   @Override
-  public @NonNull LocalizedReference format(@NonNull Formatter formatter) {
+  public @NonNull LocalizedTextReference format(@NonNull Formatter formatter) {
     this.formatters.add(formatter);
     return this;
   }
 
   @Override
-  public @NonNull LocalizedReference append(@NonNull Text text) {
+  public @NonNull LocalizedTextReference append(@NonNull Text text) {
     this.extra.add(text);
     return this;
   }
 
   @Override
-  public @NonNull LocalizedReference format(@NonNull Placeholder placeholder) {
+  public @NonNull LocalizedTextReference format(@NonNull Placeholder placeholder) {
     this.linePlaceholders.add(placeholder);
     return this;
   }
@@ -197,12 +197,12 @@ public final class LocalizedReference implements Text {
   }
 
   @Override
-  public @NonNull LocalizedReference setRaw(@NonNull String raw) {
+  public @NonNull LocalizedTextReference setRaw(@NonNull String raw) {
     throw new UnsupportedOperationException("Cannot change the key of a LocalizedReference");
   }
 
   @Override
-  public @NonNull LocalizedReference append(@NonNull String string) {
-    return (LocalizedReference) Text.super.append(string);
+  public @NonNull LocalizedTextReference append(@NonNull String string) {
+    return (LocalizedTextReference) Text.super.append(string);
   }
 }

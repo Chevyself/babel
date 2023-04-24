@@ -1,7 +1,7 @@
 package com.github.chevyself.babel.api.scoreboard;
 
 import com.github.chevyself.babel.api.channels.Channel;
-import com.github.chevyself.babel.api.text.LocalizedReference;
+import com.github.chevyself.babel.api.text.LocalizedTextReference;
 import com.github.chevyself.babel.api.text.Text;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,8 +39,8 @@ public class ScoreboardLine {
   public String build(@NonNull OfflinePlayer player) {
     Channel channel = Channel.of(player);
     Text text = child;
-    if (child instanceof LocalizedReference) {
-      text = ((LocalizedReference) child).asLocalized(channel);
+    if (child instanceof LocalizedTextReference) {
+      text = ((LocalizedTextReference) child).asLocalized(channel);
     }
     return text.setSample(true).setHasPlaceholders(true).asString(channel);
   }

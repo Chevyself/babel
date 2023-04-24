@@ -7,7 +7,7 @@ import com.github.chevyself.babel.api.tab.TabCoordinate;
 import com.github.chevyself.babel.api.tab.TabView;
 import com.github.chevyself.babel.api.tab.entries.CoordinateTabEntry;
 import com.github.chevyself.babel.api.tab.entries.PlayerTabEntry;
-import com.github.chevyself.babel.api.text.Plain;
+import com.github.chevyself.babel.api.text.PlainText;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.starbox.annotations.Free;
 import com.github.chevyself.starbox.annotations.Parent;
@@ -72,7 +72,7 @@ public class SampleCommands {
   }
 
   @Command(aliases = "ctabclear", description = "tests")
-  public Plain ctabclear(Channel channel) {
+  public PlainText ctabclear(Channel channel) {
     channel.getTabView().clear();
     return Text.of("Done");
   }

@@ -9,14 +9,14 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /** Represents plain text. */
-public final class Plain implements Text {
+public final class PlainText implements Text {
 
   @NonNull @Getter private final List<Text> extra;
   @NonNull private String text;
   @Getter private boolean sample = false;
   private boolean hasPlaceholders = false;
 
-  Plain(@NonNull String text) {
+  PlainText(@NonNull String text) {
     this.text = text;
     this.extra = new ArrayList<>();
   }
@@ -39,23 +39,23 @@ public final class Plain implements Text {
   }
 
   @Override
-  public @NonNull Plain copy() {
-    return new Plain(text).appendMany(this.extra);
+  public @NonNull PlainText copy() {
+    return new PlainText(text).appendMany(this.extra);
   }
 
   @Override
-  public @NonNull Plain appendMany(@NonNull Collection<Text> extra) {
-    return (Plain) Text.super.appendMany(extra);
+  public @NonNull PlainText appendMany(@NonNull Collection<Text> extra) {
+    return (PlainText) Text.super.appendMany(extra);
   }
 
   @Override
-  public @NonNull Plain append(@NonNull String string) {
-    return (Plain) Text.super.append(string);
+  public @NonNull PlainText append(@NonNull String string) {
+    return (PlainText) Text.super.append(string);
   }
 
   @Override
-  public @NonNull Plain appendMany(@NonNull Text... texts) {
-    return (Plain) Text.super.appendMany(texts);
+  public @NonNull PlainText appendMany(@NonNull Text... texts) {
+    return (PlainText) Text.super.appendMany(texts);
   }
 
   @Override
@@ -64,31 +64,31 @@ public final class Plain implements Text {
   }
 
   @Override
-  public @NonNull Plain setRaw(@NonNull String raw) {
+  public @NonNull PlainText setRaw(@NonNull String raw) {
     this.text = raw;
     return this;
   }
 
   @Override
-  public @NonNull Plain format(@NonNull Object... objects) {
+  public @NonNull PlainText format(@NonNull Object... objects) {
     this.text = Strings.format(text, objects);
     this.extra.forEach(text -> text.format(objects));
     return this;
   }
 
   @Override
-  public @NonNull Plain format(@NonNull Formatter formatter) {
-    return (Plain) formatter.format(this);
+  public @NonNull PlainText format(@NonNull Formatter formatter) {
+    return (PlainText) formatter.format(this);
   }
 
   @Override
-  public @NonNull Plain append(@NonNull Text text) {
+  public @NonNull PlainText append(@NonNull Text text) {
     this.extra.add(text);
     return this;
   }
 
   @Override
-  public @NonNull Plain format(@NonNull Placeholder placeholder) {
+  public @NonNull PlainText format(@NonNull Placeholder placeholder) {
     this.text = placeholder.format(this.text);
     this.extra.forEach(text -> text.format(placeholder));
     return this;

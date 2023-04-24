@@ -35,7 +35,7 @@ import org.bukkit.command.CommandSender;
  * <p>However, they can also be safely copied using {@link #copy()}.
  *
  * <p>To ensure thread safety, each thread should use its own instance of text, however, {@link
- * LocalizedReference} is immutable and can be used in multiple threads.
+ * LocalizedTextReference} is immutable and can be used in multiple threads.
  */
 public interface Text extends BukkitResult {
 
@@ -44,12 +44,12 @@ public interface Text extends BukkitResult {
    *
    * @param locale the locale to get the language
    * @param key the key to get the json/text message
-   * @return a new {@link Localized} instance
+   * @return a new {@link LocalizedText} instance
    * @throws NullPointerException if the locale or key is null
    */
   @NonNull
-  static Localized localized(@NonNull Locale locale, @NonNull String key) {
-    return new Localized(locale, ResourceManager.getInstance().getRaw(locale, key).trim());
+  static LocalizedText localized(@NonNull Locale locale, @NonNull String key) {
+    return new LocalizedText(locale, ResourceManager.getInstance().getRaw(locale, key).trim());
   }
 
   /**
@@ -57,11 +57,11 @@ public interface Text extends BukkitResult {
    *
    * @param sender the sender to get the language
    * @param key the key to get the json/text message
-   * @return a new {@link Localized} instance
+   * @return a new {@link LocalizedText} instance
    * @throws NullPointerException if the sender or key is null
    */
   @NonNull
-  static Localized localized(@NonNull CommandSender sender, @NonNull String key) {
+  static LocalizedText localized(@NonNull CommandSender sender, @NonNull String key) {
     return Text.localized(Language.getLocale(sender), key);
   }
 
@@ -70,11 +70,11 @@ public interface Text extends BukkitResult {
    *
    * @param channel the channel to get the language
    * @param key the key to get the json/text message
-   * @return a new {@link Localized} instance
+   * @return a new {@link LocalizedText} instance
    * @throws NullPointerException if the channel or key is null
    */
   @NonNull
-  static Localized localized(@NonNull Channel channel, String key) {
+  static LocalizedText localized(@NonNull Channel channel, String key) {
     return Text.localized(channel.getLocale().orElse(ResourceManager.getBase()), key);
   }
 
@@ -87,7 +87,7 @@ public interface Text extends BukkitResult {
    * @throws NullPointerException if the forwarding channel or key is null
    */
   @NonNull
-  static List<Localized> localized(
+  static List<LocalizedText> localized(
       @NonNull ForwardingChannel.Multiple forwardingChannel, @NonNull String key) {
     return forwardingChannel.getChannels().stream()
         .map(channel -> Text.localized(channel, key))
@@ -102,32 +102,32 @@ public interface Text extends BukkitResult {
    * @throws NullPointerException if the text is null
    */
   @NonNull
-  static Plain of(@NonNull String text) {
-    return new Plain(text);
+  static PlainText of(@NonNull String text) {
+    return new PlainText(text);
   }
 
   /**
    * Get a localized reference from a key.
    *
    * @param key the key of the localized message
-   * @return ta new {@link LocalizedReference} instance
+   * @return ta new {@link LocalizedTextReference} instance
    * @throws NullPointerException if the key is null
    */
   @NonNull
-  static LocalizedReference localized(@NonNull String key) {
-    return new LocalizedReference(key);
+  static LocalizedTextReference localized(@NonNull String key) {
+    return new LocalizedTextReference(key);
   }
 
   /**
    * Parses text from a string. If the string starts with 'localized:' or '$' a {@link
-   * LocalizedReference} will be returned, else a {@link Plain} will be provided/
+   * LocalizedTextReference} will be returned, else a {@link PlainText} will be provided/
    *
    * <p>If the string starts with 'localized:', the key will be extracted from the string and a
-   * {@link LocalizedReference} will be created using it. If the string starts with '$', the dollar
-   * sign will be removed from the string and a new {@link LocalizedReference} will be created using
+   * {@link LocalizedTextReference} will be created using it. If the string starts with '$', the dollar
+   * sign will be removed from the string and a new {@link LocalizedTextReference} will be created using
    * the resulting string.
    *
-   * <p>Otherwise, a {@link Plain} will be created using the string
+   * <p>Otherwise, a {@link PlainText} will be created using the string
    *
    * @param string the string to parse
    * @return the parsed text
@@ -142,8 +142,8 @@ public interface Text extends BukkitResult {
   }
 
   /**
-   * Parses text from a string, returning a {@link Localized} instance if the string starts with
-   * 'localized:', otherwise a {@link Plain} instance will be returned.
+   * Parses text from a string, returning a {@link LocalizedText} instance if the string starts with
+   * 'localized:', otherwise a {@link PlainText} instance will be returned.
    *
    * @param locale the locale parsing the text
    * @param string the string to parse
@@ -170,7 +170,7 @@ public interface Text extends BukkitResult {
    */
   @NonNull
   static Text parse(Channel channel, @NonNull String string) {
-    return parse(
+    return Text.parse(
         channel == null ? null : channel.getLocale().orElse(ResourceManager.getBase()), string);
   }
 
@@ -179,7 +179,7 @@ public interface Text extends BukkitResult {
    * SampleFormatter}.
    *
    * <p>A sample text is one which contains references to other texts. For example, if you have a
-   * text with the content "Hello ${owner.name}" it is referencing as a {@link LocalizedReference}
+   * text with the content "Hello ${owner.name}" it is referencing as a {@link LocalizedTextReference}
    * to the text with the key "owner.name".
    *
    * @return true if this text is a sample
@@ -238,8 +238,7 @@ public interface Text extends BukkitResult {
   /**
    * Build the message.
    *
-   * @param channel the channel to build the message for
-   *     com.github.chevyself.babel.api.text.format.SampleFormatter}
+   * @param channel the channel to build the message for {@link SampleFormatter}
    * @return the built message
    */
   default BaseComponent[] build(@NonNull Channel channel) {
@@ -328,7 +327,7 @@ public interface Text extends BukkitResult {
   /**
    * Get the raw text. This is the text without being formatted.
    *
-   * <p>Ex: {@link Localized} the raw text is its json
+   * <p>Ex: {@link LocalizedText} the raw text is its json
    *
    * @return the raw text
    */

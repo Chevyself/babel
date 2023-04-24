@@ -1,7 +1,7 @@
 package com.github.chevyself.babel.api.text.format;
 
 import com.github.chevyself.babel.api.ResourceManager;
-import com.github.chevyself.babel.api.text.Localized;
+import com.github.chevyself.babel.api.text.LocalizedText;
 import com.github.chevyself.babel.api.text.Text;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import lombok.NonNull;
 
 /** Formatter for sample lines. */
-public final class SampleFormatter implements Formatter, Localized.LocalizedFormatter {
+public final class SampleFormatter implements Formatter, LocalizedText.LocalizedFormatter {
 
   /**
    * Pattern to find anything that is inside a word starting with '$' and inside '{}' such as:
@@ -23,8 +23,8 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
   @Override
   public @NonNull Text format(@NonNull Text text) {
     Locale locale;
-    if (text instanceof Localized) {
-      locale = ((Localized) text).getLocale();
+    if (text instanceof LocalizedText) {
+      locale = ((LocalizedText) text).getLocale();
     } else {
       locale = ResourceManager.getBase();
     }
@@ -38,7 +38,7 @@ public final class SampleFormatter implements Formatter, Localized.LocalizedForm
     while (matcher.find()) {
       String group = matcher.group();
       // I don't really understand why remove quotation marks
-      // keep it removed until theres a reason
+      // keep it removed until there's a reason
       // String key = group.replace("\"", "");
       String key = group.substring(2, group.length() - 1);
       raw = raw.replace(group, Text.localized(locale, key).getRaw());

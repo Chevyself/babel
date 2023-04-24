@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /** This is a {@link Text} which uses a message obtained from {@link ResourceManager}. */
-public final class Localized implements Text {
+public final class LocalizedText implements Text {
 
   @NonNull @Getter private final Locale locale;
   @NonNull @Getter private final List<Text> extra;
@@ -20,20 +20,20 @@ public final class Localized implements Text {
   @Getter private boolean sample = false;
   private boolean hasPlaceholders = false;
 
-  Localized(@NonNull Locale locale, @NonNull String text) {
+  LocalizedText(@NonNull Locale locale, @NonNull String text) {
     this.locale = locale;
     this.text = text;
     this.extra = new ArrayList<>();
   }
 
   @Override
-  public @NonNull Localized appendMany(@NonNull Collection<Text> extra) {
-    return (Localized) Text.super.appendMany(extra);
+  public @NonNull LocalizedText appendMany(@NonNull Collection<Text> extra) {
+    return (LocalizedText) Text.super.appendMany(extra);
   }
 
   @Override
-  public @NonNull Localized appendMany(@NonNull Text... texts) {
-    return (Localized) Text.super.appendMany(texts);
+  public @NonNull LocalizedText appendMany(@NonNull Text... texts) {
+    return (LocalizedText) Text.super.appendMany(texts);
   }
 
   @Override
@@ -42,7 +42,7 @@ public final class Localized implements Text {
   }
 
   @NonNull
-  public Localized setRaw(@NonNull String json) {
+  public LocalizedText setRaw(@NonNull String json) {
     this.text = json;
     return this;
   }
@@ -53,42 +53,42 @@ public final class Localized implements Text {
   }
 
   @Override
-  public @NonNull Localized setSample(boolean sample) {
+  public @NonNull LocalizedText setSample(boolean sample) {
     this.sample = sample;
     return this;
   }
 
   @Override
-  public @NonNull Localized setHasPlaceholders(boolean hasPlaceholders) {
+  public @NonNull LocalizedText setHasPlaceholders(boolean hasPlaceholders) {
     this.hasPlaceholders = hasPlaceholders;
     return this;
   }
 
   @Override
-  public @NonNull Localized copy() {
-    return new Localized(locale, text).appendMany(this.extra);
+  public @NonNull LocalizedText copy() {
+    return new LocalizedText(locale, text).appendMany(this.extra);
   }
 
   @Override
-  public @NonNull Localized format(@NonNull Object... objects) {
+  public @NonNull LocalizedText format(@NonNull Object... objects) {
     text = Strings.format(text, objects);
     this.extra.forEach(text -> text.format(objects));
     return this;
   }
 
-  public @NonNull Localized format(@NonNull Map<String, String> map) {
+  public @NonNull LocalizedText format(@NonNull Map<String, String> map) {
     text = Strings.format(text, map);
     this.extra.forEach(text -> text.format(map));
     return this;
   }
 
   @Override
-  public @NonNull Localized format(@NonNull Formatter formatter) {
-    return (Localized) formatter.format(this);
+  public @NonNull LocalizedText format(@NonNull Formatter formatter) {
+    return (LocalizedText) formatter.format(this);
   }
 
   @Override
-  public @NonNull Localized append(@NonNull Text text) {
+  public @NonNull LocalizedText append(@NonNull Text text) {
     this.extra.add(text);
     return this;
   }
@@ -101,8 +101,8 @@ public final class Localized implements Text {
   }
 
   @Override
-  public @NonNull Localized append(@NonNull String string) {
-    return (Localized) Text.super.append(string);
+  public @NonNull LocalizedText append(@NonNull String string) {
+    return (LocalizedText) Text.super.append(string);
   }
 
   /** Represents a formatter which can format {@link Text} using {@link Locale}. */
