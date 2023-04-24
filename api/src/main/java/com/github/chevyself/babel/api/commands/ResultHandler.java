@@ -10,6 +10,7 @@ import com.github.chevyself.starbox.result.StarboxResult;
 import lombok.NonNull;
 import org.bukkit.command.CommandSender;
 
+/** Implementation of {@link Middleware} that handles the display of the result from a command. */
 public final class ResultHandler implements Middleware<CommandContext> {
 
   @Override

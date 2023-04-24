@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NonNull;
@@ -255,6 +256,11 @@ public interface Text extends BukkitResult {
         .toArray(BaseComponent[]::new);
   }
 
+  /**
+   * Send the message to a channel.
+   *
+   * @param channel the channel to receive the message
+   */
   default void send(@NonNull Channel channel) {
     channel.send(this);
   }
@@ -292,19 +298,51 @@ public interface Text extends BukkitResult {
   @NonNull
   Text append(@NonNull Text text);
 
+  /**
+   * Format this text using a placeholder.
+   *
+   * @see com.github.chevyself.starbox.util.Strings#format(String, Map)
+   * @param placeholder the placeholder to format the text
+   * @return this same instance
+   */
   @NonNull
   Text format(@NonNull Text.Placeholder placeholder);
 
+  /**
+   * Format this text using a placeholder. The placeholder will be created using the key and value,
+   * it may have a default value in case the value is null.
+   *
+   * @see #format(Placeholder)
+   * @param key the key of the placeholder
+   * @param value the value of the placeholder
+   * @param def the default value of the placeholder
+   * @return this same instance
+   */
   @NonNull
   default Text placeholder(@NonNull String key, Object value, @NonNull String def) {
     return this.format(new Text.Placeholder(key, value, def));
   }
 
+  /**
+   * Format this text using a placeholder. The placeholder will be created using the key and value.
+   *
+   * @see #format(Placeholder)
+   * @param key the key of the placeholder
+   * @param value the value of the placeholder
+   * @return this same instance
+   */
   @NonNull
   default Text placeholder(@NonNull String key, Object value) {
     return this.format(new Text.Placeholder(key, value));
   }
 
+  /**
+   * Format the text using an array of placeholders. This will loop through the array and call
+   * {@link #format(Placeholder)}
+   *
+   * @param placeholders the placeholders to format the text
+   * @return this same instance
+   */
   @NonNull
   default Text placeholders(@NonNull Placeholder... placeholders) {
     for (Placeholder placeholder : placeholders) {
@@ -389,19 +427,31 @@ public interface Text extends BukkitResult {
   }
 
   /**
-   * Get the extra lines that have been appended
+   * Get the extra lines that have been appended.
    *
    * @return the extra lines in a list
    */
   @NonNull
   Collection<Text> getExtra();
 
+  /**
+   * Appends many other texts.
+   *
+   * @param extra the texts to append
+   * @return this same instance
+   */
   @NonNull
   default Text appendMany(@NonNull Collection<Text> extra) {
     extra.forEach(this::append);
     return this;
   }
 
+  /**
+   * Append many other texts.
+   *
+   * @param texts the texts to append
+   * @return this same instance
+   */
   @NonNull
   default Text appendMany(@NonNull Text... texts) {
     return this.appendMany(Arrays.asList(texts));
@@ -444,7 +494,7 @@ public interface Text extends BukkitResult {
     }
 
     /**
-     * Get the key of the placeholder
+     * Get the key of the placeholder.
      *
      * @return the key
      */
@@ -454,7 +504,7 @@ public interface Text extends BukkitResult {
     }
 
     /**
-     * Get the value of the placeholder
+     * Get the value of the placeholder.
      *
      * @return the value
      */

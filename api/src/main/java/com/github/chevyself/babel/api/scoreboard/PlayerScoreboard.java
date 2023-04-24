@@ -25,7 +25,9 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.Nullable;
 
+/** Implementation of {@link ChannelScoreboard} for {@link Player} channels. */
 public class PlayerScoreboard implements ChannelScoreboard {
 
   @NonNull private static final Map<Integer, String> characters = new HashMap<>();
@@ -44,7 +46,7 @@ public class PlayerScoreboard implements ChannelScoreboard {
   @NonNull @Getter private final Objective objective;
   @NonNull @Getter private List<ScoreboardLine> layout;
 
-  public PlayerScoreboard(
+  private PlayerScoreboard(
       @NonNull UUID owner,
       @NonNull Scoreboard scoreboard,
       @NonNull Objective objective,
@@ -55,6 +57,13 @@ public class PlayerScoreboard implements ChannelScoreboard {
     this.layout = layout;
   }
 
+  /**
+   * Create a new scoreboard for the given {@link Player}.
+   *
+   * @param owner the player to create the scoreboard for
+   * @param layout the layout of the scoreboard
+   * @return the created scoreboard
+   */
   @NonNull
   public static PlayerScoreboard create(@NonNull UUID owner, @NonNull List<ScoreboardLine> layout) {
     ScoreboardManager scoreboardManager = Objects.requireNonNull(Bukkit.getScoreboardManager());
@@ -72,18 +81,28 @@ public class PlayerScoreboard implements ChannelScoreboard {
         "&" + (position <= 9 ? position : PlayerScoreboard.characters.get(position)) + "&r");
   }
 
+  /**
+   * Get the owner of this scoreboard as the Bukkit entity.
+   *
+   * @return the owner of this scoreboard
+   */
   @NonNull
   public Optional<Player> getBukkit() {
     return Optional.ofNullable(Bukkit.getPlayer(this.owner));
   }
 
+  /**
+   * Get the channel of the owner of this scoreboard.
+   *
+   * @return the channel of this scoreboard
+   */
   @NonNull
   public PlayerChannel getChannel() {
     return Channel.of(this.owner);
   }
 
   @Override
-  public @NonNull PlayerScoreboard initialize(String title) {
+  public @NonNull PlayerScoreboard initialize(@Nullable String title) {
     if (title != null) this.objective.setDisplayName(title);
     this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     this.setLayout(this.layout);

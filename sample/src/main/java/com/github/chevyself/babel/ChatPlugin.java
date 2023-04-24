@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/** Main class of the babel plugin. */
 public class ChatPlugin extends JavaPlugin {
 
   @Override

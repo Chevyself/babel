@@ -22,6 +22,9 @@ import org.bukkit.plugin.Plugin;
 /**
  * Represents the protocol of ViaVersion. This class will be used to get the version of a player and
  * store it in a map.
+ *
+ * <p>This needs to be registered in the plugin, as it relies on listening to the {@link
+ * PlayerJoinEvent} and {@link PlayerQuitEvent}, to do so, use {@link #register(Plugin)}.
  */
 public final class ViaVersionProtocol implements Listener {
 
@@ -60,6 +63,11 @@ public final class ViaVersionProtocol implements Listener {
         uuid -> Versions.getVersion(Via.getAPI().getPlayerVersion(player.getUniqueId())));
   }
 
+  /**
+   * Register the protocol listener in the plugin.
+   *
+   * @param plugin the plugin to register the listener
+   */
   public void register(@NonNull Plugin plugin) {
     Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
   }

@@ -27,6 +27,7 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+/** Implementation of {@link TabView} for a player. */
 public class PlayerTabView implements TabView {
   @NonNull private static final PlayerTabViewAdapter adapter = Players.getTabViewAdapter();
 
@@ -35,6 +36,12 @@ public class PlayerTabView implements TabView {
   @NonNull private final List<TabSlot> slots;
   @Getter private boolean destroyed;
 
+  /**
+   * Create a new tab view for a player.
+   *
+   * @param uniqueId the unique id of the player
+   * @param size the size of the tab view
+   */
   public PlayerTabView(@NonNull UUID uniqueId, @NonNull TabSize size) {
     this.uniqueId = uniqueId;
     this.size = size;

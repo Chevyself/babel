@@ -77,6 +77,7 @@ public final class LocalizedText implements Text {
   }
 
   public @NonNull LocalizedText format(@NonNull Map<String, String> map) {
+    // TODO this must be moved to Text#format(Map<String, String>)
     text = Strings.format(text, map);
     this.extra.forEach(text -> text.format(map));
     return this;

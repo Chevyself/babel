@@ -28,9 +28,7 @@ public final class Debugger {
     this.logger = logger;
   }
 
-  /**
-   * Create the debugger.
-   */
+  /** Create the debugger. */
   public Debugger() {
     this(Logger.getLogger("Reflect"));
   }
@@ -94,6 +92,13 @@ public final class Debugger {
     }
   }
 
+  /**
+   * Create a new {@link LogTask} with the given message.
+   *
+   * @param message the message to display
+   * @return the new task
+   */
+  @NonNull
   public LogTask logTask(@NonNull String message) {
     return new LogTask(taskCount++, this).start(message);
   }

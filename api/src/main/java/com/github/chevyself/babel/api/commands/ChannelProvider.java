@@ -5,6 +5,7 @@ import com.github.chevyself.starbox.bukkit.context.CommandContext;
 import com.github.chevyself.starbox.bukkit.providers.type.BukkitExtraArgumentProvider;
 import lombok.NonNull;
 
+/** Implementation of provider to use channels in commands. */
 public final class ChannelProvider implements BukkitExtraArgumentProvider<Channel> {
   @Override
   public @NonNull Channel getObject(@NonNull CommandContext commandContext) {

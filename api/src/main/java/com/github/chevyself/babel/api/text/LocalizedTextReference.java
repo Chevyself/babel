@@ -126,6 +126,13 @@ public final class LocalizedTextReference implements Text {
     return this.copy(this.sample, this.hasPlaceholders);
   }
 
+  /**
+   * Create a copy of this.
+   *
+   * @param sample whether this is a sample
+   * @param hasPlaceholders whether this has placeholders
+   * @return the copy
+   */
   public @NonNull LocalizedTextReference copy(boolean sample, boolean hasPlaceholders) {
     return new LocalizedTextReference(
         new ArrayList<>(this.objects),

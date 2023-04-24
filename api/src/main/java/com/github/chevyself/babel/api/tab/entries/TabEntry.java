@@ -104,17 +104,37 @@ public interface TabEntry extends Comparable<TabEntry> {
   int getPing(@NonNull TabSlot slot);
 
   /**
-   * Get the priority of the entry. This is used to sort the entries in the tab list.
+   * Get whether this entry can be replaced by another entry.
    *
-   * @return the priority of the entry
+   * <p>For instance {@link EmptyTabEntry} can be replaced, meanwhile {@link PlayerTabEntry} can
+   * only be replaced by another {@link PlayerTabEntry}.
+   *
+   * @param entry the entry to compare
+   * @return whether this entry can be replaced by another entry
    */
   boolean canBeReplaced(@NonNull TabEntry entry);
 
+  /**
+   * Get the display of the entry. This is used to be set in packets
+   *
+   * @param viewer the viewer of the tab list
+   * @param slot the slot that holds the entry
+   * @return the display of the entry
+   */
   @NonNull
   default WrappedChatComponent getDisplay(@NonNull Player viewer, @NonNull TabSlot slot) {
     return WrappedChatComponent.of(this.getDisplay(slot).build(Channel.of(viewer)));
   }
 
+  /**
+   * Get the adapter of the entry. This is used to be sent in packets
+   *
+   * @param viewer the viewer of the tab list
+   * @param slot the slot that holds the entry
+   * @return the adapter of the entry
+   * @throws PacketHandlingException if the adapter could not be constructed
+   */
+  @NonNull
   default PlayerInfoAdapter toAdapter(@NonNull Player viewer, @NonNull TabSlot slot)
       throws PacketHandlingException {
     return new PlayerInfoAdapter(

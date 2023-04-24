@@ -18,6 +18,7 @@ public final class SampleFormatter implements Formatter, LocalizedText.Localized
    */
   @NonNull private static final Pattern PATTERN = Pattern.compile("\\$\\{(.*?)}");
 
+  /** Creates a new instance. */
   public SampleFormatter() {}
 
   @Override

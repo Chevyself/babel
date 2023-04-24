@@ -21,7 +21,7 @@ public class PlayerTabEntry implements TabEntry {
   @NonNull private final UUID uuid;
 
   /**
-   * Create the entry
+   * Create the entry.
    *
    * @param uuid the uuid of the player
    */
@@ -30,7 +30,7 @@ public class PlayerTabEntry implements TabEntry {
   }
 
   /**
-   * Create the entry
+   * Create the entry.
    *
    * @param player the player to represent
    */
@@ -39,7 +39,7 @@ public class PlayerTabEntry implements TabEntry {
   }
 
   /**
-   * Get the player that is represented by this entry
+   * Get the player that is represented by this entry.
    *
    * @return the player wrapped in an optional
    */
@@ -78,7 +78,9 @@ public class PlayerTabEntry implements TabEntry {
               try {
                 return WrappedCraftPlayer.of(player).getHandle().getSkin();
               } catch (PacketHandlingException e) {
-                Debugger.getInstance().getLogger().log(Level.SEVERE, "Could not get skin from player", e);
+                Debugger.getInstance()
+                    .getLogger()
+                    .log(Level.SEVERE, "Could not get skin from player", e);
                 return null;
               }
             })

@@ -25,10 +25,6 @@ public abstract class ReflectionLookUp<O, T> extends NameLookUp<T> {
     this.type = type;
   }
 
-  public static <O> ClassLookUp<WrappedClass<O>> forClass() {
-    return new ClassLookUp<>();
-  }
-
   @Override
   public @NonNull ReflectionLookUp<O, T> since(int major, int minor, @NonNull String name) {
     return (ReflectionLookUp<O, T>) super.since(major, minor, name);

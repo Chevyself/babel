@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import lombok.NonNull;
 import org.bukkit.Sound;
 
+/** Implementation of {@link BukkitArgumentProvider} that provides {@link Sound} for commands. */
 public class SoundProvider implements BukkitArgumentProvider<Sound> {
 
   @Override

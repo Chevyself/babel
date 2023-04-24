@@ -6,6 +6,12 @@ import com.github.chevyself.reflect.wrappers.WrappedMethod;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a reflection look up for different Bukkit versions. Implementations are used to look
+ * up for: classes, methods and fields
+ *
+ * @param <T> the type of the object being looked up
+ */
 public interface LookUp<T> {
 
   /**
@@ -60,6 +66,12 @@ public interface LookUp<T> {
     return new MethodLookUp<>(clazz, null);
   }
 
+  /**
+   * Look up for a class.
+   *
+   * @return a new instance
+   * @param <O> the type of the class
+   */
   @NonNull
   static <O> ClassLookUp<O> forClass() {
     return new ClassLookUp<>();

@@ -9,6 +9,7 @@ import com.github.chevyself.reflect.wrappers.WrappedConstructor;
 import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 
+/** Wraps the EntityWither nms class. */
 public class WrappedEntityWither extends WrappedEntityLiving {
 
   @NonNull
@@ -22,6 +23,13 @@ public class WrappedEntityWither extends WrappedEntityLiving {
     super(reference);
   }
 
+  /**
+   * Create a new wither.
+   *
+   * @param server the world to create the wither in
+   * @return the wither
+   * @throws PacketHandlingException if the wither could not be created
+   */
   public static WrappedEntityWither construct(@NonNull WrappedWorldServer server)
       throws PacketHandlingException {
     try {

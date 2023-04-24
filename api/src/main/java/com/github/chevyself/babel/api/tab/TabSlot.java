@@ -70,6 +70,15 @@ public final class TabSlot implements Comparable<TabSlot> {
     return this.getCoordinate().compareTo(o.getCoordinate());
   }
 
+  /**
+   * Get the adapter of this slot's entry.
+   *
+   * @see TabEntry#toAdapter(Player, TabSlot)
+   * @param viewer the viewer of the tab list
+   * @return the adapter of the entry
+   * @throws PacketHandlingException if the adapter could not be constructed
+   */
+  @NonNull
   public PlayerInfoAdapter toAdapter(@NonNull Player viewer) throws PacketHandlingException {
     return entry.toAdapter(viewer, this);
   }

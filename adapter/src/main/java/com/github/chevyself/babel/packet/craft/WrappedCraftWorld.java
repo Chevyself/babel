@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 import org.bukkit.World;
 
+/** Wraps the CraftWorld nms class. */
 public class WrappedCraftWorld extends ReflectWrapper {
 
   @NonNull
@@ -29,6 +30,12 @@ public class WrappedCraftWorld extends ReflectWrapper {
     return WrappedCraftWorld.CRAFT_WORLD.getWrapped();
   }
 
+  /**
+   * Wrap a CraftWorld.
+   *
+   * @param world the world to wrap
+   * @return the wrapped world
+   */
   @NonNull
   public static WrappedCraftWorld of(@NonNull World world) {
     return new WrappedCraftWorld(world);

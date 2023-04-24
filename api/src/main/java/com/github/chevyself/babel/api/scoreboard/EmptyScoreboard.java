@@ -3,7 +3,9 @@ package com.github.chevyself.babel.api.scoreboard;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
+/** Represents a scoreboard without a player. */
 public class EmptyScoreboard implements ChannelScoreboard {
   @Override
   public @NonNull EmptyScoreboard update() {
@@ -16,7 +18,7 @@ public class EmptyScoreboard implements ChannelScoreboard {
   }
 
   @Override
-  public @NonNull EmptyScoreboard initialize(String title) {
+  public @NonNull EmptyScoreboard initialize(@Nullable String title) {
     return this;
   }
 

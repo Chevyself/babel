@@ -3,7 +3,9 @@ package com.github.chevyself.babel.api.scoreboard;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
+/** Represents a scoreboard that forwards all its methods to a list of scoreboards. */
 public interface ForwardingScoreboard extends ChannelScoreboard {
 
   @Override
@@ -27,12 +29,17 @@ public interface ForwardingScoreboard extends ChannelScoreboard {
     return this;
   }
 
+  /**
+   * Get the scoreboards that this scoreboard forwards to.
+   *
+   * @return the scoreboards that this scoreboard forwards to
+   */
   @NonNull
   List<? extends ChannelScoreboard> getForwards();
 
   @Override
   @NonNull
-  default ForwardingScoreboard initialize(String title) {
+  default ForwardingScoreboard initialize(@Nullable String title) {
     this.getForwards()
         .forEach(
             forward -> {

@@ -11,7 +11,7 @@ public class TextTabEntry extends EmptyTabEntry {
   @Getter @NonNull private final Text display;
 
   /**
-   * Create the entry
+   * Create the entry.
    *
    * @param display the line to display
    */

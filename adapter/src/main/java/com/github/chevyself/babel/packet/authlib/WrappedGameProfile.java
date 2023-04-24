@@ -67,6 +67,11 @@ public class WrappedGameProfile extends AbstractWrapper<Object> {
     }
   }
 
+  /**
+   * Get the unique id of the profile.
+   *
+   * @return the uuid
+   */
   @NonNull
   public UUID getId() {
     UUID uuid = UUID.randomUUID();

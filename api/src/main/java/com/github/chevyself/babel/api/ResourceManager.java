@@ -9,6 +9,17 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * The resource manager is the main class for the API. It is used to register languages, those
+ * languages will be used to format {@link com.github.chevyself.babel.api.text.LocalizedText}. It
+ * does have a {@link SampleFormatter} which can be accessed through {@link
+ * ResourceManager#getSampleFormatter()} and is used to format {@link
+ * com.github.chevyself.babel.api.text.Text}.
+ *
+ * <p>The base language of the manager is {@link ResourceManager#getBase()} and defaults to {@link
+ * Locale#ENGLISH} but can be changed through {@link ResourceManager#setBase(Locale)}. This is used
+ * in case a message needs to be displayed locally and no language is found or specified.
+ */
 public final class ResourceManager {
 
   @NonNull @Getter @Setter private static Locale base = Locale.ENGLISH;
@@ -54,7 +65,7 @@ public final class ResourceManager {
   }
 
   /**
-   * Get a bukkit languages from a locale.
+   * Get languages from a locale.
    *
    * @param locale the locale to get the bukkit languages for
    * @return the list of languages

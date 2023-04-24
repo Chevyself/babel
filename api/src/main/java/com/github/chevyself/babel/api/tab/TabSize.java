@@ -33,6 +33,11 @@ public enum TabSize implements Iterable<TabCoordinate> {
     @NonNull private final TabSize size;
     int index = 0;
 
+    /**
+     * Create a new iterator for the slots of the tab list.
+     *
+     * @param size the size of the tab list
+     */
     public Iterator(@NonNull TabSize size) {
       this.size = size;
     }

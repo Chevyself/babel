@@ -11,6 +11,23 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * Represents a language.
+ *
+ * <p>This is used to get the actual message of localized text: {@link
+ * com.github.chevyself.babel.api.text.LocalizedText}. Using the different methods you could get
+ * either an array of components or a string.
+ *
+ * <ul>
+ *   <li>{@link #getRaw(String)}: get the raw string of a key
+ *   <li>{@link #get(String)}: get the localized text of a key
+ *   <li>{@link #get(String, Map)}: get the localized text of a key with a map of placeholders
+ *   <li>{@link #get(String, Object...)}: get the localized text of a key with a list of
+ *       placeholders
+ * </ul>
+ *
+ * <p>Languages are registered in {@link ResourceManager}.
+ */
 public interface Language {
 
   /**
@@ -39,15 +56,52 @@ public interface Language {
     return online != null ? Language.getLocale(online) : ResourceManager.getBase();
   }
 
+  /**
+   * Get the raw string of a key.
+   *
+   * @param key the key to get the raw string from
+   * @return the raw string
+   */
   @NonNull
   Optional<String> getRaw(@NonNull String key);
 
+  /**
+   * Get the base component of a key.
+   *
+   * <p>This parses the raw string, using: {@link
+   * com.github.chevyself.starbox.bukkit.utils.Components#getComponent(String)}
+   *
+   * @param key the key to get the base component from
+   * @return the base component
+   */
   @NonNull
   BaseComponent[] get(@NonNull String key);
 
+  /**
+   * Get the base component of a key with a map of placeholders.
+   *
+   * <p>Before parsing, the raw string is formatted using {@link
+   * com.github.chevyself.starbox.util.Strings#format(String, Map)}
+   *
+   * @see #get(String)
+   * @param key the key to get the base component from
+   * @param map the map of placeholders
+   * @return the base component
+   */
   @NonNull
   BaseComponent[] get(@NonNull String key, @NonNull Map<String, String> map);
 
+  /**
+   * Get the base component of a key with a list of placeholders.
+   *
+   * <p>Before parsing, the raw string is formatted using {@link
+   * com.github.chevyself.starbox.util.Strings#format(String, Object...)}
+   *
+   * @see #get(String)
+   * @param key the key to get the base component from
+   * @param objects the list of placeholders
+   * @return the base component
+   */
   @NonNull
   BaseComponent[] get(@NonNull String key, Object... objects);
 
