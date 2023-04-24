@@ -30,7 +30,7 @@ public class PercentageTask extends TimeTask {
    */
   public void lap(@NonNull String message) {
     completed++;
-    this.debugger.getLogger().finest(getBar() + " " + completed + "/" + size + " " + message);
+    this.debugger.getLogger().finest(this.getBar() + " " + completed + "/" + size + " " + message);
   }
 
   @NonNull

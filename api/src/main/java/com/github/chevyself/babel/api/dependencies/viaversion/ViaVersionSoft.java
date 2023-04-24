@@ -17,16 +17,16 @@ public final class ViaVersionSoft {
   private static ViaVersionProtocol protocol;
 
   static {
-    reload();
+    ViaVersionSoft.reload();
   }
 
   /** Checks if the soft dependency is enabled. */
   private static void reload() {
-    enabled = Bukkit.getServer().getPluginManager().getPlugin("ViaVersion") != null;
-    if (enabled) {
-      protocol = new ViaVersionProtocol();
+    ViaVersionSoft.enabled = Bukkit.getServer().getPluginManager().getPlugin("ViaVersion") != null;
+    if (ViaVersionSoft.enabled) {
+      ViaVersionSoft.protocol = new ViaVersionProtocol();
     } else {
-      protocol = null;
+      ViaVersionSoft.protocol = null;
     }
   }
 
@@ -39,7 +39,8 @@ public final class ViaVersionSoft {
   @NonNull
   public static ViaVersionProtocol getProtocol() {
     return Objects.requireNonNull(
-        protocol, "Protocol has not been initialized. Check if it has been using #isEnabled");
+        ViaVersionSoft.protocol,
+        "Protocol has not been initialized. Check if it has been using #isEnabled");
   }
 
   /**
@@ -49,7 +50,7 @@ public final class ViaVersionSoft {
    * @throws NullPointerException if the protocol is not enabled
    */
   public static void registerProtocol(@NonNull Plugin plugin) {
-    Bukkit.getServer().getPluginManager().registerEvents(getProtocol(), plugin);
+    Bukkit.getServer().getPluginManager().registerEvents(ViaVersionSoft.getProtocol(), plugin);
   }
 
   /**
@@ -61,7 +62,7 @@ public final class ViaVersionSoft {
    */
   @NonNull
   public static Versions.PlayerVersion getVersion(@NonNull Player player) {
-    return getProtocol().getVersion(player);
+    return ViaVersionSoft.getProtocol().getVersion(player);
   }
 
   /**
@@ -72,6 +73,6 @@ public final class ViaVersionSoft {
    */
   @NonNull
   public static PlayerChannel getProtocolChannel(@NonNull UUID uniqueId) {
-    return getProtocol().getChannel(uniqueId);
+    return ViaVersionSoft.getProtocol().getChannel(uniqueId);
   }
 }

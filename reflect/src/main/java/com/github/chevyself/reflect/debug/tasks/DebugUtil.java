@@ -54,6 +54,6 @@ final class DebugUtil {
    */
   @NonNull
   public static String percentageBar(int size, int total, int completed) {
-    return percentageBar(size, total, completed, '█', '░');
+    return DebugUtil.percentageBar(size, total, completed, '█', '░');
   }
 }

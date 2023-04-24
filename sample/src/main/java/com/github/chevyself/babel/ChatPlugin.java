@@ -6,7 +6,6 @@ import com.github.chevyself.babel.api.commands.ChannelProvider;
 import com.github.chevyself.babel.api.commands.ResultHandler;
 import com.github.chevyself.babel.api.lang.YamlLanguage;
 import com.github.chevyself.babel.debug.ErrorHandler;
-import com.github.chevyself.babel.debug.ErrorHandler.LoggerErrorHandler;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.starbox.bukkit.CommandManager;
 import com.github.chevyself.starbox.bukkit.context.CommandContext;
@@ -24,7 +23,8 @@ public class ChatPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    ErrorHandler errors = ErrorHandler.setInstance(new LoggerErrorHandler(this.getLogger()));
+    ErrorHandler errors =
+        ErrorHandler.setInstance(new ErrorHandler.LoggerErrorHandler(this.getLogger()));
     // Load languages
     try {
       ResourceManager.getInstance()

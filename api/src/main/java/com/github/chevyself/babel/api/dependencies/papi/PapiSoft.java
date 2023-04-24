@@ -15,7 +15,7 @@ public final class PapiSoft {
   private static PapiPlaceholderBuilder builder;
 
   static {
-    reload();
+    PapiSoft.reload();
   }
 
   /**
@@ -27,14 +27,14 @@ public final class PapiSoft {
   @NonNull
   public static PapiPlaceholderBuilder getBuilder() {
     return Objects.requireNonNull(
-        builder, "Builder has not been enabled. Check if it has been with #isEnabled");
+        PapiSoft.builder, "Builder has not been enabled. Check if it has been with #isEnabled");
   }
 
   /** Checks if the soft dependency is enabled. */
   public static void reload() {
-    enabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
-    if (enabled) {
-      builder = new PapiPlaceholderBuilder();
+    PapiSoft.enabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
+    if (PapiSoft.enabled) {
+      PapiSoft.builder = new PapiPlaceholderBuilder();
     }
   }
 }

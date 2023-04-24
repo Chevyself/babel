@@ -123,9 +123,9 @@ public interface Text extends BukkitResult {
    * LocalizedTextReference} will be returned, else a {@link PlainText} will be provided/
    *
    * <p>If the string starts with 'localized:', the key will be extracted from the string and a
-   * {@link LocalizedTextReference} will be created using it. If the string starts with '$', the dollar
-   * sign will be removed from the string and a new {@link LocalizedTextReference} will be created using
-   * the resulting string.
+   * {@link LocalizedTextReference} will be created using it. If the string starts with '$', the
+   * dollar sign will be removed from the string and a new {@link LocalizedTextReference} will be
+   * created using the resulting string.
    *
    * <p>Otherwise, a {@link PlainText} will be created using the string
    *
@@ -179,8 +179,8 @@ public interface Text extends BukkitResult {
    * SampleFormatter}.
    *
    * <p>A sample text is one which contains references to other texts. For example, if you have a
-   * text with the content "Hello ${owner.name}" it is referencing as a {@link LocalizedTextReference}
-   * to the text with the key "owner.name".
+   * text with the content "Hello ${owner.name}" it is referencing as a {@link
+   * LocalizedTextReference} to the text with the key "owner.name".
    *
    * @return true if this text is a sample
    */

@@ -63,7 +63,7 @@ public class WrappedEntity extends AbstractWrapper<Object> {
    */
   @NonNull
   private static final WrappedMethod<?> SET_CUSTOM_NAME =
-      LookUp.methodOn(CLAZZ)
+      LookUp.methodOn(WrappedEntity.CLAZZ)
           .findDeclared(true)
           .usingParams(String.class)
           .since(8, "setCustomName")

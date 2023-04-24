@@ -50,12 +50,12 @@ public class PlayerTabEntry implements TabEntry {
 
   @Override
   public @NonNull Text getDisplay(@NonNull TabSlot slot) {
-    return Text.of(getPlayer().map(Player::getPlayerListName).orElse(""));
+    return Text.of(this.getPlayer().map(Player::getPlayerListName).orElse(""));
   }
 
   @Override
   public @NonNull WrappedEnumGameMode getGamemode(@NonNull TabSlot slot) {
-    return getPlayer()
+    return this.getPlayer()
         .map(player -> WrappedEnumGameMode.valueOf(player.getGameMode()))
         .orElse(WrappedEnumGameMode.SURVIVAL);
   }
@@ -101,7 +101,7 @@ public class PlayerTabEntry implements TabEntry {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (o == null || this.getClass() != o.getClass()) return false;
     PlayerTabEntry that = (PlayerTabEntry) o;
     return uuid.equals(that.uuid);
   }

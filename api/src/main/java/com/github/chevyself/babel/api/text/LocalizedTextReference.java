@@ -114,12 +114,12 @@ public final class LocalizedTextReference implements Text {
 
   @Override
   public @NonNull Text setSample(boolean sample) {
-    return copy(sample, this.hasPlaceholders);
+    return this.copy(sample, this.hasPlaceholders);
   }
 
   @Override
   public @NonNull Text setHasPlaceholders(boolean placeholders) {
-    return copy(this.sample, placeholders);
+    return this.copy(this.sample, placeholders);
   }
 
   @Override
@@ -151,18 +151,18 @@ public final class LocalizedTextReference implements Text {
 
   @Override
   public @NonNull BaseComponent[] build() {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#build");
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedTextReference#build");
     return this.asLocalized().build();
   }
 
   @Override
   public BaseComponent[] build(@NonNull Channel channel) {
-    return asLocalized(channel).build();
+    return this.asLocalized(channel).build();
   }
 
   @Override
   public @NonNull String asString(@NonNull Channel channel) {
-    return asLocalized(channel).asString();
+    return this.asLocalized(channel).asString();
   }
 
   @Override
@@ -192,13 +192,13 @@ public final class LocalizedTextReference implements Text {
 
   @Override
   public @NonNull String getRaw() {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedReference#getRaw");
+    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedTextReference#getRaw");
     return this.asLocalized().getRaw();
   }
 
   @Override
   public @NonNull LocalizedTextReference setRaw(@NonNull String raw) {
-    throw new UnsupportedOperationException("Cannot change the key of a LocalizedReference");
+    throw new UnsupportedOperationException("Cannot change the key of a LocalizedTextReference");
   }
 
   @Override

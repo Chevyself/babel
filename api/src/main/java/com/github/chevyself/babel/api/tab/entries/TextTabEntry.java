@@ -22,7 +22,7 @@ public class TextTabEntry extends EmptyTabEntry {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (o == null || this.getClass() != o.getClass()) return false;
     if (!super.equals(o)) return false;
     TextTabEntry that = (TextTabEntry) o;
     return display.equals(that.display);
