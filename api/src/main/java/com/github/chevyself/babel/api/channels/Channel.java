@@ -214,31 +214,46 @@ public interface Channel {
    */
   Optional<Locale> getLocale();
 
+  /**
+   * Get the boss-bar of the channel.
+   *
+   * @return the boss-bar
+   */
   @NonNull
   AdaptedBossBar getBossBar();
 
+  /**
+   * Get the tab-view of the channel.
+   *
+   * @return the tab view
+   */
   @NonNull
   TabView getTabView();
 
+  /**
+   * Get the scoreboard of the channel.
+   *
+   * @return the scoreboard
+   */
   @NonNull
   ChannelScoreboard getScoreboard();
 
   /**
-   * Checks whether this channel has a boss bar
+   * Checks whether this channel has a boss bar.
    *
    * @return true if the channel has a boss bar
    */
   boolean hasBossBar();
 
   /**
-   * Checks whether this channel has a tab view
+   * Checks whether this channel has a tab view.
    *
    * @return true if the channel has a tab view
    */
   boolean hasTabView();
 
   /**
-   * Checks whether this channel has a scoreboard
+   * Checks whether this channel has a scoreboard.
    *
    * @return true if the channel has a scoreboard
    */
