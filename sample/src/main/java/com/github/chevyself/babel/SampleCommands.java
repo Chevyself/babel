@@ -102,6 +102,7 @@ public class SampleCommands {
     if (channel.hasTabView()) {
       TabView tabView = channel.getTabView();
       for (TabCoordinate coordinate : tabView.getSize()) {
+        //noinspection deprecation Test command, don't worry
         tabView.set(coordinate, new CoordinateTabEntry());
       }
       return Text.of("Done");

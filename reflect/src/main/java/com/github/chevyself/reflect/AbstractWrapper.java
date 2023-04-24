@@ -6,11 +6,11 @@ import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Implementation for {@link SetterWrapper}. Create it using {@link Wrapper#wrap(Object)}
+ * Implementation for {@link Wrapper}. Create it using {@link Wrapper#wrap(Object)}
  *
  * @param <T> the type of the wrapped object
  */
-public class AbstractWrapper<T> implements SetterWrapper<T> {
+public class AbstractWrapper<T> implements Wrapper<T> {
 
   @Getter @Setter protected T wrapped;
 

@@ -1,10 +1,9 @@
 package com.github.chevyself.babel.api.tab;
 
 import com.github.chevyself.babel.api.tab.entries.TabEntry;
-import com.github.chevyself.babel.debug.ErrorHandler;
+import com.github.chevyself.reflect.debug.Debugger;
 import java.util.Collection;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import lombok.NonNull;
 
 /**
@@ -16,46 +15,46 @@ import lombok.NonNull;
 public class EmptyTabView implements TabView {
   @Override
   public void clear() {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#clear");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#clear");
   }
 
   @Override
   public void initialize() {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#initialize");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#initialize");
   }
 
   @Override
   public void set(@NonNull TabCoordinate coordinate, @NonNull TabEntry entry) {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#set");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#set");
   }
 
   @Override
   public @NonNull TabSize getSize() {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#getSize");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#getSize");
     return TabSize.ONE;
   }
 
   @Override
   public boolean add(@NonNull TabEntry entry) {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#add");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#add");
     return false;
   }
 
   @Override
   public boolean add(@NonNull Collection<TabEntry> entries) {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#add");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#add");
     return false;
   }
 
   @Override
   public boolean remove(
       @NonNull Supplier<TabEntry> replacement, @NonNull Collection<? extends TabEntry> entries) {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#remove");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#remove");
     return false;
   }
 
   @Override
   public void sort() {
-    ErrorHandler.getInstance().handle(Level.FINE, "Use of EmptyTabView#sort");
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#sort");
   }
 }

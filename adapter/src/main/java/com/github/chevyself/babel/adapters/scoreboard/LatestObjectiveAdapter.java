@@ -16,6 +16,8 @@ public class LatestObjectiveAdapter implements ObjectiveAdapter {
       @NonNull String name,
       @NonNull String criteria,
       @Nullable String display) {
+    // TODO create 1.18 adapter
+    // This method was deprecated in 1.18
     return scoreboard.registerNewObjective(
         name.length() > 16 ? name.substring(0, 15) : name,
         criteria,

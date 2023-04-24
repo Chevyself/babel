@@ -4,9 +4,8 @@ import com.github.chevyself.babel.api.ResourceManager;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.text.format.Formatter;
-import com.github.chevyself.babel.debug.ErrorHandler;
+import com.github.chevyself.reflect.debug.Debugger;
 import java.util.*;
-import java.util.logging.Level;
 import lombok.Getter;
 import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -151,7 +150,7 @@ public final class LocalizedTextReference implements Text {
 
   @Override
   public @NonNull BaseComponent[] build() {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedTextReference#build");
+    Debugger.getInstance().getLogger().finest("Raw use of LocalizedTextReference#build");
     return this.asLocalized().build();
   }
 
@@ -192,7 +191,7 @@ public final class LocalizedTextReference implements Text {
 
   @Override
   public @NonNull String getRaw() {
-    ErrorHandler.getInstance().handle(Level.FINEST, "Raw use of LocalizedTextReference#getRaw");
+    Debugger.getInstance().getLogger().finest("Raw use of LocalizedTextReference#getRaw");
     return this.asLocalized().getRaw();
   }
 

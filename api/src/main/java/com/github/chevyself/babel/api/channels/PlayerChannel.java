@@ -88,7 +88,7 @@ public interface PlayerChannel extends Channel {
     this.getPlayer()
         .ifPresent(
             player -> {
-              if (Versions.BUKKIT < 11) {
+              if (Versions.getBukkit().isBefore(11)) {
                 player.playSound(location, sound, volume, pitch);
               } else {
                 player.playSound(location, sound, category.getWrapped(), volume, pitch);

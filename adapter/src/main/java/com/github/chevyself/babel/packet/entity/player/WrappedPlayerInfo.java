@@ -82,7 +82,8 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
       @NonNull WrappedChatComponent display) {
     Object toWrap = null;
     try {
-      if (Versions.BUKKIT < 17) {
+      int major = Versions.getBukkit().getMajor();
+      if (major < 17) {
         toWrap =
             WrappedPlayerInfo.CONSTRUCTOR.invoke(
                 packet != null ? packet.getWrapped() : null,
@@ -90,7 +91,7 @@ public class WrappedPlayerInfo extends AbstractWrapper<Object> {
                 ping,
                 gamemode.getWrapped(),
                 display.getWrapped());
-      } else if (Versions.BUKKIT >= 19) {
+      } else if (major >= 19) {
         toWrap =
             WrappedPlayerInfo.CONSTRUCTOR.invoke(
                 profile.getWrapped(), ping, gamemode.getWrapped(), display.getWrapped(), null);

@@ -29,6 +29,13 @@ public final class Debugger {
   }
 
   /**
+   * Create the debugger.
+   */
+  public Debugger() {
+    this(Logger.getLogger("Reflect"));
+  }
+
+  /**
    * Get the instance of the debugger.
    *
    * @return the debugger
