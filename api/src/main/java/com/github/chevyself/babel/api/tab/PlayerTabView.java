@@ -74,6 +74,11 @@ public class PlayerTabView implements TabView {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Get the viewer of this tab view.
+   *
+   * @return the viewer
+   */
   @NonNull
   public Optional<Player> getViewer() {
     return Optional.ofNullable(Bukkit.getPlayer(this.uniqueId));
