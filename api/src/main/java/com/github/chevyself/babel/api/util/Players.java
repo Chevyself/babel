@@ -54,7 +54,6 @@ public final class Players {
    * <p>If the server version is greater than 1.11 it will use the Spigot built-in title API.
    * Otherwise, it will use the legacy method of sending titles in {@link LegacyPlayerTitleAdapter}
    *
-   *
    * @return the adapter
    */
   @NonNull
@@ -70,7 +69,8 @@ public final class Players {
    * Get the adapter to set the player list tab list footer and header.
    *
    * <p>If the server version is greater than 1.13 it will use the Spigot built-in tab list API.
-   * Otherwise, it will use the legacy method of setting the tab list in {@link LegacyPlayerTabListAdapter}
+   * Otherwise, it will use the legacy method of setting the tab list in {@link
+   * LegacyPlayerTabListAdapter}
    *
    * @return the adapter
    */
@@ -116,9 +116,9 @@ public final class Players {
   /**
    * Get the adapter to change the tab view of players.
    *
-   * <p>In 1.19.3 there were some packet changes related to the tab view, therefore the previous method
-   * of changing the tab view was moved to {@link LegacyTabViewAdapter} and the new method was created in
-   * {@link LatestTabViewAdapter}
+   * <p>In 1.19.3 there were some packet changes related to the tab view, therefore the previous
+   * method of changing the tab view was moved to {@link LegacyTabViewAdapter} and the new method
+   * was created in {@link LatestTabViewAdapter}
    *
    * @return the adapter
    */

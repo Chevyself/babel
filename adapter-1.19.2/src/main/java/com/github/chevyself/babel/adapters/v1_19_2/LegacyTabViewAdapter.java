@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 
-/**
- * Adapter for the tab view in versions equal or prior to 1.19.2.
- */
+/** Adapter for the tab view in versions equal or prior to 1.19.2. */
 public class LegacyTabViewAdapter implements PlayerTabViewAdapter {
 
   private Packet createPacket(@NonNull WrappedPlayerInfoAction action)
@@ -40,7 +38,8 @@ public class LegacyTabViewAdapter implements PlayerTabViewAdapter {
   }
 
   @Override
-  public void initialize(@NonNull Player viewer, @NonNull Collection<PlayerInfoAdapter> playerInfo) {
+  public void initialize(
+      @NonNull Player viewer, @NonNull Collection<PlayerInfoAdapter> playerInfo) {
     try {
       Packet packet = this.createPacket(WrappedPlayerInfoAction.ADD_PLAYER);
       packet.setField(1, CollectionModifier.addWrappers(this.wrap(playerInfo)));

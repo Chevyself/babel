@@ -60,8 +60,8 @@ public final class PlayerInfoAdapter {
   /**
    * Get the player info entry
    *
-   * <p>Used for versions greater or equal than 1.19.3. From 1.19.2 and previous versions the
-   * method {@link #asPlayerInfoData()} may be used.
+   * <p>Used for versions greater or equal than 1.19.3. From 1.19.2 and previous versions the method
+   * {@link #asPlayerInfoData()} may be used.
    *
    * @return the player info entry wrapped
    */

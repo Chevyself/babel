@@ -6,9 +6,7 @@ import java.util.List;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 
-/**
- * Adapter for the tab view of the client.
- */
+/** Adapter for the tab view of the client. */
 public interface PlayerTabViewAdapter {
 
   /**

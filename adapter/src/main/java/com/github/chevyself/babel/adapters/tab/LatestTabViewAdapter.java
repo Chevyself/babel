@@ -16,9 +16,7 @@ import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 
-/**
- * Adapter for the tab view in versions '1.19.3' and up.
- */
+/** Adapter for the tab view in versions '1.19.3' and up. */
 public class LatestTabViewAdapter implements PlayerTabViewAdapter {
 
   @Override
@@ -31,7 +29,8 @@ public class LatestTabViewAdapter implements PlayerTabViewAdapter {
   }
 
   @Override
-  public void initialize(@NonNull Player viewer, @NonNull Collection<PlayerInfoAdapter> playerInfo) {
+  public void initialize(
+      @NonNull Player viewer, @NonNull Collection<PlayerInfoAdapter> playerInfo) {
     try {
       this.sendAdd(viewer, playerInfo);
     } catch (PacketHandlingException e) {
@@ -40,7 +39,8 @@ public class LatestTabViewAdapter implements PlayerTabViewAdapter {
   }
 
   @Override
-  public void update(@NonNull Player player, boolean skin, @NonNull List<PlayerInfoAdapter> playerInfo) {
+  public void update(
+      @NonNull Player player, boolean skin, @NonNull List<PlayerInfoAdapter> playerInfo) {
     try {
       if (skin) {
         this.sendRemove(player, playerInfo);

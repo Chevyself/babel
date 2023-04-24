@@ -31,7 +31,8 @@ public enum WrappedPlayerInfoAction implements Wrapper<Object> {
   /**
    * Removes the player from the tab-list.
    *
-   * <p>In 1.19.3 and up a new packet was created to remove players from the tab-list: {@link PacketType.Play.ClientBound#PLAYER_INFO_REMOVE}
+   * <p>In 1.19.3 and up a new packet was created to remove players from the tab-list: {@link
+   * PacketType.Play.ClientBound#PLAYER_INFO_REMOVE}
    *
    * @deprecated removed in 1.19.3
    */
@@ -79,9 +80,10 @@ public enum WrappedPlayerInfoAction implements Wrapper<Object> {
   public static EnumSet<?> toEnumSet(@NonNull WrappedPlayerInfoAction action)
       throws PacketHandlingException {
     try {
-      EnumSet<?> enumSet = WrappedClass.of(EnumSet.class)
-          .getMethod(EnumSet.class, "of", Enum.class)
-          .prepare(null, action.getWrapped());
+      EnumSet<?> enumSet =
+          WrappedClass.of(EnumSet.class)
+              .getMethod(EnumSet.class, "of", Enum.class)
+              .prepare(null, action.getWrapped());
       return Objects.requireNonNull(enumSet);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not create enum set", e);
@@ -105,8 +107,7 @@ public enum WrappedPlayerInfoAction implements Wrapper<Object> {
             .map(WrappedPlayerInfoAction::getWrapped)
             .collect(Collectors.toList());
     try {
-      EnumSet<?> enumSet = WrappedPlayerInfoAction.COPY_OF
-          .prepare(null, entries);
+      EnumSet<?> enumSet = WrappedPlayerInfoAction.COPY_OF.prepare(null, entries);
       return Objects.requireNonNull(enumSet);
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw new PacketHandlingException("Could not create enum set", e);
