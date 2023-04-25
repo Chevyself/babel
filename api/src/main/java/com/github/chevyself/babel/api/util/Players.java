@@ -91,10 +91,10 @@ public final class Players {
    */
   @NonNull
   public static BossBarAdapter getBossBarAdapter() {
-    if (Versions.getBukkit().isAfter(8)) {
-      return new LatestBossBarAdapter();
-    } else {
+    if (Versions.getBukkit().isBefore(9)) {
       return new LegacyBossBarAdapter();
+    } else {
+      return new LatestBossBarAdapter();
     }
   }
 
