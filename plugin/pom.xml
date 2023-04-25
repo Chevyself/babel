@@ -9,7 +9,7 @@
     <version>1.0.0-ALPHA</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>sample</artifactId>
+  <artifactId>plugin</artifactId>
   <version>1.0.0-ALPHA</version>
 
   <build>
@@ -26,6 +26,7 @@
                 <includes>
                   <include>com.github.chevyself.babel:api</include>
                   <include>com.github.chevyself.babel:adapter</include>
+                  <include>com.github.chevyself.babel:adapter-1.19.2</include>
                   <include>com.github.chevyself.babel:adapter-1.12</include>
                   <include>com.github.chevyself.babel:adapter-1.11</include>
                   <include>com.github.chevyself.babel:adapter-1.8</include>
@@ -49,13 +50,14 @@
           </execution>
         </executions>
       </plugin>
-      <!-- build number plugin -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>1.4</version>
-      </plugin>
     </plugins>
+    <!-- Resources -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
   </build>
 
   <dependencies>
@@ -79,4 +81,3 @@
     <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
   </properties>
 </project>
-

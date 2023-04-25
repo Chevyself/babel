@@ -1,4 +1,5 @@
-name: Chat
-main: com.github.chevyself.babel.ChatPlugin
-version: 0.0.1
+name: Babel
+main: com.github.chevyself.babel.BabelPlugin
+version: ${project.version}-${git.commit.id.abbrev}
 api-version: 1.19
+author: Chevyself

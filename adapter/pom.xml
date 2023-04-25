@@ -13,18 +13,18 @@
   <version>1.0.0-ALPHA</version>
 
   <dependencies>
+    <!-- Reflection -->
+    <dependency>
+      <groupId>com.github.chevyself.babel</groupId>
+      <artifactId>reflect</artifactId>
+      <version>1.0.0-ALPHA</version>
+    </dependency>
     <!-- Spigot -->
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
       <version>${spigot-api.version-latest}</version>
       <scope>provided</scope>
-    </dependency>
-    <!-- Reflection -->
-    <dependency>
-      <groupId>com.github.chevyself.babel</groupId>
-      <artifactId>reflect</artifactId>
-      <version>1.0.0-ALPHA</version>
     </dependency>
   </dependencies>
 </project>

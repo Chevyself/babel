@@ -20,7 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /** Main class of the babel plugin. */
-public class ChatPlugin extends JavaPlugin {
+public class BabelPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {

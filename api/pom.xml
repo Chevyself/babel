@@ -1,89 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
-        <groupId>com.github.chevyself.babel</groupId>
-        <artifactId>babel</artifactId>
-        <version>1.0.0-ALPHA</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>api</artifactId>
+  <parent>
+    <groupId>com.github.chevyself.babel</groupId>
+    <artifactId>babel</artifactId>
     <version>1.0.0-ALPHA</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>api</artifactId>
+  <version>1.0.0-ALPHA</version>
 
-    <repositories>
-        <!-- Soft dependencies -->
-        <!-- PAPI -->
-        <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <!-- ViaVersion -->
-        <repository>
-            <id>viaversion-repo</id>
-            <url>https://repo.viaversion.com</url>
-        </repository>
-    </repositories>
+  <repositories>
+    <!-- Soft dependencies -->
+    <!-- PAPI -->
+    <repository>
+      <id>placeholderapi</id>
+      <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+    </repository>
+    <!-- ViaVersion -->
+    <repository>
+      <id>viaversion-repo</id>
+      <url>https://repo.viaversion.com</url>
+    </repository>
+  </repositories>
 
-    <dependencies>
-        <!-- Soft dependencies -->
-        <!-- ViaVersion -->
-        <dependency>
-            <groupId>com.viaversion</groupId>
-            <artifactId>viaversion-api</artifactId>
-            <version>${viaversion-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- PAPI -->
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>${placeholderapi.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Adapters -->
-        <dependency>
-            <groupId>com.github.chevyself.babel</groupId>
-            <artifactId>adapter-1.19.2</artifactId>
-            <version>1.0.0-ALPHA</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.chevyself.babel</groupId>
-            <artifactId>adapter-1.12</artifactId>
-            <version>1.0.0-ALPHA</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.chevyself.babel</groupId>
-            <artifactId>adapter-1.11</artifactId>
-            <version>1.0.0-ALPHA</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.chevyself.babel</groupId>
-            <artifactId>adapter-1.8</artifactId>
-            <version>1.0.0-ALPHA</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.chevyself.babel</groupId>
-            <artifactId>adapter</artifactId>
-            <version>1.0.0-ALPHA</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Spigot -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>${spigot-api.version-latest}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.chevyself.babel</groupId>
+      <artifactId>adapter-1.11</artifactId>
+      <version>1.0.0-ALPHA</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.chevyself.babel</groupId>
+      <artifactId>adapter-1.12</artifactId>
+      <version>1.0.0-ALPHA</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Adapters -->
+    <dependency>
+      <groupId>com.github.chevyself.babel</groupId>
+      <artifactId>adapter-1.19.2</artifactId>
+      <version>1.0.0-ALPHA</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.chevyself.babel</groupId>
+      <artifactId>adapter-1.8</artifactId>
+      <version>1.0.0-ALPHA</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.chevyself.babel</groupId>
+      <artifactId>adapter</artifactId>
+      <version>1.0.0-ALPHA</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Soft dependencies -->
+    <!-- ViaVersion -->
+    <dependency>
+      <groupId>com.viaversion</groupId>
+      <artifactId>viaversion-api</artifactId>
+      <version>${viaversion-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- PAPI -->
+    <dependency>
+      <groupId>me.clip</groupId>
+      <artifactId>placeholderapi</artifactId>
+      <version>${placeholderapi.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Spigot -->
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>${spigot-api.version-latest}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
-    <properties>
-        <placeholderapi.version>2.11.2</placeholderapi.version>
-        <viaversion-api.version>4.4.1</viaversion-api.version>
-        <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
-    </properties>
+  <properties>
+    <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
+    <placeholderapi.version>2.11.2</placeholderapi.version>
+    <viaversion-api.version>4.4.1</viaversion-api.version>
+  </properties>
 </project>
