@@ -35,6 +35,7 @@ public class PlayerTabView implements TabView {
   @NonNull @Getter private final TabSize size;
   @NonNull private final List<TabSlot> slots;
   @Getter private boolean destroyed;
+  private boolean initialized;
 
   /**
    * Create a new tab view for a player.
@@ -101,16 +102,19 @@ public class PlayerTabView implements TabView {
 
   @Override
   public void initialize() {
-    this.checkForViewer(
-        viewer -> {
-          try {
-            PlayerTabView.adapter.initialize(viewer, this.populate(viewer));
-          } catch (PacketHandlingException e) {
-            Debugger.getInstance()
-                .getLogger()
-                .log(Level.SEVERE, "Could not initialize tab view", e);
-          }
-        });
+    if (!this.initialized) {
+      this.initialized = true;
+      this.checkForViewer(
+          viewer -> {
+            try {
+              PlayerTabView.adapter.initialize(viewer, this.populate(viewer));
+            } catch (PacketHandlingException e) {
+              Debugger.getInstance()
+                  .getLogger()
+                  .log(Level.SEVERE, "Could not initialize tab view", e);
+            }
+          });
+    }
   }
 
   @Override

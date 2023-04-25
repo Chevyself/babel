@@ -164,6 +164,8 @@ public interface Channel {
   /**
    * Play sound to a channel.
    *
+   * <p>This method is introduced in Minecraft 1.11
+   *
    * @param sound the sound to play
    * @param category the category in which the sound will play
    * @param volume the volume of the sound
