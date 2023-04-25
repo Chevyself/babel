@@ -90,8 +90,13 @@ public class PlayerTabEntry implements TabEntry {
   @Override
   public int compareTo(@NonNull TabEntry o) {
     return !(o instanceof PlayerTabEntry)
-        ? 0
+        ? TabEntry.super.compareTo(o)
         : this.getName().compareTo(((PlayerTabEntry) o).getName());
+  }
+
+  @Override
+  public int getPriority() {
+    return 1;
   }
 
   @NonNull

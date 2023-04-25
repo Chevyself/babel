@@ -40,6 +40,13 @@ public class SampleCommands {
     return Text.of("Applied");
   }
 
+  @Command(aliases = "ctabsort")
+  public BukkitResult ctabSort(Channel channel) {
+    TabView tabView = channel.getTabView();
+    tabView.sort();
+    return Text.of("Sorted");
+  }
+
   @Parent
   @Command(
       aliases = "chat",

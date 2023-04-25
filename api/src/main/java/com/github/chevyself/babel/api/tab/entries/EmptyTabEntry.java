@@ -37,11 +37,6 @@ public class EmptyTabEntry implements TabEntry {
   }
 
   @Override
-  public int compareTo(@NonNull TabEntry o) {
-    return 0;
-  }
-
-  @Override
   public boolean equals(Object obj) {
     return obj instanceof EmptyTabEntry;
   }

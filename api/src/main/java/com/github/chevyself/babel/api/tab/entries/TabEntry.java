@@ -75,6 +75,21 @@ public interface TabEntry extends Comparable<TabEntry> {
   }
 
   /**
+   * Get the priority of the entry. This is used to sort the entries in the tab list.
+   *
+   * @return the priority of the entry
+   */
+  default int getPriority() {
+    return 0;
+  }
+
+  @Override
+  default int compareTo(@NonNull TabEntry o) {
+    // The higher the priority, the higher the entry is in the tab list
+    return Integer.compare(o.getPriority(), this.getPriority());
+  }
+
+  /**
    * Get the display of the entry. This is uses the name of the entry to display text.
    *
    * @param slot the slot to get the display

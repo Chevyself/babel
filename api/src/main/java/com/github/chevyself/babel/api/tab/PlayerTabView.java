@@ -86,10 +86,11 @@ public class PlayerTabView implements TabView {
 
   @Override
   public void clear() {
-    this.checkForViewer(
-        viewer -> {
-          PlayerTabView.adapter.clear(viewer, this.collectSlotsAdapters(viewer));
-        });
+    Map<TabSlot, TabEntry> map = new HashMap<>();
+    for (TabCoordinate coordinate : this.size) {
+      map.put(this.getSlot(coordinate), new EmptyTabEntry());
+    }
+    this.set(map);
   }
 
   @Override
