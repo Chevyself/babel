@@ -20,7 +20,7 @@ public enum WrappedEnumGameMode implements Wrapper<Object> {
   public static final WrappedClass<?> CLAZZ =
       LookUp.forClass()
           .atPackage("world.level")
-          .since(8, "WorldSetting$EnumGamemode")
+          .since(8, "WorldSettings$EnumGamemode")
           .since(10, "EnumGamemode")
           .find();
 
