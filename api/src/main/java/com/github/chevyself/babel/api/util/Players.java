@@ -41,10 +41,10 @@ public final class Players {
 
   @NonNull
   private static PlayerLocaleAdapter getLocaleAdapter() {
-    if (Versions.getBukkit().isAfter(11)) {
-      return new LatestPlayerLocaleAdapter();
-    } else {
+    if (Versions.getBukkit().isBefore(12)) {
       return new LegacyPlayerLocaleAdapter();
+    } else {
+      return new LatestPlayerLocaleAdapter();
     }
   }
 
@@ -58,10 +58,10 @@ public final class Players {
    */
   @NonNull
   public static PlayerTitleAdapter getTitleAdapter() {
-    if (Versions.getBukkit().isAfter(11)) {
-      return new LatestPlayerTitleAdapter();
-    } else {
+    if (Versions.getBukkit().isBefore(12)) {
       return new LegacyPlayerTitleAdapter();
+    } else {
+      return new LatestPlayerTitleAdapter();
     }
   }
 
@@ -76,10 +76,10 @@ public final class Players {
    */
   @NonNull
   public static PlayerTabListAdapter getTabListAdapter() {
-    if (Versions.getBukkit().isAfter(13)) {
-      return new LatestPlayerTabListAdapter();
-    } else {
+    if (Versions.getBukkit().isBefore(12)) {
       return new LegacyPlayerTabListAdapter();
+    } else {
+      return new LatestPlayerTabListAdapter();
     }
   }
 
@@ -106,10 +106,10 @@ public final class Players {
    */
   @NonNull
   public static ObjectiveAdapter getObjectiveAdapter() {
-    if (Versions.getBukkit().isAfter(12)) {
-      return new LatestObjectiveAdapter();
-    } else {
+    if (Versions.getBukkit().isBefore(13)) {
       return new LegacyObjectiveAdapter();
+    } else {
+      return new LatestObjectiveAdapter();
     }
   }
 
