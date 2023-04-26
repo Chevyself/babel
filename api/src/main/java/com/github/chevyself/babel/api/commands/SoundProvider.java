@@ -1,4 +1,4 @@
-package com.github.chevyself.babel;
+package com.github.chevyself.babel.api.commands;
 
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.starbox.bukkit.context.CommandContext;
@@ -12,7 +12,7 @@ import lombok.NonNull;
 import org.bukkit.Sound;
 
 /** Implementation of {@link BukkitArgumentProvider} that provides {@link Sound} for commands. */
-public class SoundProvider implements BukkitArgumentProvider<Sound> {
+public final class SoundProvider implements BukkitArgumentProvider<Sound> {
 
   @Override
   public @NonNull List<String> getSuggestions(@NonNull String string, CommandContext context) {

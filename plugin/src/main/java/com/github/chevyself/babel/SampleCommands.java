@@ -21,6 +21,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 @SuppressWarnings("MissingJavadoc")
+@Deprecated
 public class SampleCommands {
 
   @Command(aliases = "bossbar")

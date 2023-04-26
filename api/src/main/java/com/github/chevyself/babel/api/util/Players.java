@@ -106,7 +106,7 @@ public final class Players {
    */
   @NonNull
   public static ObjectiveAdapter getObjectiveAdapter() {
-    if (Versions.getBukkit().isAfter(12, 0)) {
+    if (Versions.getBukkit().isAfter(12)) {
       return new LatestObjectiveAdapter();
     } else {
       return new LegacyObjectiveAdapter();

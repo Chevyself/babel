@@ -4,7 +4,11 @@ import com.github.chevyself.babel.api.ResourceManager;
 import com.github.chevyself.babel.api.bossbar.WitherTask;
 import com.github.chevyself.babel.api.commands.ChannelProvider;
 import com.github.chevyself.babel.api.commands.ResultHandler;
+import com.github.chevyself.babel.api.commands.SoundProvider;
+import com.github.chevyself.babel.api.commands.TextProvider;
+import com.github.chevyself.babel.api.commands.WrappedSoundCategoryProvider;
 import com.github.chevyself.babel.api.lang.YamlLanguage;
+import com.github.chevyself.babel.commands.BabelCommand;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.debug.Debugger;
 import com.github.chevyself.starbox.bukkit.CommandManager;
@@ -29,7 +33,7 @@ public class BabelPlugin extends JavaPlugin {
     // Load languages
     try {
       ResourceManager.getInstance()
-          .registerAll(this, YamlLanguage.load(this, this.getDataFolder(), "lang/en", "lang/es"));
+          .registerAll(this, YamlLanguage.load(this, this.getDataFolder(), "info.yml", "lang/en"));
     } catch (IOException e) {
       debugger.getLogger().log(Level.SEVERE, "Failed to create 'lang' directory", e);
     }
@@ -37,11 +41,16 @@ public class BabelPlugin extends JavaPlugin {
     MessagesProvider messages = new BukkitMessagesProvider();
     ProvidersRegistry<CommandContext> registry =
         new BukkitProvidersRegistry(messages)
-            .addProviders(new ChannelProvider(), new SoundProvider());
-    new CommandManager(this, registry, messages)
-        .addGlobalMiddlewares(new PermissionMiddleware(), new ResultHandler())
-        .parseAndRegisterAll(new SampleCommands())
-        .registerPlugin();
+            .addProviders(
+                new ChannelProvider(),
+                new SoundProvider(),
+                new TextProvider(),
+                new WrappedSoundCategoryProvider());
+    CommandManager manager =
+        new CommandManager(this, registry, messages)
+            .addGlobalMiddlewares(new PermissionMiddleware(), new ResultHandler())
+            .registerPlugin();
+    manager.registerAll(BabelCommand.getCommands(manager));
 
     if (Versions.getBukkit().getMajor() == 8) {
       Bukkit.getScheduler().runTaskTimer(this, new WitherTask(), 0, 2);

@@ -1,4 +1,5 @@
 language: "en"
-cmd.hello: "Hello!"
-cmd.tab: "Set tab as header: {0} footer: {1}"
-error.not-sound: "That is not a sound!"
+cmd:
+  version: "Babel is currently on version &b${version}&r, git commit &b${git-commit}&r on branch &b${git-branch}"
+  header-footer: "Set header to: %header% and footer: %footer%"
+  title: "Send title: %title% with subtitle: %subtitle% and fade in: %fade-in% stay: %stay% and fade out: %fade-out%"
