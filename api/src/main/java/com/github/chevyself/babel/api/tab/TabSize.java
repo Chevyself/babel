@@ -31,7 +31,8 @@ public enum TabSize implements Iterable<TabCoordinate> {
   public static class Iterator implements java.util.Iterator<TabCoordinate> {
 
     @NonNull private final TabSize size;
-    int index = 0;
+    int x = 0;
+    int y = 0;
 
     /**
      * Create a new iterator for the slots of the tab list.
@@ -44,13 +45,17 @@ public enum TabSize implements Iterable<TabCoordinate> {
 
     @Override
     public boolean hasNext() {
-      return index < size.getTotal();
+      return x < size.getRows();
     }
 
     @Override
     public TabCoordinate next() {
-      TabCoordinate coordinate = new TabCoordinate(index % size.getRows(), index / size.getRows());
-      index++;
+      TabCoordinate coordinate = new TabCoordinate(x, y);
+      y++;
+      if (y >= size.getTotal() / size.getRows()) {
+        y = 0;
+        x++;
+      }
       return coordinate;
     }
   }

@@ -294,12 +294,17 @@ public class PlayerTabView implements TabView {
     Map<TabSlot, TabEntry> toUpdate = new HashMap<>();
     List<TabEntry> sortedEntries =
         this.slots.stream().map(TabSlot::getEntry).sorted().collect(Collectors.toList());
-    for (int i = 0; i < slots.size(); i++) {
-      TabSlot tabSlot = slots.get(i);
-      TabEntry tabEntry = sortedEntries.get(i);
-      if (!tabSlot.getEntry().equals(tabEntry)) {
-        toUpdate.put(tabSlot, tabEntry);
+    int entryIndex = 0;
+    for (TabCoordinate coordinate : this.size) {
+      if (entryIndex >= sortedEntries.size()) {
+        break;
       }
+      TabSlot slot = this.getSlot(coordinate);
+      TabEntry entry = sortedEntries.get(entryIndex);
+      if (!slot.getEntry().equals(entry)) {
+        toUpdate.put(slot, entry);
+      }
+      entryIndex++;
     }
     this.set(toUpdate);
   }
