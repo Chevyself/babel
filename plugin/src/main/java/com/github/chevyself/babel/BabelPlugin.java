@@ -6,6 +6,8 @@ import com.github.chevyself.babel.api.commands.ChannelProvider;
 import com.github.chevyself.babel.api.commands.ResultHandler;
 import com.github.chevyself.babel.api.commands.SoundProvider;
 import com.github.chevyself.babel.api.commands.TextProvider;
+import com.github.chevyself.babel.api.commands.WrappedBarColorProvider;
+import com.github.chevyself.babel.api.commands.WrappedBarStyleProvider;
 import com.github.chevyself.babel.api.commands.WrappedSoundCategoryProvider;
 import com.github.chevyself.babel.api.lang.YamlLanguage;
 import com.github.chevyself.babel.commands.BabelCommand;
@@ -45,6 +47,8 @@ public class BabelPlugin extends JavaPlugin {
                 new ChannelProvider(),
                 new SoundProvider(),
                 new TextProvider(),
+                new WrappedBarColorProvider(),
+                new WrappedBarStyleProvider(),
                 new WrappedSoundCategoryProvider());
     CommandManager manager =
         new CommandManager(this, registry, messages)
