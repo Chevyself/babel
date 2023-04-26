@@ -2,4 +2,6 @@ language: "en"
 cmd:
   version: "Babel is currently on version &b${version}&r, git commit &b${git-commit}&r on branch &b${git-branch}"
   header-footer: "Set header to: %header%&r and footer: %footer%"
-  title: "Send title: %title%&r with subtitle: %subtitle%&r and fade in: &b%fade-in% stay: &b%stay% and fade out: &b%fade-out%"
+  title: "Send title: %title%&r with subtitle: %subtitle%&r and fade in: &b%fade-in%&r stay: &b%stay%&r and fade out: &b%fade-out%"
+error:
+  not-sound: "&cCould not find sound &a{0}"
