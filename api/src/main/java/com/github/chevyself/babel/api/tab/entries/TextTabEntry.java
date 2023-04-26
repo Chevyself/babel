@@ -1,5 +1,6 @@
 package com.github.chevyself.babel.api.tab.entries;
 
+import com.github.chevyself.babel.api.tab.TabSlot;
 import com.github.chevyself.babel.api.text.Text;
 import java.util.Objects;
 import lombok.Getter;
@@ -26,6 +27,11 @@ public class TextTabEntry extends EmptyTabEntry {
     if (!super.equals(o)) return false;
     TextTabEntry that = (TextTabEntry) o;
     return display.equals(that.display);
+  }
+
+  @Override
+  public @NonNull Text getDisplay(@NonNull TabSlot slot) {
+    return this.getDisplay();
   }
 
   @Override
