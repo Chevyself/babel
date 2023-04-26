@@ -17,8 +17,10 @@ public class LatestPlaySoundCommands {
       @Required(name = "sound", description = "The sound to play") Sound sound,
       @Required(name = "category", description = "The category of the sound")
           WrappedSoundCategory category,
-      @Required(name = "volume", description = "The volume of the sound") float volume,
-      @Required(name = "pitch", description = "The pitch of the sound") float pitch) {
-    channel.playSound(sound, category, volume, pitch);
+      @Required(name = "volume", description = "The volume of the sound", suggestions = "1")
+          double volume,
+      @Required(name = "pitch", description = "The pitch of the sound", suggestions = "1")
+          double pitch) {
+    channel.playSound(sound, category, (float) volume, (float) pitch);
   }
 }
