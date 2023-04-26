@@ -1,5 +1,5 @@
 language: "en"
 cmd:
   version: "Babel is currently on version &b${version}&r, git commit &b${git-commit}&r on branch &b${git-branch}"
-  header-footer: "Set header to: %header% and footer: %footer%"
-  title: "Send title: %title% with subtitle: %subtitle% and fade in: %fade-in% stay: %stay% and fade out: %fade-out%"
+  header-footer: "Set header to: %header%&r and footer: %footer%"
+  title: "Send title: %title%&r with subtitle: %subtitle%&r and fade in: &b%fade-in% stay: &b%stay% and fade out: &b%fade-out%"
