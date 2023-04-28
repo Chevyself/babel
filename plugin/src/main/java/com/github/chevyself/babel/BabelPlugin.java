@@ -9,7 +9,9 @@ import com.github.chevyself.babel.api.commands.TextProvider;
 import com.github.chevyself.babel.api.commands.WrappedBarColorProvider;
 import com.github.chevyself.babel.api.commands.WrappedBarStyleProvider;
 import com.github.chevyself.babel.api.commands.WrappedSoundCategoryProvider;
+import com.github.chevyself.babel.api.dependencies.viaversion.ViaVersionSoft;
 import com.github.chevyself.babel.api.lang.YamlLanguage;
+import com.github.chevyself.babel.api.listeners.PlayerChannelListener;
 import com.github.chevyself.babel.commands.BabelCommand;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.debug.Debugger;
@@ -23,6 +25,7 @@ import com.github.chevyself.starbox.providers.registry.ProvidersRegistry;
 import java.io.IOException;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /** Main class of the babel plugin. */
@@ -60,12 +63,21 @@ public class BabelPlugin extends JavaPlugin {
       Bukkit.getScheduler().runTaskTimer(this, new WitherTask(), 0, 2);
     }
 
+    // Registers required listeners
+    if (ViaVersionSoft.isEnabled()) {
+      // Protocol listeners
+      ViaVersionSoft.registerProtocol(this);
+    }
+    // Player listeners
+    Bukkit.getServer().getPluginManager().registerEvents(new PlayerChannelListener(), this);
+
     super.onEnable();
   }
 
   @Override
   public void onDisable() {
     ResourceManager.getInstance().unregister(this);
+    HandlerList.unregisterAll(this);
     Debugger.setInstance(new Debugger());
     super.onDisable();
   }
