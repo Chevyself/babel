@@ -309,7 +309,13 @@ public class PlayerTabView implements TabView {
     this.set(toUpdate);
   }
 
-  private void destroy() {
+  @Override
+  public void destroy() {
     this.destroyed = true;
+    this.getViewer()
+        .ifPresent(
+            player -> {
+              PlayerTabView.adapter.clear(player, this.collectSlotsAdapters(player));
+            });
   }
 }

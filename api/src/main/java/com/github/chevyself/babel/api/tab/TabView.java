@@ -115,4 +115,7 @@ public interface TabView {
 
   /** Sorts the entries inside the slots of the tab view. */
   void sort();
+
+  /** Destroy the tab view. */
+  void destroy();
 }

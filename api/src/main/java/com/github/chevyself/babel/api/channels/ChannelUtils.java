@@ -10,15 +10,26 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import lombok.NonNull;
 
 /** Utility class for channels. */
-final class ChannelUtils {
+public final class ChannelUtils {
 
-  @NonNull public static final PlayerTabListAdapter tabListAdapter = Players.getTabListAdapter();
-  @NonNull public static final PlayerTitleAdapter titleAdapter = Players.getTitleAdapter();
-  @NonNull public static final BossBarAdapter bossBarAdapter = Players.getBossBarAdapter();
-  @NonNull public static final Set<PlayerScoreboard> scoreboards = new HashSet<>();
-  @NonNull public static final Set<PlayerTabView> views = new HashSet<>();
+  @NonNull static final PlayerTabListAdapter tabListAdapter = Players.getTabListAdapter();
+  @NonNull static final PlayerTitleAdapter titleAdapter = Players.getTitleAdapter();
+  @NonNull static final BossBarAdapter bossBarAdapter = Players.getBossBarAdapter();
+  @NonNull static final Set<PlayerScoreboard> scoreboards = new HashSet<>();
+  @NonNull static final Set<PlayerTabView> views = new HashSet<>();
   @NonNull static final List<PlayerChannel> players = new ArrayList<>();
+
+  /**
+   * Removes a player from the list of cached players channels.
+   *
+   * @param uuid the uuid of the player to remove
+   * @return true if the player was removed, false otherwise
+   */
+  public static boolean removePlayer(@NonNull UUID uuid) {
+    return ChannelUtils.players.removeIf(channel -> channel.getUniqueId().equals(uuid));
+  }
 }

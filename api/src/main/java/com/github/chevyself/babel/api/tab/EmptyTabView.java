@@ -57,4 +57,9 @@ public class EmptyTabView implements TabView {
   public void sort() {
     Debugger.getInstance().getLogger().fine("Use of EmptyTabView#sort");
   }
+
+  @Override
+  public void destroy() {
+    Debugger.getInstance().getLogger().fine("Use of EmptyTabView#destroy");
+  }
 }
