@@ -7,18 +7,17 @@ import com.github.chevyself.babel.api.tab.entries.CoordinateTabEntry;
 import com.github.chevyself.babel.api.tab.entries.PlayerTabEntry;
 import com.github.chevyself.babel.api.tab.entries.TextTabEntry;
 import com.github.chevyself.babel.api.text.Text;
+import com.github.chevyself.starbox.annotations.Command;
 import com.github.chevyself.starbox.annotations.Parent;
 import com.github.chevyself.starbox.annotations.Required;
-import com.github.chevyself.starbox.bukkit.annotations.Command;
+import com.github.chevyself.starbox.common.CommandPermission;
 import org.bukkit.entity.Player;
 
 public class TabCommands {
 
   @Parent
-  @Command(
-      aliases = "tab",
-      description = "Parent command to test tab-view features",
-      permission = "babel.tab")
+  @CommandPermission("babel.tab")
+  @Command(aliases = "tab", description = "Parent command to test tab-view features")
   public Text tab(Channel channel) {
     if (!channel.hasTabView()) {
       channel.getTabView().initialize();
@@ -28,10 +27,10 @@ public class TabCommands {
     }
   }
 
+  @CommandPermission("babel.tab")
   @Command(
       aliases = {"coordinates", "coords"},
-      description = "Show the coordinates of each slot in the tab-view",
-      permission = "babel.tab")
+      description = "Show the coordinates of each slot in the tab-view")
   public Text coords(Channel channel) {
     TabView tabView = channel.getTabView();
     for (TabCoordinate coordinate : tabView.getSize()) {
@@ -41,13 +40,15 @@ public class TabCommands {
     return Text.of("Coordinates set");
   }
 
-  @Command(aliases = "clear", description = "Clear the tab-view", permission = "babel.tab")
+  @CommandPermission("babel.tab")
+  @Command(aliases = "clear", description = "Clear the tab-view")
   public Text clear(Channel channel) {
     channel.getTabView().clear();
     return Text.of("Tab view cleared");
   }
 
-  @Command(aliases = "add", description = "Add a player to the tab-view", permission = "babel.tab")
+  @CommandPermission("babel.tab")
+  @Command(aliases = "add", description = "Add a player to the tab-view")
   public Text add(
       Channel channel,
       @Required(name = "player", description = "The player to add") Player player) {
@@ -55,10 +56,8 @@ public class TabCommands {
     return Text.of("Player added");
   }
 
-  @Command(
-      aliases = "remove",
-      description = "Remove a player from the tab-view",
-      permission = "babel.tab")
+  @CommandPermission("babel.tab")
+  @Command(aliases = "remove", description = "Remove a player from the tab-view")
   public Text remove(
       Channel channel,
       @Required(name = "player", description = "The player to remove") Player player) {
@@ -66,7 +65,8 @@ public class TabCommands {
     return Text.of("Player removed");
   }
 
-  @Command(aliases = "set", description = "Set a text tab-view entry", permission = "babel.tab")
+  @CommandPermission("babel.tab")
+  @Command(aliases = "set", description = "Set a text tab-view entry")
   public Text set(
       Channel channel,
       @Required(name = "x", description = "The x coordinate of the entry") int x,
@@ -76,7 +76,8 @@ public class TabCommands {
     return Text.of("Entry set");
   }
 
-  @Command(aliases = "sort", description = "Sort the tab-view", permission = "babel.tab")
+  @CommandPermission("babel.tab")
+  @Command(aliases = "sort", description = "Sort the tab-view")
   public Text sort(Channel channel) {
     channel.getTabView().sort();
     return Text.of("Tab view sorted");

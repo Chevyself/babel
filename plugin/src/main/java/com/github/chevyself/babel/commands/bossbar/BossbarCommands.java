@@ -3,32 +3,37 @@ package com.github.chevyself.babel.commands.bossbar;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.text.Text;
 import com.github.chevyself.babel.util.Versions;
+import com.github.chevyself.starbox.CommandManager;
+import com.github.chevyself.starbox.annotations.Command;
 import com.github.chevyself.starbox.annotations.Parent;
 import com.github.chevyself.starbox.annotations.Required;
-import com.github.chevyself.starbox.bukkit.AnnotatedCommand;
-import com.github.chevyself.starbox.bukkit.CommandManager;
-import com.github.chevyself.starbox.bukkit.annotations.Command;
-import java.util.Collection;
+import com.github.chevyself.starbox.bukkit.commands.BukkitCommand;
+import com.github.chevyself.starbox.bukkit.context.CommandContext;
+import com.github.chevyself.starbox.common.CommandPermission;
+import java.util.List;
 import lombok.NonNull;
 
 public class BossbarCommands {
 
   @NonNull
-  public static Collection<AnnotatedCommand> getBossbarCommands(CommandManager manager) {
-    Collection<AnnotatedCommand> commands = manager.parseCommands(new BossbarCommands());
+  public static List<BukkitCommand> getBossbarCommands(
+      CommandManager<CommandContext, BukkitCommand> manager) {
+    List<BukkitCommand> commands =
+        manager.getCommandParser().parseAllCommandsFrom(new BossbarCommands());
     if (Versions.getBukkit().isAfter(8)) {
-      AnnotatedCommand bossbar =
+      BukkitCommand boosbar =
           commands.stream()
               .filter(command -> command.getName().equals("bossbar"))
               .findFirst()
               .orElseThrow(NullPointerException::new);
-      manager.parseCommands(new LatestBossbarCommands()).forEach(bossbar::addChildren);
+      boosbar.parseAndAddChildren(manager, new LatestBossbarCommands());
     }
     return commands;
   }
 
   @Parent
-  @Command(aliases = "bossbar", description = "Create a bossbar", permission = "babel.bossbar")
+  @CommandPermission("babel.bossbar")
+  @Command(aliases = "bossbar", description = "Create a bossbar")
   public Text bossbar(
       Channel channel,
       @Required(name = "progress", description = "The progress of the bossbar", suggestions = "1")
@@ -38,10 +43,8 @@ public class BossbarCommands {
     return Text.of("Bossbar created");
   }
 
-  @Command(
-      aliases = "title",
-      description = "Set the title of the bossbar",
-      permission = "babel.bossbar.title")
+  @CommandPermission("babel.bossbar.title")
+  @Command(aliases = "title", description = "Set the title of the bossbar")
   public Text title(
       Channel channel,
       @Required(name = "title", description = "The title of the bossbar") Text title) {
@@ -49,10 +52,8 @@ public class BossbarCommands {
     return Text.of("Bossbar title set");
   }
 
-  @Command(
-      aliases = "progress",
-      description = "Set the progress of the bossbar",
-      permission = "babel.bossbar.progress")
+  @CommandPermission("babel.bossbar.progress")
+  @Command(aliases = "progress", description = "Set the progress of the bossbar")
   public Text progress(
       Channel channel,
       @Required(name = "progress", description = "The progress of the bossbar", suggestions = "1")
@@ -61,10 +62,8 @@ public class BossbarCommands {
     return Text.of("Bossbar progress set");
   }
 
-  @Command(
-      aliases = "display",
-      description = "Display the bossbar",
-      permission = "babel.bossbar.display")
+  @CommandPermission("babel.bossbar.display")
+  @Command(aliases = "display", description = "Display the bossbar")
   public Text display(Channel channel) {
     channel.getBossBar().display();
     return Text.of("Bossbar displayed");

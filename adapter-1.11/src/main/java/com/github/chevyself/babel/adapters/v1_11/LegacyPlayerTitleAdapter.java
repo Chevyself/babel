@@ -6,7 +6,7 @@ import com.github.chevyself.babel.packet.PacketType;
 import com.github.chevyself.babel.packet.chat.WrappedChatComponent;
 import com.github.chevyself.babel.packet.chat.WrappedTitleAction;
 import com.github.chevyself.reflect.debug.Debugger;
-import com.github.chevyself.starbox.bukkit.utils.Components;
+import com.github.chevyself.starbox.common.Components;
 import java.util.logging.Level;
 import lombok.NonNull;
 import org.bukkit.entity.Player;

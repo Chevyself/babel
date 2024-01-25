@@ -3,10 +3,11 @@ package com.github.chevyself.babel.commands;
 import com.github.chevyself.babel.api.channels.Channel;
 import com.github.chevyself.babel.api.scoreboard.ScoreboardLine;
 import com.github.chevyself.babel.api.text.Text;
+import com.github.chevyself.starbox.annotations.Command;
 import com.github.chevyself.starbox.annotations.Parent;
 import com.github.chevyself.starbox.annotations.Required;
 import com.github.chevyself.starbox.arguments.ArgumentBehaviour;
-import com.github.chevyself.starbox.bukkit.annotations.Command;
+import com.github.chevyself.starbox.common.CommandPermission;
 import java.util.Arrays;
 import java.util.List;
 import lombok.NonNull;
@@ -14,17 +15,11 @@ import lombok.NonNull;
 public class ScoreboardCommands {
 
   @Parent
-  @Command(
-      aliases = "scoreboard",
-      description = "Starts the scoreboard for the player",
-      permission = "babel.scoreboard")
+  @CommandPermission("babel.scoreboard")
+  @Command(aliases = "scoreboard", description = "Starts the scoreboard for the player")
   public Text scoreboard(
       Channel channel,
-      @Required(
-              name = "title",
-              description = "The title of the scoreboard",
-              behaviour = ArgumentBehaviour.MULTIPLE)
-          Text title,
+      @Required(name = "title", description = "The title of the scoreboard") Text title,
       @Required(
               name = "layout",
               description = "The layout of the scoreboard",

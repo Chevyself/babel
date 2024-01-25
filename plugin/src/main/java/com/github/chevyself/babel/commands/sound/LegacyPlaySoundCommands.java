@@ -1,16 +1,17 @@
 package com.github.chevyself.babel.commands.sound;
 
 import com.github.chevyself.babel.api.channels.Channel;
+import com.github.chevyself.starbox.annotations.Command;
 import com.github.chevyself.starbox.annotations.Required;
-import com.github.chevyself.starbox.bukkit.annotations.Command;
+import com.github.chevyself.starbox.common.CommandPermission;
 import org.bukkit.Sound;
 
 public class LegacyPlaySoundCommands {
 
+  @CommandPermission("babel.sound")
   @Command(
       aliases = {"playSound", "sound"},
-      description = "Play a sound",
-      permission = "babel.sound")
+      description = "Play a sound")
   public void playSound(
       Channel channel,
       @Required(name = "sound", description = "The sound to play") Sound sound,

@@ -9,13 +9,14 @@ import com.github.chevyself.babel.api.tab.entries.CoordinateTabEntry;
 import com.github.chevyself.babel.api.tab.entries.PlayerTabEntry;
 import com.github.chevyself.babel.api.text.PlainText;
 import com.github.chevyself.babel.api.text.Text;
+import com.github.chevyself.starbox.annotations.Command;
 import com.github.chevyself.starbox.annotations.Free;
 import com.github.chevyself.starbox.annotations.Parent;
 import com.github.chevyself.starbox.annotations.Required;
 import com.github.chevyself.starbox.arguments.ArgumentBehaviour;
-import com.github.chevyself.starbox.bukkit.annotations.Command;
 import com.github.chevyself.starbox.bukkit.context.CommandContext;
-import com.github.chevyself.starbox.bukkit.result.BukkitResult;
+import com.github.chevyself.starbox.common.CommandPermission;
+import com.github.chevyself.starbox.result.Result;
 import java.util.*;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -25,7 +26,7 @@ import org.bukkit.entity.Player;
 public class SampleCommands {
 
   @Command(aliases = "bossbar")
-  public BukkitResult bossbar(
+  public Result bossbar(
       Channel channel,
       @Required(name = "progress") double progress,
       @Required(name = "text", behaviour = ArgumentBehaviour.CONTINUOUS) String text) {
@@ -34,7 +35,7 @@ public class SampleCommands {
   }
 
   @Command(aliases = "scoreboard")
-  public BukkitResult scoreboard(Channel channel) {
+  public Result scoreboard(Channel channel) {
     List<ScoreboardLine> layout =
         ScoreboardLine.parse(Arrays.asList("This", "is", "the", "best", ":)"), false);
     channel.getScoreboard().setLayout(layout).initialize("Hey!");
@@ -42,18 +43,16 @@ public class SampleCommands {
   }
 
   @Command(aliases = "ctabsort")
-  public BukkitResult ctabSort(Channel channel) {
+  public Result ctabSort(Channel channel) {
     TabView tabView = channel.getTabView();
     tabView.sort();
     return Text.of("Sorted");
   }
 
   @Parent
-  @Command(
-      aliases = "chat",
-      description = "Parent command for the commands of Chat sample plugin",
-      permission = "chat.main")
-  public BukkitResult chat(
+  @CommandPermission("chat.main")
+  @Command(aliases = "chat", description = "Parent command for the commands of Chat sample plugin")
+  public Result chat(
       CommandContext context,
       @Required(
               name = "line",
@@ -120,19 +119,12 @@ public class SampleCommands {
     }
   }
 
-  @Command(aliases = "title", description = "Send a title", permission = "chat.title")
+  @CommandPermission("chat.title")
+  @Command(aliases = "title", description = "Send a title")
   public void title(
       Channel channel,
-      @Required(
-              name = "title",
-              description = "The title to show",
-              behaviour = ArgumentBehaviour.MULTIPLE)
-          String title,
-      @Required(
-              name = "subtitle",
-              description = "The subtitle to show",
-              behaviour = ArgumentBehaviour.MULTIPLE)
-          String subtitle,
+      @Required(name = "title", description = "The title to show") String title,
+      @Required(name = "subtitle", description = "The subtitle to show") String subtitle,
       @Free(
               name = "fade in",
               description = "The time that the title will have to show",
@@ -148,11 +140,12 @@ public class SampleCommands {
     channel.sendRawTitle(title, subtitle, fadeIn, stay, fadeOut);
   }
 
-  @Command(aliases = "tab", permission = "chat.tab")
-  public BukkitResult tab(
+  @CommandPermission("chat.tab")
+  @Command(aliases = "tab")
+  public Result tab(
       Channel channel,
-      @Required(name = "header", behaviour = ArgumentBehaviour.MULTIPLE) String header,
-      @Required(name = "footer", behaviour = ArgumentBehaviour.MULTIPLE) String footer) {
+      @Required(name = "header") String header,
+      @Required(name = "footer") String footer) {
     channel.setRawTabList(header, footer);
     return Text.localized("cmd.tab").format(header, footer);
   }

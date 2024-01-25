@@ -15,13 +15,11 @@ import com.github.chevyself.babel.api.listeners.PlayerChannelListener;
 import com.github.chevyself.babel.commands.BabelCommand;
 import com.github.chevyself.babel.util.Versions;
 import com.github.chevyself.reflect.debug.Debugger;
-import com.github.chevyself.starbox.bukkit.CommandManager;
+import com.github.chevyself.starbox.CommandManager;
+import com.github.chevyself.starbox.CommandManagerBuilder;
+import com.github.chevyself.starbox.bukkit.BukkitAdapter;
+import com.github.chevyself.starbox.bukkit.commands.BukkitCommand;
 import com.github.chevyself.starbox.bukkit.context.CommandContext;
-import com.github.chevyself.starbox.bukkit.messages.BukkitMessagesProvider;
-import com.github.chevyself.starbox.bukkit.messages.MessagesProvider;
-import com.github.chevyself.starbox.bukkit.middleware.PermissionMiddleware;
-import com.github.chevyself.starbox.bukkit.providers.registry.BukkitProvidersRegistry;
-import com.github.chevyself.starbox.providers.registry.ProvidersRegistry;
 import java.io.IOException;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -43,20 +41,18 @@ public class BabelPlugin extends JavaPlugin {
       debugger.getLogger().log(Level.SEVERE, "Failed to create 'lang' directory", e);
     }
     // Load commands
-    MessagesProvider messages = new BukkitMessagesProvider();
-    ProvidersRegistry<CommandContext> registry =
-        new BukkitProvidersRegistry(messages)
-            .addProviders(
-                new ChannelProvider(),
-                new SoundProvider(),
-                new TextProvider(),
-                new WrappedBarColorProvider(),
-                new WrappedBarStyleProvider(),
-                new WrappedSoundCategoryProvider());
-    CommandManager manager =
-        new CommandManager(this, registry, messages)
-            .addGlobalMiddlewares(new PermissionMiddleware(), new ResultHandler())
-            .registerPlugin();
+    CommandManager<CommandContext, BukkitCommand> manager =
+        new CommandManagerBuilder<>(new BukkitAdapter(this, true)).build();
+    manager
+        .getProvidersRegistry()
+        .addProviders(
+            new ChannelProvider(),
+            new SoundProvider(),
+            new TextProvider(),
+            new WrappedBarColorProvider(),
+            new WrappedBarStyleProvider(),
+            new WrappedSoundCategoryProvider());
+    manager.getMiddlewareRegistry().addGlobalMiddleware(new ResultHandler());
     manager.registerAll(BabelCommand.getCommands(manager));
 
     if (Versions.getBukkit().getMajor() == 8) {

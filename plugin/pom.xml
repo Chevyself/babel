@@ -32,6 +32,7 @@
                   <include>com.github.chevyself.babel:adapter-1.8</include>
                   <include>com.github.chevyself.babel:reflect</include>
                   <include>com.github.Chevyself.starbox-commands:bukkit</include>
+                  <include>com.github.Chevyself.starbox-commands:common-mc</include>
                   <include>com.github.Chevyself.starbox-commands:core</include>
                 </includes>
               </artifactSet>

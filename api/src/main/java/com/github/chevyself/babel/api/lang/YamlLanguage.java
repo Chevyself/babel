@@ -2,7 +2,7 @@ package com.github.chevyself.babel.api.lang;
 
 import com.github.chevyself.babel.api.exceptions.LanguageParsingException;
 import com.github.chevyself.reflect.debug.Debugger;
-import com.github.chevyself.starbox.bukkit.utils.Components;
+import com.github.chevyself.starbox.common.Components;
 import com.github.chevyself.starbox.util.Strings;
 import java.io.File;
 import java.io.FileReader;

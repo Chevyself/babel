@@ -6,25 +6,30 @@ import com.github.chevyself.babel.commands.sound.LatestPlaySoundCommands;
 import com.github.chevyself.babel.commands.sound.LegacyPlaySoundCommands;
 import com.github.chevyself.babel.commands.tab.TabCommands;
 import com.github.chevyself.babel.util.Versions;
+import com.github.chevyself.starbox.CommandManager;
+import com.github.chevyself.starbox.annotations.Command;
 import com.github.chevyself.starbox.annotations.Parent;
 import com.github.chevyself.starbox.annotations.Required;
 import com.github.chevyself.starbox.arguments.ArgumentBehaviour;
-import com.github.chevyself.starbox.bukkit.AnnotatedCommand;
-import com.github.chevyself.starbox.bukkit.CommandManager;
-import com.github.chevyself.starbox.bukkit.annotations.Command;
-import java.util.Collection;
+import com.github.chevyself.starbox.bukkit.commands.BukkitCommand;
+import com.github.chevyself.starbox.bukkit.context.CommandContext;
+import com.github.chevyself.starbox.common.CommandPermission;
+import java.util.List;
 import lombok.NonNull;
 
 public class BabelCommand {
 
   @NonNull
-  public static Collection<AnnotatedCommand> getCommands(@NonNull CommandManager manager) {
-    Collection<AnnotatedCommand> commands = manager.parseCommands(new BabelCommand());
-    AnnotatedCommand babel = BabelCommand.getBabel(commands);
-    manager.parseCommands(BabelCommand.getSoundCommands()).forEach(babel::addChildren);
-    manager.parseCommands(new TabCommands()).forEach(babel::addChildren);
-    manager.parseCommands(new ChannelCommands()).forEach(babel::addChildren);
-    manager.parseCommands(new ScoreboardCommands()).forEach(babel::addChildren);
+  public static List<BukkitCommand> getCommands(
+      @NonNull CommandManager<CommandContext, BukkitCommand> manager) {
+    List<BukkitCommand> commands =
+        manager.getCommandParser().parseAllCommandsFrom(new BabelCommand());
+    BukkitCommand babel = BabelCommand.getBabel(commands);
+    babel.parseAndAddChildren(
+        BabelCommand.getSoundCommands(),
+        new TabCommands(),
+        new ChannelCommands(),
+        new ScoreboardCommands());
     // Adds bossbar commands
     BossbarCommands.getBossbarCommands(manager).forEach(babel::addChildren);
     return commands;
@@ -40,7 +45,7 @@ public class BabelCommand {
   }
 
   @NonNull
-  private static AnnotatedCommand getBabel(@NonNull Collection<AnnotatedCommand> commands) {
+  private static BukkitCommand getBabel(@NonNull List<BukkitCommand> commands) {
     return commands.stream()
         .filter(annotated -> annotated.getName().equals("babel"))
         .findFirst()
@@ -48,10 +53,10 @@ public class BabelCommand {
   }
 
   @Parent
+  @CommandPermission("babel.main")
   @Command(
       aliases = {"babel", "bbl", "chat"},
-      description = "Babel parent command",
-      permission = "babel.main")
+      description = "Babel parent command")
   public Text babel(
       @Required(
               name = "text",
@@ -62,7 +67,8 @@ public class BabelCommand {
     return text;
   }
 
-  @Command(aliases = "version", description = "Get the version of Babel", permission = "babel.main")
+  @CommandPermission("babel.main")
+  @Command(aliases = "version", description = "Get the version of Babel")
   public Text version() {
     return Text.localized("cmd.version");
   }

@@ -8,10 +8,10 @@ import com.github.chevyself.babel.api.lang.Language;
 import com.github.chevyself.babel.api.placeholders.PlaceholderManager;
 import com.github.chevyself.babel.api.text.format.Formatter;
 import com.github.chevyself.babel.api.text.format.SampleFormatter;
-import com.github.chevyself.starbox.bukkit.result.BukkitResult;
 import com.github.chevyself.starbox.bukkit.utils.BukkitUtils;
-import com.github.chevyself.starbox.bukkit.utils.Components;
+import com.github.chevyself.starbox.common.Components;
 import com.github.chevyself.starbox.exceptions.ArgumentProviderException;
+import com.github.chevyself.starbox.result.Result;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +38,7 @@ import org.bukkit.command.CommandSender;
  * <p>To ensure thread safety, each thread should use its own instance of text, however, {@link
  * LocalizedTextReference} is immutable and can be used in multiple threads.
  */
-public interface Text extends BukkitResult {
+public interface Text extends Result {
 
   /**
    * Start localized text.
@@ -282,12 +282,6 @@ public interface Text extends BukkitResult {
    */
   @NonNull
   Text format(@NonNull Formatter formatter);
-
-  @Override
-  @NonNull
-  default List<BaseComponent> getComponents() {
-    return Arrays.asList(this.build());
-  }
 
   /**
    * Append text.
