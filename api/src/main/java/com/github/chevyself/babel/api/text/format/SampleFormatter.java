@@ -12,11 +12,15 @@ import lombok.NonNull;
 public final class SampleFormatter implements Formatter, LocalizedText.LocalizedFormatter {
 
   /**
-   * Pattern to find anything that is inside a word starting with '$' and inside '{}' such as:
+   * Pattern to match keys in the sample lines.
    *
-   * <p>${this.will.be.matched}
+   * <ul>
+   *   <li>To match keys with whitespaces or any use ${key with whitespaces}
+   *   <li>To match keys without whitespaces use $keyWithoutWhitespaces
+   * </ul>
    */
-  @NonNull private static final Pattern PATTERN = Pattern.compile("\\$\\{(.*?)}");
+  @NonNull
+  private static final Pattern PATTERN = Pattern.compile("\\$\\{(.*?)}|\\$([^\\s\"\\]})]+)");
 
   /** Creates a new instance. */
   public SampleFormatter() {}
@@ -38,10 +42,7 @@ public final class SampleFormatter implements Formatter, LocalizedText.Localized
     Matcher matcher = SampleFormatter.PATTERN.matcher(raw);
     while (matcher.find()) {
       String group = matcher.group();
-      // I don't really understand why remove quotation marks
-      // keep it removed until there's a reason
-      // String key = group.replace("\"", "");
-      String key = group.substring(2, group.length() - 1);
+      String key = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
       raw = raw.replace(group, Text.localized(locale, key).getRaw());
     }
     text.getExtra().forEach(child -> this.format(locale, child));
