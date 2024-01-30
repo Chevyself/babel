@@ -90,17 +90,17 @@ public final class ResourceManager {
    */
   @NonNull
   public String getRaw(@NonNull Locale locale, @NonNull String key) {
-    return this.getLanguages(locale).stream()
-        .map(language -> language.getRaw(key).orElse(key))
-        .filter(raw -> !raw.equals(key))
-        .findFirst()
-        .orElseGet(
-            () -> {
-              if (locale.getLanguage().equals("en")) {
-                return key;
-              } else {
-                return this.getRaw(ResourceManager.getBase(), key);
-              }
-            });
+    for (Language language : this.getLanguages(locale)) {
+      Optional<String> message = language.getRaw(key);
+      if (message.isPresent()) {
+        return message.get();
+      }
+    }
+    if (locale.equals(ResourceManager.getBase())) {
+      // Not found even in the base language
+      return key;
+    } else {
+      return this.getRaw(ResourceManager.getBase(), key);
+    }
   }
 }

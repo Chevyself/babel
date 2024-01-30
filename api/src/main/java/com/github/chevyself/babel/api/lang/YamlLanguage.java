@@ -156,7 +156,13 @@ public final class YamlLanguage implements Language {
 
   @NonNull
   public Optional<String> getRaw(@NonNull String key) {
-    return Optional.ofNullable(configuration.getString(key));
+    // We get the object from the config
+    Object object = configuration.get(key, null);
+    // We MUST check if the object is a String
+    // the issue with configuration#getString is that it will always return the object #toString
+    // which is not what we want, because it may return a configuration section, a list, etc.
+    // We only want strings
+    return Optional.ofNullable(object instanceof String ? (String) object : null);
   }
 
   @NonNull
