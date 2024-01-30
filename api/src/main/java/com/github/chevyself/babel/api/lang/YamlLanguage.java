@@ -76,16 +76,20 @@ public final class YamlLanguage implements Language {
    * @throws LanguageParsingException if the language cannot be parsed
    */
   @NonNull
-  public static YamlLanguage load(@NonNull InputStream resource, @NonNull File file)
+  public static YamlLanguage load(@NonNull InputStream resource, File file)
       throws LanguageParsingException {
-    try (Reader isReader = new InputStreamReader(resource);
-        Reader fileReader = new FileReader(file)) {
+    try (Reader isReader = new InputStreamReader(resource)) {
       YamlConfiguration resourceYml = YamlConfiguration.loadConfiguration(isReader);
-      YamlConfiguration fileYml = YamlConfiguration.loadConfiguration(fileReader);
-      fileYml.addDefaults(resourceYml);
-      fileYml.options().copyDefaults(true);
-      fileYml.save(file);
-      return YamlLanguage.of(fileYml);
+      if (file == null) return YamlLanguage.of(resourceYml);
+      // We're using files, this means giving the option for the user
+      // to edit the language file
+      try (Reader fileReader = new FileReader(file)) {
+        YamlConfiguration fileYml = YamlConfiguration.loadConfiguration(fileReader);
+        fileYml.addDefaults(resourceYml);
+        fileYml.options().copyDefaults(true);
+        fileYml.save(file);
+        return YamlLanguage.of(fileYml);
+      }
     } catch (IOException e) {
       throw new LanguageParsingException(
           "Failed to handle reader either from resource or file in " + file);
@@ -105,18 +109,23 @@ public final class YamlLanguage implements Language {
    */
   @NonNull
   public static List<YamlLanguage> load(
-      @NonNull Plugin plugin, @NonNull File directory, @NonNull String... lang) throws IOException {
-    if (!directory.exists() && !directory.mkdirs()) {
+      @NonNull Plugin plugin, File directory, @NonNull String... lang) throws IOException {
+    if (directory != null && !directory.exists() && !directory.mkdirs()) {
       throw new IOException("Could not create directory" + directory);
     } else {
+      // Here directory might be null
       List<YamlLanguage> languages = new ArrayList<>();
       for (String name : lang) {
         String resourcePath = !name.endsWith(".yml") ? name + ".yml" : name;
         InputStream resource = plugin.getResource(resourcePath);
         if (resource != null) {
-          File file = new File(directory, resourcePath.replace("/", File.separator));
+          File file =
+              directory != null
+                  ? new File(directory, resourcePath.replace("/", File.separator))
+                  : null;
           try {
-            if (!file.exists()
+            if (file != null
+                && !file.exists()
                 && (file.getParentFile().exists()
                     ? !file.createNewFile()
                     : !file.getParentFile().mkdirs() || !file.createNewFile())) {
@@ -137,6 +146,12 @@ public final class YamlLanguage implements Language {
       }
       return languages;
     }
+  }
+
+  @NonNull
+  public static List<YamlLanguage> load(@NonNull Plugin plugin, @NonNull String... lang)
+      throws IOException {
+    return YamlLanguage.load(plugin, null, lang);
   }
 
   @NonNull
